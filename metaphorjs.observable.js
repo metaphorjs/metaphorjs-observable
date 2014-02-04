@@ -4,6 +4,9 @@
 
 (function(){
 
+"use strict"
+
+
 var randomHash = function() {
 
 	var chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
@@ -345,6 +348,11 @@ var observable = function() {
 	return self;
 };
 
-window['observable'] = observable;
+if (window.MetaphorJs) {
+    window.MetaphorJs.namespace.register("MetaphorJs.lib.Observable", observable);
+}
+else {
+    window.observable = observable;
+}
 
 })();

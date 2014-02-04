@@ -1,5 +1,9 @@
 # Observable
-### A javasript event system
+### A javascript event system
+
+If MetaphorJs.namespace is included the library
+lives within MetaphorJs.lib namespace.
+Otherwise - window.observable.
 
 ##API
 
@@ -46,7 +50,7 @@ event.destroy(); // better not call this function directly; use observable.destr
 
 ```js
 
-var o = new observable;
+var o = new MetaphorJs.lib.Observable;
 
 var eid = o.on("eventName", function(){});
 o.trigger("eventName", 1, 2, etc);
@@ -73,7 +77,7 @@ e.on(function(){});
 
 
 // data collection
-var o1 = new observable;
+var o1 = new MetaphorJs.lib.Observable;
 o1.createEvent("find-some-data", "all");
 o1.on("find-some-data", oneObject.dataCollector, oneObject);
 o1.on("find-some-data", anotherObject.dataCollector, anotherObject);
