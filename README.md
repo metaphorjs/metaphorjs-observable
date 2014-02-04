@@ -4,12 +4,13 @@
 ##API
 
 ```js
-observable.on(eventName, fn[, scope][, options]); -> listenerId
+observable.on(eventName, fn[, scope][, options]); //-> listenerId
 // options = {once: false, limit: null, start: 0};
 // limit: allow this event listeners to be called this number of times
 // start: start calling this event listener after this number of triggerings
 // once: call this event listener only once
-observable.once(eventName, fn[, scope][, options]); -> listenerId
+// scope: "this" object for the event listener
+observable.once(eventName, fn[, scope][, options]); //-> listenerId
 observable.un(eventName, fn[, scope]);
 observable.un(eventName, listenerId);
 observable.createEvent(eventName, returnResult); // -> event
@@ -17,7 +18,7 @@ observable.createEvent(eventName, returnResult); // -> event
 observable.trigger(eventName, arg1, arg2, etc); // -> mixed
 // if returnResult is not false, returns some result or array of all results
 observable.getEvent(eventName); // -> event
-observable.hasListener([fn[, scope]]);
+observable.hasListener(fn[, scope]);
 observable.hasListener();
 observable.removeAllListeners();
 observable.suspendEvent(eventName);
@@ -26,7 +27,7 @@ observable.resumeEvent(eventName);
 observable.resumeAllEvents();
 observable.destroy();
 
-event.on(fn[, scope][, options]); -> listenerId
+event.on(fn[, scope][, options]); // -> listenerId
 event.un(fn[, scope]);
 event.un(listenerId);
 event.hasListener(fn[, scope]);
@@ -62,7 +63,6 @@ var obj     = new someClass;
 o.on("eventName", obj.someFn, obj);
 o.trigger("eventName");
 o.un("eventName", obj.someFn, obj);
-
 // obj.someFn will be called with this = obj
 
 
