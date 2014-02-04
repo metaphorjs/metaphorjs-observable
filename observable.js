@@ -213,8 +213,6 @@ var event = function(name, returnResult) {
             }
 		}
 	});
-
-	return self;
 };
 
 
@@ -225,13 +223,23 @@ var observable = function() {
 
 	extend(self, {
 
-		destroy: function() {
-			for (var i in events) {
-				events[i].destroy();
-			}
+		destroy: function(name) {
 
-			events 	= null;
-			self	= null;
+            if (name) {
+                name = name.toLowerCase();
+                if (events[name]) {
+                    events[name].destroy();
+                    delete events[name];
+                }
+            }
+            else {
+                for (var i in events) {
+                    events[i].destroy();
+                }
+
+                events 	= null;
+                self	= null;
+            }
 		},
 
         createEvent: function(name, returnResult) {

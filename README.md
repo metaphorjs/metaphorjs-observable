@@ -10,22 +10,24 @@ observable.on(eventName, fn[, scope][, options]); //-> listenerId
 // start: start calling this event listener after this number of triggerings
 // once: call this event listener only once
 // scope: "this" object for the event listener
+// fn: event handler; return false to stop event (only if returnResult === false)
 observable.once(eventName, fn[, scope][, options]); //-> listenerId
 observable.un(eventName, fn[, scope]);
 observable.un(eventName, listenerId);
 observable.createEvent(eventName, returnResult); // -> event
-// returnResult = false|first|last|all
+// returnResult = false|first|last|all; default = false
 observable.trigger(eventName, arg1, arg2, etc); // -> mixed
 // if returnResult is not false, returns some result or array of all results
 observable.getEvent(eventName); // -> event
 observable.hasListener(fn[, scope]);
 observable.hasListener();
-observable.removeAllListeners();
+observable.removeAllListeners(eventName);
 observable.suspendEvent(eventName);
 observable.suspendAllEvents();
 observable.resumeEvent(eventName);
 observable.resumeAllEvents();
-observable.destroy();
+observable.destroy(); // destroy all events
+observable.destroy(eventName); // destroy specific event
 
 event.on(fn[, scope][, options]); // -> listenerId
 event.un(fn[, scope]);
@@ -36,7 +38,7 @@ event.removeAllListeners();
 event.suspend();
 event.resume();
 event.trigger(arg1, arg2, etc); // -> mixed
-event.destroy();
+event.destroy(); // better not call this function directly; use observable.destroy(name)
 
 ```
 
@@ -68,6 +70,18 @@ o.un("eventName", obj.someFn, obj);
 
 var e = o.createEvent("newEvent");
 e.on(function(){});
+
+
+// data collection
+var o1 = new observable;
+o1.createEvent("find-some-data", "all");
+o1.on("find-some-data", oneObject.dataCollector, oneObject);
+o1.on("find-some-data", anotherObject.dataCollector, anotherObject);
+
+// dataCollector is just some function that returns mixed data
+// relevant to "find-some-data"
+
+var data    = o1.trigger("find-some-data"); // -> [mixed, mixed]
 
 ```
 
