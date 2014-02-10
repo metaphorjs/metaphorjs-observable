@@ -1,12 +1,11 @@
-# Observable
-### A javascript event system
+#MetaphorJs.lib.Observable
+A javascript event system
 
 If MetaphorJs.ns is included the library
 lives within MetaphorJs.lib namespace.
 Otherwise - window.observable.
 
 ##API
-
 ```js
 observable.on(eventName, fn[, scope][, options]); //-> listenerId
 // options = {once: false, limit: null, start: 0};
@@ -44,13 +43,10 @@ event.suspend();
 event.resume();
 event.trigger(arg1, arg2, etc); // -> mixed
 event.destroy(); // better not call this function directly; use observable.destroy(name)
-
 ```
 
 ##Usage
-
 ```js
-
 var o = new MetaphorJs.lib.Observable;
 
 var eid = o.on("eventName", function(){});
@@ -88,5 +84,13 @@ o1.on("find-some-data", anotherObject.dataCollector, anotherObject);
 
 var data    = o1.trigger("find-some-data"); // -> [mixed, mixed]
 
-```
+o1.createEvent("first-data", "first");
+o1.on("first-data", oneObject.returnSomeData, oneObject);
+o1.on("first-data", anotherObject.returnSomeData, anotherObject);
 
+var data    = o1.trigger("first-data"); // -> mixed
+
+// "all" - return all results in array
+// "first" - return first non-empty result
+// "last" - return last non-empty result
+```

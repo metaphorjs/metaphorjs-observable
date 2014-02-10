@@ -1,5 +1,5 @@
 /*!
- * MetaphorJs.lib.Observable
+ * MetaphorJs.lib.Observable 1.1
  * @author johann kuindji
  * @github https://github.com/kuindji/metaphorjs-observable
  */
@@ -364,7 +364,7 @@ if (window.MetaphorJs && MetaphorJs.ns) {
     MetaphorJs.ns.register("MetaphorJs.lib.Observable", observable);
 }
 else {
-    window.MetaphorJs   = MetaphorJs || {};
+    window.MetaphorJs   = window.MetaphorJs || {};
     MetaphorJs.lib      = MetaphorJs.lib || {};
     MetaphorJs.lib.Observable = observable;
 }
