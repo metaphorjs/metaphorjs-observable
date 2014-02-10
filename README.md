@@ -1,7 +1,7 @@
 # Observable
 ### A javascript event system
 
-If MetaphorJs.namespace is included the library
+If MetaphorJs.ns is included the library
 lives within MetaphorJs.lib namespace.
 Otherwise - window.observable.
 
@@ -32,6 +32,7 @@ observable.resumeEvent(eventName);
 observable.resumeAllEvents();
 observable.destroy(); // destroy all events
 observable.destroy(eventName); // destroy specific event
+observable.getApi(); // return all object methods except "destroy"
 
 event.on(fn[, scope][, options]); // -> listenerId
 event.un(fn[, scope]);

@@ -1,5 +1,7 @@
-/**
- * @author johann kuindji (kuindji@gmail.com)
+/*!
+ * MetaphorJs.lib.Observable
+ * @author johann kuindji
+ * @github https://github.com/kuindji/metaphorjs-observable
  */
 
 (function(){
@@ -8,22 +10,20 @@
 
 
 var randomHash = function() {
-
-	var chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
-		hash = '';
-
-	for(var i = 0; i < 10; i++) {
-		var x = Math.floor(Math.random() * 52);
-		hash += chars.charAt(x);
-	}
-
-	return hash;
+    var N = 10;
+	return new Array(N+1).join((Math.random().toString(36)+'00000000000000000')
+                .slice(2, 18)).slice(0, N)
 };
 
-var extend = function(trg, src) {
-	for (var i in src) {
-		trg[i] = src[i];
-	}
+var extend = function(trg) {
+    var i, j, len, src;
+
+    for (j = 1, len = arguments.length; j < len; j++) {
+        src     = arguments[j];
+        for (i in src) {
+            trg[i] = src[i];
+        }
+    }
 };
 
 var event = function(name, returnResult) {
@@ -48,6 +48,10 @@ var event = function(name, returnResult) {
 
 
 		on: function(fn, scope, options) {
+
+            if (!fn) {
+                return;
+            }
 
             scope       = scope || fn;
             options     = options || {};
@@ -221,10 +225,113 @@ var event = function(name, returnResult) {
 
 var observable = function() {
 
-	var self = this,
-		events	= {};
+	var self        = this,
+		events      = {},
+        api         = {};
 
-	extend(self, {
+    extend(api, {
+
+        createEvent: function(name, returnResult) {
+            name = name.toLowerCase();
+            if (!events[name]) {
+                events[name] = new event(name, returnResult);
+            }
+            return events[name];
+        },
+
+        getEvent: function(name) {
+            name = name.toLowerCase();
+            return events[name];
+        },
+
+        on: function(name, fn, scope, options) {
+            name = name.toLowerCase();
+            if (!events[name]) {
+                events[name] = new event(name);
+            }
+            return events[name].on(fn, scope, options);
+        },
+
+        once: function(name, fn, scope, options) {
+            options     = options || {};
+            options.limit = 1;
+            return self.on(name, fn, scope, options);
+        },
+
+
+        un: function(name, fn, scope) {
+            name = name.toLowerCase();
+            if (!events[name]) {
+                return;
+            }
+            events[name].un(fn, scope);
+        },
+
+        hasListener: function(name, fn, scope) {
+            name = name.toLowerCase();
+            if (!events[name]) {
+                return false;
+            }
+            return events[name].hasListener(fn, scope);
+        },
+
+        removeAllListeners: function(name) {
+            if (!events[name]) {
+                return;
+            }
+            events[name].removeAllListeners();
+        },
+
+        trigger: function() {
+
+            var a = [],
+                name = arguments[0];
+
+            name = name.toLowerCase();
+
+            if (!events[name]) {
+                return;
+            }
+
+            for (var i = 1, len = arguments.length; i < len; i++) {
+                a.push(arguments[i]);
+            }
+
+            var e = events[name];
+            return e.trigger.apply(e, a);
+        },
+
+        suspendEvent: function(name) {
+            name = name.toLowerCase();
+            if (!events[name]) {
+                return;
+            }
+            events[name].suspend();
+        },
+
+        suspendAllEvents: function() {
+            for (var name in events) {
+                events[name].suspend();
+            }
+        },
+
+        resumeEvent: function(name) {
+            name = name.toLowerCase();
+            if (!events[name]) {
+                return;
+            }
+            events[name].resume();
+        },
+
+        resumeAllEvents: function() {
+
+            for (var name in events) {
+                events[name].resume();
+            }
+        }
+    });
+
+	extend(self, api, {
 
 		destroy: function(name) {
 
@@ -245,114 +352,21 @@ var observable = function() {
             }
 		},
 
-        createEvent: function(name, returnResult) {
-            name = name.toLowerCase();
-            if (!events[name]) {
-                events[name] = new event(name, returnResult);
-            }
-            return events[name];
-        },
-
-        getEvent: function(name) {
-            name = name.toLowerCase();
-            return events[name];
-        },
-
-		on: function(name, fn, scope, options) {
-			name = name.toLowerCase();
-			if (!events[name]) {
-				events[name] = new event(name);
-			}
-			return events[name].on(fn, scope, options);
-		},
-
-        once: function(name, fn, scope, options) {
-            options     = options || {};
-            options.limit = 1;
-            return self.on(name, fn, scope, options);
-        },
-
-
-		un: function(name, fn, scope) {
-			name = name.toLowerCase();
-			if (!events[name]) {
-                return;
-            }
-			events[name].un(fn, scope);
-		},
-
-        hasListener: function(name, fn, scope) {
-            name = name.toLowerCase();
-            if (!events[name]) {
-                return false;
-            }
-            return events[name].hasListener(fn, scope);
-        },
-
-		removeAllListeners: function(name) {
-			if (!events[name]) {
-                return;
-            }
-			events[name].removeAllListeners();
-		},
-
-		trigger: function() {
-
-			var a = [],
-				name = arguments[0];
-
-			name = name.toLowerCase();
-
-			if (!events[name]) {
-                return;
-            }
-
-			for (var i = 1, len = arguments.length; i < len; i++) {
-				a.push(arguments[i]);
-			}
-
-			var e = events[name];
-			return e.trigger.apply(e, a);
-		},
-
-		suspendEvent: function(name) {
-			name = name.toLowerCase();
-			if (!events[name]) {
-                return;
-            }
-			events[name].suspend();
-		},
-
-		suspendAllEvents: function() {
-			for (var name in events) {
-				events[name].suspend();
-            }
-		},
-
-		resumeEvent: function(name) {
-			name = name.toLowerCase();
-			if (!events[name]) {
-                return;
-            }
-			events[name].resume();
-		},
-
-		resumeAllEvents: function() {
-
-			for (var name in events) {
-				events[name].resume();
-            }
-		}
+        getApi: function() {
+            return api;
+        }
 	});
 
 	return self;
 };
 
-if (window.MetaphorJs) {
-    window.MetaphorJs.namespace.register("MetaphorJs.lib.Observable", observable);
+if (window.MetaphorJs && MetaphorJs.ns) {
+    MetaphorJs.ns.register("MetaphorJs.lib.Observable", observable);
 }
 else {
-    window.observable = observable;
+    window.MetaphorJs   = MetaphorJs || {};
+    MetaphorJs.lib      = MetaphorJs.lib || {};
+    MetaphorJs.lib.Observable = observable;
 }
 
 })();
