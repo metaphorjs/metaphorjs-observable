@@ -1,4 +1,4 @@
-/*!
+/**
  * MetaphorJs.lib.Observable 1.1
  * @author johann kuindji
  * @github https://github.com/kuindji/metaphorjs-observable
@@ -6,12 +6,12 @@
 
 (function(){
 
-"use strict"
+"use strict";
 
 
 var randomHash = function() {
     var N = 10;
-	return new Array(N+1).join((Math.random().toString(36)+'00000000000000000')
+    return new Array(N+1).join((Math.random().toString(36)+'00000000000000000')
                 .slice(2, 18)).slice(0, N)
 };
 
@@ -28,26 +28,28 @@ var extend = function(trg) {
 
 var event = function(name, returnResult) {
 
-	var listeners 	    = [],
-		hash 		    = randomHash(),
-		suspended	    = false,
-		lid			    = 0,
-		self 		    = this,
+    var listeners 	    = [],
+        map             = {},
+        hash 		    = randomHash(),
+        suspended	    = false,
+        lid			    = 0,
+        self 		    = this,
         returnResult    = returnResult || false; // first|last|all
 
-	extend(self, {
+    extend(self, {
 
-		destroy: function() {
-			listeners 	= null;
-			hash 		= null;
-			suspended 	= null;
-			lid 		= null;
-			self 		= null;
-			name 		= null;
-		},
+        destroy: function() {
+            listeners 	= null;
+            map         = null;
+            hash 		= null;
+            suspended 	= null;
+            lid 		= null;
+            self 		= null;
+            name 		= null;
+        },
 
 
-		on: function(fn, scope, options) {
+        on: function(fn, scope, options) {
 
             if (!fn) {
                 return;
@@ -58,40 +60,42 @@ var event = function(name, returnResult) {
 
             var uni     = name+"_"+hash;
 
-			if (scope[uni]) {
+            if (scope[uni]) {
                 return;
             }
 
-			var id 	    = ++lid,
-				first 	= options.first || false;
+            var id 	    = ++lid,
+                first 	= options.first || false;
 
-			scope[uni]  = id;
+            scope[uni]  = id;
 
 
-			var e = {
-				fn:         fn,
-				scope:      scope,
-				id:         id,
-				called:     0, // how many times the function was triggered
-				limit:      options.limit ? options.limit :
-						        (options.once ? 1 : 0), // how many times the function is allowed to trigger
-				start:      options.start || 1, // from which attempt it is allowed to trigger the function
-				count:      0 // how many attempts to trigger the function was made
-			};
+            var e = {
+                fn:         fn,
+                scope:      scope,
+                id:         id,
+                called:     0, // how many times the function was triggered
+                limit:      options.limit ? options.limit :
+                                (options.once ? 1 : 0), // how many times the function is allowed to trigger
+                start:      options.start || 1, // from which attempt it is allowed to trigger the function
+                count:      0 // how many attempts to trigger the function was made
+            };
 
-			if (first) {
-				listeners.unshift(e);
-			}
-			else {
-				listeners.push(e);
-			}
+            if (first) {
+                listeners.unshift(e);
+            }
+            else {
+                listeners.push(e);
+            }
 
-			return id;
-		},
+            map[id] = e;
 
-		un: function(fn, scope) {
+            return id;
+        },
 
-			var inx     = -1,
+        un: function(fn, scope) {
+
+            var inx     = -1,
                 uni     = name+"_"+hash,
                 id;
 
@@ -103,25 +107,26 @@ var event = function(name, returnResult) {
                 id      = scope[uni];
             }
 
-			if (!id) {
+            if (!id) {
                 return false;
             }
 
-			for (var i = 0, len = listeners.length; i < len; i++) {
-				if (listeners[i].id == id) {
-					inx = i;
-					delete listeners[i].scope[uni];
-					break;
-				}
-			}
+            for (var i = 0, len = listeners.length; i < len; i++) {
+                if (listeners[i].id == id) {
+                    inx = i;
+                    delete listeners[i].scope[uni];
+                    break;
+                }
+            }
 
-			if (inx == -1) {
+            if (inx == -1) {
                 return false;
             }
 
-			listeners.splice(inx, 1);
+            listeners.splice(inx, 1);
+            delete map[id];
             return true;
-		},
+        },
 
         hasListener: function(fn, scope) {
 
@@ -155,47 +160,61 @@ var event = function(name, returnResult) {
             }
         },
 
-		removeAllListeners: function() {
+        removeAllListeners: function() {
             var uni = name+"_"+hash;
-			for (var i = 0, len = listeners.length; i < len; i++) {
-				delete listeners[i].scope[uni];
-			}
-			listeners = [];
-		},
+            for (var i = 0, len = listeners.length; i < len; i++) {
+                delete listeners[i].scope[uni];
+            }
+            listeners   = [];
+            map         = {};
+        },
 
-		suspend: function() {
-			suspended = true;
-		},
+        suspend: function() {
+            suspended = true;
+        },
 
-		resume: function() {
-			suspended = false;
-		},
+        resume: function() {
+            suspended = false;
+        },
 
-		trigger: function() {
+        trigger: function() {
 
-			if (suspended || listeners.length == 0) {
+            if (suspended || listeners.length == 0) {
                 return;
             }
 
-			var ret 	= returnResult == "all" ? [] : null,
+            var ret 	= returnResult == "all" ? [] : null,
+                q       = [],
+                i, len, l,
                 res;
 
-			for (var i = 0, len = listeners.length; i < len; i++) {
+            // create a snapshot of listeners list
+            for (i = 0, len = listeners.length; i < len; i++) {
+                q.push(listeners[i]);
+            }
 
-				var l = listeners[i];
+            // now if during triggering someone unsubscribes
+            // we won't skip any listener due to shifted
+            // index
+            while (l = q.shift()) {
 
-				l.count++;
-
-				if (l.count < l.start) {
+                // listener may already have unsubsribed
+                if (!l || !map[l.id]) {
                     continue;
                 }
 
-				res = l.fn.apply(l.scope, arguments);
+                l.count++;
 
-				l.called++;
+                if (l.count < l.start) {
+                    continue;
+                }
 
-				if (l.called == l.limit) {
-                    self.removeListener(l.id);
+                res = l.fn.apply(l.scope, arguments);
+
+                l.called++;
+
+                if (l.called == l.limit) {
+                    this.un(l.id);
                 }
 
                 if (returnResult == "all") {
@@ -213,20 +232,20 @@ var event = function(name, returnResult) {
                 if (returnResult == false && res === false) {
                     break;
                 }
-			}
+            }
 
             if (returnResult) {
                 return ret;
             }
-		}
-	});
+        }
+    });
 };
 
 
 var observable = function() {
 
-	var self        = this,
-		events      = {},
+    var self        = this,
+        events      = {},
         api         = {};
 
     extend(api, {
@@ -331,9 +350,9 @@ var observable = function() {
         }
     });
 
-	extend(self, api, {
+    extend(self, api, {
 
-		destroy: function(name) {
+        destroy: function(name) {
 
             if (name) {
                 name = name.toLowerCase();
@@ -350,14 +369,14 @@ var observable = function() {
                 events 	= null;
                 self	= null;
             }
-		},
+        },
 
         getApi: function() {
             return api;
         }
-	});
+    });
 
-	return self;
+    return self;
 };
 
 if (window.MetaphorJs && MetaphorJs.ns) {
