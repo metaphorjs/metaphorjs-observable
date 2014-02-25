@@ -1,0 +1,393 @@
+
+html {
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    color: #000;
+    line-height: 22px;
+    background-color: #f0f0f0;
+}
+
+body {
+    margin: 0 auto;
+    max-width: 1200px;
+}
+
+a:link, a:visited {
+    text-decoration: none;
+    color: #5E709D;
+}
+
+a:hover {
+    text-decoration: underline;
+    color: #5E709D;
+}
+
+ul {
+    list-style: none;
+    margin: 0;
+}
+
+li {
+    clear: both;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+}
+h1 span, h2 span, h3 span, h4 span, h5 span, h6 span {
+    font-weight: normal;
+}
+
+h3 {
+    font-size: 22px;
+    line-height: 30px;
+}
+
+h4 {
+    font-size: 14px;
+    margin: 20px 0 10px;
+    color: #777;
+    font-weight: normal;
+    text-transform: uppercase;
+}
+
+h5 {
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+h1 {
+    text-align: center;
+    font-size: 32px;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 20px;
+}
+
+h2 {
+    padding: 20px 0 20px 10px;
+}
+
+
+
+#description {
+    font-size: 24px;
+    line-height: 30px;
+    text-align: center;
+}
+
+#navigation {
+    background-color: #fff;
+    border-radius: 5px;
+    padding-top: 10px;
+    font-size: 14px;
+    overflow: hidden;
+}
+
+#navigation li {
+    white-space: nowrap;
+    overflow: hidden;
+    -ms-text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+}
+
+#main {
+    margin-top: 10px;
+}
+
+#main p {
+    color: #666;
+    margin: 0;
+    font-size: 14px;
+}
+pre, :not(pre) > code {
+    font-size: 12px;
+    line-height: 14px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) inset;
+    border-radius: 3px;
+}
+:not(pre) > code {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+pre code {
+
+}
+
+#options {
+    text-align: center;
+    padding: 15px;
+}
+#options label {
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+
+
+
+.labels {
+    line-height: 10px;
+    margin: 5px 0 10px 0;
+}
+
+.label {
+    text-transform: uppercase;
+    font-size: 10px;
+    border-radius: 2px;
+    color: #fff;
+    background-color: #666;
+    padding: 2px 5px;
+    line-height: 12px;
+    text-shadow: rgba(0,0,0,0.2) 1px 1px;
+}
+
+.label.plain {
+    text-transform: none;
+    font-size: 11px;
+}
+
+
+
+ul.nav-class-level, ul.nav-interface-level,
+ul.nav-gconstant-level, ul.nav-function-level, ul.nav-gvar-level {
+    padding-left: 10px;
+}
+ul.nav-method-level {
+    display: none;
+    padding-left: 15px;
+}
+ul.nav-property-level {
+    display: none;
+}
+
+li.nav-class {
+
+}
+
+.nav-namespace {
+    padding-left: 10px;
+    font-weight: bold;
+    color: #666;
+}
+
+
+
+
+
+ul.namespace-level {
+    padding-left: 0;
+}
+
+ul.class-level, ul.interface-level, ul.gconstant-level,
+ul.gfunction-level, ul.gvar-level {
+    padding-left: 0;
+}
+
+ul.sub-level {
+    margin-top: 10px;
+    border-left: 1px solid #e0e0e0;
+}
+
+ul.method-level {
+    padding-left: 10px;
+}
+
+ul.property-level {
+    padding-left: 10px;
+}
+
+ul.constant-level {
+    padding-left: 10px;
+}
+
+
+ul.params {
+    margin-top: 10px;
+}
+
+ul.fields {
+    padding-left: 0;
+    color: #666;
+    font-size: 14px;
+}
+
+
+
+li.class, li.interface, li.gconstant, li.gfunction, li.gvar {
+    margin-bottom: 20px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #fff;
+}
+
+li.constant {
+    border-top: 1px solid #f0f0f0;
+    padding-top: 10px;
+}
+li.property {
+    border-top: 1px solid #f0f0f0;
+    padding-top: 10px;
+}
+li.method {
+    border-top: 1px solid #f0f0f0;
+    padding-top: 10px;
+}
+
+li.param, li.variable {
+    padding-bottom: 10px;
+}
+
+li.param label, li.variable label {
+}
+
+
+
+
+.class-extend {
+    background-color: #8C92CE;
+}
+
+.class-implement {
+    background-color: #9971FF;
+}
+
+.class-abstract, .func-abstract {
+    background-color: #e0e0e0;
+    color: #000;
+}
+
+.class-final, .func-final {
+    background-color: #444;
+    color: #fff;
+}
+
+.func-sig {
+    font-weight: normal;
+}
+
+.func-constructor {
+    background-color: #5E839D;
+}
+
+.func-public, .var-public {
+    background-color: #5E9D66;
+}
+
+.func-protected, .var-protected {
+    background-color: #E98900;
+}
+
+.func-private, .var-private {
+    background-color: #CD0000;
+}
+
+.func-static, .var-static {
+    background-color: #71C5FF;
+    color: #000;
+}
+
+.func-return {
+    font-weight: normal;
+    color: #666;
+}
+
+.var-default {
+    font-weight: normal;
+    color: #B03C0A;
+}
+
+.var-required, .func-required {
+    background-color: #9D645E;
+}
+
+.var-name {
+    font-weight: bold;
+}
+
+.var-type {
+    font-weight: normal;
+    color: #444;
+}
+
+
+
+.inherited {
+    display: none;
+}
+.protected {
+    display: none;
+}
+.private {
+    display: none;
+}
+
+
+
+
+
+.clearfix:after {
+    content:  		".";
+    display:  		block;
+    clear:			both;
+    visibility:   	hidden;
+    line-height:  	0;
+    font-size:      0;
+    height:   		0;
+    float: 			none;
+}
+
+.clearfix {
+    float: 			none;
+}
+
+html[xmlns] .clearfix {
+    display:  		block;
+}
+
+* html .clearfix {
+    height:   		1%;
+}
+
+
+
+
+@media (min-width: 768px) {
+
+    #navigation {
+        width: 25%;
+        float: left;
+    }
+
+    #main {
+        width: 75%;
+        float: left;
+        margin-top: 0;
+    }
+
+    h1 {
+        height: 60px;
+        line-height: 60px;
+        padding: 0;
+    }
+
+    ul.class-level, ul.interface-level, ul.gconstant-level, ul.gfunction-level, ul.gvar-level {
+        padding-left: 10px;
+    }
+
+    ul.nav-method-level {
+        display: block;
+    }
+    ul.nav-property-level {
+        display: block;
+    }
+
+    li.nav-class, li.nav-interface {
+        margin-bottom: 20px;
+    }
+
+    h2 {
+        padding-left: 20px;
+    }
+}
