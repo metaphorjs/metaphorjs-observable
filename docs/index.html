@@ -7,70 +7,616 @@
     <link rel="stylesheet" href="assets/prism.css">
 </head>
 <body>
+<div id="header">
     <h1>MetaphorJs.lib.Observable</h1>
     <div id="description">Api Reference</div>
-    <div id="options">
-        <label><input id="option-inherited" type="checkbox"/> Show inherited</label>
-        <label><input id="option-protected" type="checkbox"/> Show protected</label>
-        <label><input id="option-private" type="checkbox"/> Show private</label>
-    </div>
-    <nav id="navigation">
-        <ul class="nav-class-level"><li class="nav-class"><a class="nav-class" href="#/MetaphorJs.lib.Observable">MetaphorJs.lib.Observable</a><ul class="nav-method-level"><li class="nav-method public"><a class="nav-method" href="#/MetaphorJs.lib.Observable/createEvent">createEvent(name, returnResult)</a></li><li class="nav-method public"><a class="nav-method" href="#/MetaphorJs.lib.Observable/getEvent">getEvent(name)</a></li><li class="nav-method public"><a class="nav-method" href="#/MetaphorJs.lib.Observable/on">on(name, fn, scope, options)</a></li><li class="nav-method public"><a class="nav-method" href="#/MetaphorJs.lib.Observable/once">once(name, fn, scope, options)</a></li><li class="nav-method public"><a class="nav-method" href="#/MetaphorJs.lib.Observable/un">un(name, fn, scope)</a></li><li class="nav-method public"><a class="nav-method" href="#/MetaphorJs.lib.Observable/hasListener">hasListener(name)</a></li><li class="nav-method public"><a class="nav-method" href="#/MetaphorJs.lib.Observable/hasListener">hasListener(name, fn, scope)</a></li><li class="nav-method public"><a class="nav-method" href="#/MetaphorJs.lib.Observable/removeAllListeners">removeAllListeners()</a></li><li class="nav-method public"><a class="nav-method" href="#/MetaphorJs.lib.Observable/removeAllListeners">removeAllListeners(name)</a></li><li class="nav-method public"><a class="nav-method" href="#/MetaphorJs.lib.Observable/trigger">trigger(name, ...)</a></li><li class="nav-method public"><a class="nav-method" href="#/MetaphorJs.lib.Observable/suspendEvent">suspendEvent(name)</a></li><li class="nav-method public"><a class="nav-method" href="#/MetaphorJs.lib.Observable/suspendAllEvents">suspendAllEvents()</a></li><li class="nav-method public"><a class="nav-method" href="#/MetaphorJs.lib.Observable/resumeEvent">resumeEvent(name)</a></li><li class="nav-method public"><a class="nav-method" href="#/MetaphorJs.lib.Observable/resumeAllEvents">resumeAllEvents()</a></li><li class="nav-method public"><a class="nav-method" href="#/MetaphorJs.lib.Observable/destroy">destroy()</a></li><li class="nav-method public"><a class="nav-method" href="#/MetaphorJs.lib.Observable/destroy">destroy(name)</a></li><li class="nav-method public"><a class="nav-method" href="#/MetaphorJs.lib.Observable/getApi">getApi()</a></li></ul></li><li class="nav-class"><a class="nav-class" href="#/MetaphorJs.lib.ObservableEvent">MetaphorJs.lib.ObservableEvent</a><ul class="nav-method-level"><li class="nav-method public"><a class="nav-method" href="#/MetaphorJs.lib.ObservableEvent/destroy">destroy()</a></li><li class="nav-method public"><a class="nav-method" href="#/MetaphorJs.lib.ObservableEvent/on">on(fn, scope, options)</a></li><li class="nav-method public"><a class="nav-method" href="#/MetaphorJs.lib.ObservableEvent/un">un(fn, scope)</a></li><li class="nav-method public"><a class="nav-method" href="#/MetaphorJs.lib.ObservableEvent/hasListener">hasListener()</a></li><li class="nav-method public"><a class="nav-method" href="#/MetaphorJs.lib.ObservableEvent/hasListener">hasListener(fn, scope)</a></li><li class="nav-method public"><a class="nav-method" href="#/MetaphorJs.lib.ObservableEvent/removeAllListeners">removeAllListeners()</a></li><li class="nav-method public"><a class="nav-method" href="#/MetaphorJs.lib.ObservableEvent/suspend">suspend()</a></li><li class="nav-method public"><a class="nav-method" href="#/MetaphorJs.lib.ObservableEvent/resume">resume()</a></li><li class="nav-method public"><a class="nav-method" href="#/MetaphorJs.lib.ObservableEvent/trigger">trigger()</a></li></ul></li></ul>
-    </nav>
-    <div id="main">
-        <ul class="namespace-level"><li class="namespace-level" id=""><ul class="class-level"><li class="class"><h3 class="class" id="/MetaphorJs.lib.Observable"><span>class</span> MetaphorJs.lib.Observable</h3><p>A javascript event system implementing two patterns - observable and collector.</p>
+</div>
+<nav id="navigation"><div id="options"><label><input type="checkbox" id="toggle-private"/> Hide private</label><label><input type="checkbox" id="toggle-protected"/> Hide protected</label><label><input type="checkbox" id="toggle-inherited"/> Hide inherited</label></div><ul class="nav-class-level"><li class="nav-class"><a class="nav-class" href="#/MetaphorJs.lib.Observable">MetaphorJs.lib.Observable</a><ul class="nav-method-level nav-hidden"><li class="nav-method 
+                                                                                
+                
+    public
 
-<p>Observable:</p>
-<pre><code class="language-javascript">
+"><a class="nav-method" href="#/MetaphorJs.lib.Observable/createEvent">createEvent(name, returnResult)</a></li><li class="nav-method 
+                                                                                
+                
+    public
+
+"><a class="nav-method" href="#/MetaphorJs.lib.Observable/getEvent">getEvent(name)</a></li><li class="nav-method 
+                                                                                
+                
+    public
+
+"><a class="nav-method" href="#/MetaphorJs.lib.Observable/on">on(name, fn, scope, options)</a></li><li class="nav-method 
+                                                                                
+                
+    public
+
+"><a class="nav-method" href="#/MetaphorJs.lib.Observable/once">once(name, fn, scope, options)</a></li><li class="nav-method 
+                                                                                
+                
+    public
+
+"><a class="nav-method" href="#/MetaphorJs.lib.Observable/un">un(name, fn, scope)</a></li><li class="nav-method 
+                                                                                
+                
+    public
+
+"><a class="nav-method" href="#/MetaphorJs.lib.Observable/hasListener">hasListener(name)</a></li><li class="nav-method 
+                                                                                
+                
+    public
+
+"><a class="nav-method" href="#/MetaphorJs.lib.Observable/hasListener">hasListener(name, fn, scope)</a></li><li class="nav-method 
+                                                                                
+                
+    public
+
+"><a class="nav-method" href="#/MetaphorJs.lib.Observable/removeAllListeners">removeAllListeners()</a></li><li class="nav-method 
+                                                                                
+                
+    public
+
+"><a class="nav-method" href="#/MetaphorJs.lib.Observable/removeAllListeners">removeAllListeners(name)</a></li><li class="nav-method 
+                                                                                
+                
+    public
+
+"><a class="nav-method" href="#/MetaphorJs.lib.Observable/trigger">trigger(name, ...)</a></li><li class="nav-method 
+                                                                                
+                
+    public
+
+"><a class="nav-method" href="#/MetaphorJs.lib.Observable/suspendEvent">suspendEvent(name)</a></li><li class="nav-method 
+                                                                                
+                
+    public
+
+"><a class="nav-method" href="#/MetaphorJs.lib.Observable/suspendAllEvents">suspendAllEvents()</a></li><li class="nav-method 
+                                                                                
+                
+    public
+
+"><a class="nav-method" href="#/MetaphorJs.lib.Observable/resumeEvent">resumeEvent(name)</a></li><li class="nav-method 
+                                                                                
+                
+    public
+
+"><a class="nav-method" href="#/MetaphorJs.lib.Observable/resumeAllEvents">resumeAllEvents()</a></li><li class="nav-method 
+                                                                                
+                
+    public
+
+"><a class="nav-method" href="#/MetaphorJs.lib.Observable/destroy">destroy()</a></li><li class="nav-method 
+                                                                                
+                
+    public
+
+"><a class="nav-method" href="#/MetaphorJs.lib.Observable/destroy">destroy(name)</a></li><li class="nav-method 
+                                                                                
+                
+    public
+
+"><a class="nav-method" href="#/MetaphorJs.lib.Observable/getApi">getApi()</a></li></ul></li><li class="nav-class"><a class="nav-class" href="#/MetaphorJs.lib.ObservableEvent">MetaphorJs.lib.ObservableEvent</a><ul class="nav-method-level nav-hidden"><li class="nav-method 
+                                                                                
+                
+    public
+
+"><a class="nav-method" href="#/MetaphorJs.lib.ObservableEvent/destroy">destroy()</a></li><li class="nav-method 
+                                                                                
+                
+    public
+
+"><a class="nav-method" href="#/MetaphorJs.lib.ObservableEvent/on">on(fn, scope, options)</a></li><li class="nav-method 
+                                                                                
+                
+    public
+
+"><a class="nav-method" href="#/MetaphorJs.lib.ObservableEvent/un">un(fn, scope)</a></li><li class="nav-method 
+                                                                                
+                
+    public
+
+"><a class="nav-method" href="#/MetaphorJs.lib.ObservableEvent/hasListener">hasListener()</a></li><li class="nav-method 
+                                                                                
+                
+    public
+
+"><a class="nav-method" href="#/MetaphorJs.lib.ObservableEvent/hasListener">hasListener(fn, scope)</a></li><li class="nav-method 
+                                                                                
+                
+    public
+
+"><a class="nav-method" href="#/MetaphorJs.lib.ObservableEvent/removeAllListeners">removeAllListeners()</a></li><li class="nav-method 
+                                                                                
+                
+    public
+
+"><a class="nav-method" href="#/MetaphorJs.lib.ObservableEvent/suspend">suspend()</a></li><li class="nav-method 
+                                                                                
+                
+    public
+
+"><a class="nav-method" href="#/MetaphorJs.lib.ObservableEvent/resume">resume()</a></li><li class="nav-method 
+                                                                                
+                
+    public
+
+"><a class="nav-method" href="#/MetaphorJs.lib.ObservableEvent/trigger">trigger()</a></li></ul></li></ul></nav><div id="main"><ul class="namespace-level"><li class="namespace-level" id=""><ul class="class-level"><li class="class"><h3 class="class" id="/MetaphorJs.lib.Observable"><span>class</span> MetaphorJs.lib.Observable
+                </h3><p>A javascript event system implementing two patterns - observable and collector.</p><p>Observable:</p><pre><code class="language-javascript">
  var o = new MetaphorJs.lib.Observable;
  o.on("event", function(x, y, z){ console.log([x, y, z]) });
  o.trigger("event", 1, 2, 3); // [1, 2, 3]
- </code></pre>
-
-<p>Collector:</p>
-<pre><code class="language-javascript">
+ </code></pre><p>Collector:</p><pre><code class="language-javascript">
  var o = new MetaphorJs.lib.Observable;
  o.createEvent("collectStuff", "all");
  o.on("collectStuff", function(){ return 1; });
  o.on("collectStuff", function(){ return 2; });
  var results = o.trigger("collectStuff"); // [1, 2]
- </code></pre>
-
-<p>Although all methods are public there is getApi() method that allows you
-extending your own objects without overriding "destroy" (which you probably have)</p>
-<pre><code class="language-javascript">
+ </code></pre><p>Although all methods are public there is getApi() method that allows you
+extending your own objects without overriding "destroy" (which you probably have)</p><pre><code class="language-javascript">
  var o = new MetaphorJs.lib.Observable;
  $.extend(this, o.getApi());
  this.on("event", function(){ alert("ok") });
  this.trigger("event");
- </code></pre><ul class="fields"><li class="field class-field"><strong>@author</strong> johann kuindji</li><li class="field class-field"><strong>@link</strong> <a href="https://github.com/kuindji/metaphorjs-observable">https://github.com/kuindji/metaphorjs-observable</a></li><li class="field class-field"><strong>@version</strong> 1.1</li><li class="field class-field"><strong>@file</strong> metaphorjs.observable.js</li></ul><h4>Methods</h4><ul class="method-level"><li class="method public"><div class="labels"><span class="label func-public">public</span> </div><h5 class="method" id="/MetaphorJs.lib.Observable/createEvent">createEvent<span class="func-sig">(name, returnResult)</span> <span class="func-return">: MetaphorJs.lib.ObservableEvent</span></h5><p>You don't have to call this function unless you want to pass returnResult param.
+ </code></pre><ul class="fields"><li class="fieldclass-field"><strong>@author</strong>
+                        johann kuindji
+                    </li><li class="fieldclass-field"><strong>@link</strong><a href="https://github.com/kuindji/metaphorjs-observable">https://github.com/kuindji/metaphorjs-observable</a></li><li class="fieldclass-field"><strong>@version</strong>
+                        1.1
+                    </li><li class="fieldclass-field"><strong>@file</strong>
+                        metaphorjs.observable.js
+                    </li></ul><label class="section">Methods</label><ul class="method-level"><li id="/MetaphorJs.lib.Observable/createEvent"
+        class="
+                                                                                            
+                
+    method public
+
+"><div class="labels"><span class="label func-public">public</span></div><h4 class="method" id="">createEvent<span class="func-sig">(name, returnResult)</span><span class="func-return">: MetaphorJs.lib.ObservableEvent</span></h4><p>You don't have to call this function unless you want to pass returnResult param.
 This function will be automatically called from on() with
 <code class="language-javascript">returnResult = false</code>,
-so if you want to receive handler's return values, create event first, then call on().</p>
-
-<pre><code class="language-javascript">
+so if you want to receive handler's return values, create event first, then call on().</p><pre><code class="language-javascript">
  var observable = new MetaphorJs.lib.Observable;
  observable.createEvent("collectStuff", "all");
  observable.on("collectStuff", function(){ return 1; });
  observable.on("collectStuff", function(){ return 2; });
  var results = observable.trigger("collectStuff"); // [1, 2]
- </code></pre><ul class="params"><li class="param" id=""><label><span class="var-name">name</span> <span class="var-type">string</span> </label><p>Event name</p><div class="labels"><span class="label var-required">Required</span> </div></li><li class="param" id=""><label><span class="var-name">returnResult</span> <span class="var-type">bool | string</span> </label><p>false -- do not return results except if handler returned "false". This is how normal observables work.<br> "all" -- return all results as array<br> "first" -- return result of the first handler<br> "last" -- return result of the last handler</p><div class="labels"><span class="label var-required">Required</span> </div></li></ul></li><li class="method public"><div class="labels"><span class="label func-public">public</span> </div><h5 class="method" id="/MetaphorJs.lib.Observable/getEvent">getEvent<span class="func-sig">(name)</span> <span class="func-return">: MetaphorJs.lib.ObservableEvent | undefined</span></h5><ul class="params"><li class="param" id=""><label><span class="var-name">name</span> <span class="var-type">string</span> </label><p>Event name</p></li></ul></li><li class="method public"><div class="labels"><span class="label func-public">public</span> </div><h5 class="method" id="/MetaphorJs.lib.Observable/on">on<span class="func-sig">(name, fn, scope, options)</span> <span class="func-return">: void</span></h5><p>Subscribe to an event or register collector function.</p><ul class="params"><li class="param" id=""><label><span class="var-name">name</span> <span class="var-type">string</span> </label><p>Event name</p><div class="labels"><span class="label var-required">Required</span> </div></li><li class="param required"><h5 class="method" id="">fn<span class="func-sig">()</span> <span class="func-return">: void</span></h5><p>Callback function</p><div class="labels"><span class="label func-required">Required</span> </div></li><li class="param" id=""><label><span class="var-name">scope</span> <span class="var-type">object</span> </label><p>"this" object for the callback function</p></li><li class="param" id=""><label><span class="var-name">options</span> <span class="var-type">object</span> </label><ul class="sub-level"><li class="variable" id=""><label><span class="var-name">first</span> <span class="var-type">bool</span> <span class="var-default"> = false</span></label><p>True to prepend to the list of handlers</p></li><li class="variable" id=""><label><span class="var-name">limit</span> <span class="var-type">number</span> <span class="var-default"> = 0</span></label><p>Call handler this number of times; 0 for unlimited</p></li><li class="variable" id=""><label><span class="var-name">start</span> <span class="var-type">number</span> <span class="var-default"> = 1</span></label><p>Start calling handler after this number of calls. Starts from 1</p></li></ul></li></ul></li><li class="method public"><div class="labels"><span class="label func-public">public</span> </div><h5 class="method" id="/MetaphorJs.lib.Observable/once">once<span class="func-sig">(name, fn, scope, options)</span> <span class="func-return">: void</span></h5><p>Same as on(), but options.limit is forcefully set to 1.</p><ul class="params"><li class="param" id=""><label><span class="var-name">name</span> <span class="var-type">string</span> </label><p>Event name</p><div class="labels"><span class="label var-required">Required</span> </div></li><li class="param required"><h5 class="method" id="">fn<span class="func-sig">()</span> <span class="func-return">: void</span></h5><p>Callback function</p><div class="labels"><span class="label func-required">Required</span> </div></li><li class="param" id=""><label><span class="var-name">scope</span> <span class="var-type">object</span> </label><p>"this" object for the callback function</p></li><li class="param" id=""><label><span class="var-name">options</span> <span class="var-type">object</span> </label><ul class="sub-level"><li class="variable" id=""><label><span class="var-name">first</span> <span class="var-type">bool</span> <span class="var-default"> = false</span></label><p>True to prepend to the list of handlers</p></li><li class="variable" id=""><label><span class="var-name">limit</span> <span class="var-type">number</span> <span class="var-default"> = 0</span></label><p>Call handler this number of times; 0 for unlimited</p></li><li class="variable" id=""><label><span class="var-name">start</span> <span class="var-type">number</span> <span class="var-default"> = 1</span></label><p>Start calling handler after this number of calls. Starts from 1</p></li></ul></li></ul></li><li class="method public"><div class="labels"><span class="label func-public">public</span> </div><h5 class="method" id="/MetaphorJs.lib.Observable/un">un<span class="func-sig">(name, fn, scope)</span> <span class="func-return">: void</span></h5><p>Unsubscribe from an event</p><ul class="params"><li class="param" id=""><label><span class="var-name">name</span> <span class="var-type">string</span> </label><p>Event name</p><div class="labels"><span class="label var-required">Required</span> </div></li><li class="param required"><h5 class="method" id="">fn<span class="func-sig">()</span> <span class="func-return">: void</span></h5><p>Event handler</p><div class="labels"><span class="label func-required">Required</span> </div></li><li class="param" id=""><label><span class="var-name">scope</span> <span class="var-type">object</span> </label><p>If you called on() with scope you must call un() with the same scope</p></li></ul></li><li class="method public"><div class="labels"><span class="label func-public">public</span> </div><h5 class="method" id="/MetaphorJs.lib.Observable/hasListener">hasListener<span class="func-sig">(name)</span> <span class="func-return">: bool</span></h5><ul class="params"><li class="param" id=""><label><span class="var-name">name</span> <span class="var-type">string</span> </label><p>Event name</p><div class="labels"><span class="label var-required">Required</span> </div></li></ul></li><li class="method public"><div class="labels"><span class="label func-public">public</span> </div><h5 class="method" id="/MetaphorJs.lib.Observable/hasListener">hasListener<span class="func-sig">(name, fn, scope)</span> <span class="func-return">: bool</span></h5><ul class="params"><li class="param" id=""><label><span class="var-name">name</span> <span class="var-type">string</span> </label><p>Event name</p><div class="labels"><span class="label var-required">Required</span> </div></li><li class="param required"><h5 class="method" id="">fn<span class="func-sig">()</span> <span class="func-return">: void</span></h5><p>Callback function</p><div class="labels"><span class="label func-required">Required</span> </div></li><li class="param" id=""><label><span class="var-name">scope</span> <span class="var-type">object</span> </label><p>Function's "this" object</p></li></ul></li><li class="method public"><div class="labels"><span class="label func-public">public</span> </div><h5 class="method" id="/MetaphorJs.lib.Observable/removeAllListeners">removeAllListeners<span class="func-sig">()</span> <span class="func-return">: void</span></h5><p>Remove all listeners from all events</p></li><li class="method public"><div class="labels"><span class="label func-public">public</span> </div><h5 class="method" id="/MetaphorJs.lib.Observable/removeAllListeners">removeAllListeners<span class="func-sig">(name)</span> <span class="func-return">: void</span></h5><p>Remove all listeners from specific event</p><ul class="params"><li class="param" id=""><label><span class="var-name">name</span> <span class="var-type">string</span> </label><p>Event name</p><div class="labels"><span class="label var-required">Required</span> </div></li></ul></li><li class="method public"><div class="labels"><span class="label func-public">public</span> </div><h5 class="method" id="/MetaphorJs.lib.Observable/trigger">trigger<span class="func-sig">(name, ...)</span> <span class="func-return">: mixed</span></h5><p>Trigger an event -- call all listeners.</p><ul class="params"><li class="param" id=""><label><span class="var-name">name</span> <span class="var-type">string</span> </label><p>Event name</p><div class="labels"><span class="label var-required">Required</span> </div></li><li class="param" id=""><label><span class="var-name">...</span> <span class="var-type">mixed</span> </label><p>As many other params as needed</p></li></ul></li><li class="method public"><div class="labels"><span class="label func-public">public</span> </div><h5 class="method" id="/MetaphorJs.lib.Observable/suspendEvent">suspendEvent<span class="func-sig">(name)</span> <span class="func-return">: void</span></h5><p>Suspend an event. Suspended event will not call any listeners on trigger().</p><ul class="params"><li class="param" id=""><label><span class="var-name">name</span> <span class="var-type">string</span> </label><p>Event name</p></li></ul></li><li class="method public"><div class="labels"><span class="label func-public">public</span> </div><h5 class="method" id="/MetaphorJs.lib.Observable/suspendAllEvents">suspendAllEvents<span class="func-sig">()</span> <span class="func-return">: void</span></h5></li><li class="method public"><div class="labels"><span class="label func-public">public</span> </div><h5 class="method" id="/MetaphorJs.lib.Observable/resumeEvent">resumeEvent<span class="func-sig">(name)</span> <span class="func-return">: void</span></h5><p>Resume suspended event.</p><ul class="params"><li class="param" id=""><label><span class="var-name">name</span> <span class="var-type">string</span> </label><p>Event name</p></li></ul></li><li class="method public"><div class="labels"><span class="label func-public">public</span> </div><h5 class="method" id="/MetaphorJs.lib.Observable/resumeAllEvents">resumeAllEvents<span class="func-sig">()</span> <span class="func-return">: void</span></h5></li><li class="method public"><div class="labels"><span class="label func-public">public</span> </div><h5 class="method" id="/MetaphorJs.lib.Observable/destroy">destroy<span class="func-sig">()</span> <span class="func-return">: void</span></h5><p>Destroy all events and itself</p></li><li class="method public"><div class="labels"><span class="label func-public">public</span> </div><h5 class="method" id="/MetaphorJs.lib.Observable/destroy">destroy<span class="func-sig">(name)</span> <span class="func-return">: void</span></h5><p>Destroy specific event</p><ul class="params"><li class="param" id=""><label><span class="var-name">name</span> <span class="var-type">string</span> </label><p>Event name</p></li></ul></li><li class="method public"><div class="labels"><span class="label func-public">public</span> </div><h5 class="method" id="/MetaphorJs.lib.Observable/getApi">getApi<span class="func-sig">()</span> <span class="func-return">: object</span></h5><p>Get object with all functions except "destroy"</p></li></ul></li><li class="class"><h3 class="class" id="/MetaphorJs.lib.ObservableEvent"><span>class</span> MetaphorJs.lib.ObservableEvent</h3><p>This class is private - you can't create an event other than via Observable.
-See MetaphorJs.lib.Observable reference.</p><ul class="fields"><li class="field class-field"><strong>@file</strong> metaphorjs.observable.js</li></ul><h4>Methods</h4><ul class="method-level"><li class="method public"><div class="labels"><span class="label func-public">public</span> </div><h5 class="method" id="/MetaphorJs.lib.ObservableEvent/destroy">destroy<span class="func-sig">()</span> <span class="func-return">: void</span></h5></li><li class="method public"><div class="labels"><span class="label func-public">public</span> </div><h5 class="method" id="/MetaphorJs.lib.ObservableEvent/on">on<span class="func-sig">(fn, scope, options)</span> <span class="func-return">: void</span></h5><ul class="params"><li class="param required"><h5 class="method" id="">fn<span class="func-sig">()</span> <span class="func-return">: void</span></h5><p>Callback function</p><div class="labels"><span class="label func-required">Required</span> </div></li><li class="param" id=""><label><span class="var-name">scope</span> <span class="var-type">object</span> </label><p>Function's "this" object</p></li><li class="param" id=""><label><span class="var-name">options</span> <span class="var-type">object</span> </label><p>See Observable's on()</p></li></ul></li><li class="method public"><div class="labels"><span class="label func-public">public</span> </div><h5 class="method" id="/MetaphorJs.lib.ObservableEvent/un">un<span class="func-sig">(fn, scope)</span> <span class="func-return">: void</span></h5><ul class="params"><li class="param required"><h5 class="method" id="">fn<span class="func-sig">()</span> <span class="func-return">: void</span></h5><p>Callback function</p><div class="labels"><span class="label func-required">Required</span> </div></li><li class="param" id=""><label><span class="var-name">scope</span> <span class="var-type">object</span> </label><p>Function's "this" object</p></li></ul></li><li class="method public"><div class="labels"><span class="label func-public">public</span> </div><h5 class="method" id="/MetaphorJs.lib.ObservableEvent/hasListener">hasListener<span class="func-sig">()</span> <span class="func-return">: bool</span></h5></li><li class="method public"><div class="labels"><span class="label func-public">public</span> </div><h5 class="method" id="/MetaphorJs.lib.ObservableEvent/hasListener">hasListener<span class="func-sig">(fn, scope)</span> <span class="func-return">: bool</span></h5><ul class="params"><li class="param required"><h5 class="method" id="">fn<span class="func-sig">()</span> <span class="func-return">: void</span></h5><p>Callback function</p><div class="labels"><span class="label func-required">Required</span> </div></li><li class="param" id=""><label><span class="var-name">scope</span> <span class="var-type">object</span> </label><p>Function's "this" object</p></li></ul></li><li class="method public"><div class="labels"><span class="label func-public">public</span> </div><h5 class="method" id="/MetaphorJs.lib.ObservableEvent/removeAllListeners">removeAllListeners<span class="func-sig">()</span> <span class="func-return">: void</span></h5></li><li class="method public"><div class="labels"><span class="label func-public">public</span> </div><h5 class="method" id="/MetaphorJs.lib.ObservableEvent/suspend">suspend<span class="func-sig">()</span> <span class="func-return">: void</span></h5></li><li class="method public"><div class="labels"><span class="label func-public">public</span> </div><h5 class="method" id="/MetaphorJs.lib.ObservableEvent/resume">resume<span class="func-sig">()</span> <span class="func-return">: void</span></h5></li><li class="method public"><div class="labels"><span class="label func-public">public</span> </div><h5 class="method" id="/MetaphorJs.lib.ObservableEvent/trigger">trigger<span class="func-sig">()</span> <span class="func-return">: mixed</span></h5></li></ul></li></ul></li></ul>
-    </div>
-    <script src="assets/jquery-1.11.0.min.js"></script>
-    <script src="assets/prism.js"></script>
-    <script>
-        $(function(){
-            $('#option-inherited').click(function(){
-                $('.inherited')[this.checked ? 'show' : 'hide']();
-            });
-            $('#option-protected').click(function(){
-                $('.protected')[this.checked ? 'show' : 'hide']();
-            });
-            $('#option-private').click(function(){
-                $('.private')[this.checked ? 'show' : 'hide']();
-            });
-        });
-    </script>
+ </code></pre><ul class="params"><li id="/MetaphorJs.lib.Observable/createEvent/name"
+            class="
+                                                        
+    
+    param
+
+"><div class="labels"><span class="label var-required">Required</span></div><span class="var-name">name</span><span class="var-type">
+            string
+        </span><p>Event name</p></li><li id="/MetaphorJs.lib.Observable/createEvent/returnResult"
+            class="
+                                                        
+    
+    param
+
+"><div class="labels"><span class="label var-required">Required</span></div><span class="var-name">returnResult</span><span class="var-type">
+            bool | string
+        </span><p>false -- do not return results except if handler returned "false". This is how normal observables work.<br> "all" -- return all results as array<br> "first" -- return result of the first handler<br> "last" -- return result of the last handler</p></li></ul></li><li id="/MetaphorJs.lib.Observable/getEvent"
+        class="
+                                                                                            
+                
+    method public
+
+"><div class="labels"><span class="label func-public">public</span></div><h4 class="method" id="">getEvent<span class="func-sig">(name)</span><span class="func-return">: MetaphorJs.lib.ObservableEvent | undefined</span></h4><ul class="params"><li id="/MetaphorJs.lib.Observable/getEvent/name"
+            class="
+                                                        
+    
+    param
+
+"><span class="var-name">name</span><span class="var-type">
+            string
+        </span><p>Event name</p></li></ul></li><li id="/MetaphorJs.lib.Observable/on"
+        class="
+                                                                                            
+                
+    method public
+
+"><div class="labels"><span class="label func-public">public</span></div><h4 class="method" id="">on<span class="func-sig">(name, fn, scope, options)</span><span class="func-return">: void</span></h4><p>Subscribe to an event or register collector function.</p><ul class="params"><li id="/MetaphorJs.lib.Observable/on/name"
+            class="
+                                                        
+    
+    param
+
+"><div class="labels"><span class="label var-required">Required</span></div><span class="var-name">name</span><span class="var-type">
+            string
+        </span><p>Event name</p></li><li id="/MetaphorJs.lib.Observable/on/fn"
+        class="
+                                                                                                                
+    
+    param required
+
+"><h4 class="method" id="">fn<span class="func-sig">()</span><span class="func-return">: void</span></h4><p>Callback function</p><div class="labels"><span class="label func-required">Required</span></div></li><li id="/MetaphorJs.lib.Observable/on/scope"
+            class="
+                                                        
+    
+    param
+
+"><span class="var-name">scope</span><span class="var-type">
+            object
+        </span><p>"this" object for the callback function</p></li><li id="/MetaphorJs.lib.Observable/on/options"
+            class="
+                                                        
+    
+    param
+
+"><span class="var-name">options</span><span class="var-type">
+            object
+        </span><span class="var-default"> = false</span><ul class="sub-level"><li id="/MetaphorJs.lib.Observable/on/options/first"
+            class="
+                                                        
+    
+    variable
+
+"><span class="var-name">first</span><span class="var-type">
+            bool
+        </span><p>True to prepend to the list of handlers</p></li><li id="/MetaphorJs.lib.Observable/on/options/limit"
+            class="
+                                                        
+    
+    variable
+
+"><span class="var-name">limit</span><span class="var-type">
+            number
+        </span><p>Call handler this number of times; 0 for unlimited</p></li><li id="/MetaphorJs.lib.Observable/on/options/start"
+            class="
+                                                        
+    
+    variable
+
+"><span class="var-name">start</span><span class="var-type">
+            number
+        </span><span class="var-default"> = 1</span><p>Start calling handler after this number of calls. Starts from 1</p></li></ul></li></ul></li><li id="/MetaphorJs.lib.Observable/once"
+        class="
+                                                                                            
+                
+    method public
+
+"><div class="labels"><span class="label func-public">public</span></div><h4 class="method" id="">once<span class="func-sig">(name, fn, scope, options)</span><span class="func-return">: void</span></h4><p>Same as on(), but options.limit is forcefully set to 1.</p><ul class="params"><li id="/MetaphorJs.lib.Observable/once/name"
+            class="
+                                                        
+    
+    param
+
+"><div class="labels"><span class="label var-required">Required</span></div><span class="var-name">name</span><span class="var-type">
+            string
+        </span><p>Event name</p></li><li id="/MetaphorJs.lib.Observable/once/fn"
+        class="
+                                                                                                                
+    
+    param required
+
+"><h4 class="method" id="">fn<span class="func-sig">()</span><span class="func-return">: void</span></h4><p>Callback function</p><div class="labels"><span class="label func-required">Required</span></div></li><li id="/MetaphorJs.lib.Observable/once/scope"
+            class="
+                                                        
+    
+    param
+
+"><span class="var-name">scope</span><span class="var-type">
+            object
+        </span><p>"this" object for the callback function</p></li><li id="/MetaphorJs.lib.Observable/once/options"
+            class="
+                                                        
+    
+    param
+
+"><span class="var-name">options</span><span class="var-type">
+            object
+        </span><span class="var-default"> = false</span><ul class="sub-level"><li id="/MetaphorJs.lib.Observable/once/options/first"
+            class="
+                                                        
+    
+    variable
+
+"><span class="var-name">first</span><span class="var-type">
+            bool
+        </span><p>True to prepend to the list of handlers</p></li><li id="/MetaphorJs.lib.Observable/once/options/limit"
+            class="
+                                                        
+    
+    variable
+
+"><span class="var-name">limit</span><span class="var-type">
+            number
+        </span><p>Call handler this number of times; 0 for unlimited</p></li><li id="/MetaphorJs.lib.Observable/once/options/start"
+            class="
+                                                        
+    
+    variable
+
+"><span class="var-name">start</span><span class="var-type">
+            number
+        </span><span class="var-default"> = 1</span><p>Start calling handler after this number of calls. Starts from 1</p></li></ul></li></ul></li><li id="/MetaphorJs.lib.Observable/un"
+        class="
+                                                                                            
+                
+    method public
+
+"><div class="labels"><span class="label func-public">public</span></div><h4 class="method" id="">un<span class="func-sig">(name, fn, scope)</span><span class="func-return">: void</span></h4><p>Unsubscribe from an event</p><ul class="params"><li id="/MetaphorJs.lib.Observable/un/name"
+            class="
+                                                        
+    
+    param
+
+"><div class="labels"><span class="label var-required">Required</span></div><span class="var-name">name</span><span class="var-type">
+            string
+        </span><p>Event name</p></li><li id="/MetaphorJs.lib.Observable/un/fn"
+        class="
+                                                                                                                
+    
+    param required
+
+"><h4 class="method" id="">fn<span class="func-sig">()</span><span class="func-return">: void</span></h4><p>Event handler</p><div class="labels"><span class="label func-required">Required</span></div></li><li id="/MetaphorJs.lib.Observable/un/scope"
+            class="
+                                                        
+    
+    param
+
+"><span class="var-name">scope</span><span class="var-type">
+            object
+        </span><p>If you called on() with scope you must call un() with the same scope</p></li></ul></li><li id="/MetaphorJs.lib.Observable/hasListener"
+        class="
+                                                                                            
+                
+    method public
+
+"><div class="labels"><span class="label func-public">public</span></div><h4 class="method" id="">hasListener<span class="func-sig">(name)</span><span class="func-return">: bool</span></h4><ul class="params"><li id="/MetaphorJs.lib.Observable/hasListener/name"
+            class="
+                                                        
+    
+    param
+
+"><div class="labels"><span class="label var-required">Required</span></div><span class="var-name">name</span><span class="var-type">
+            string
+        </span><p>Event name</p></li></ul></li><li id="/MetaphorJs.lib.Observable/hasListener"
+        class="
+                                                                                            
+                
+    method public
+
+"><div class="labels"><span class="label func-public">public</span></div><h4 class="method" id="">hasListener<span class="func-sig">(name, fn, scope)</span><span class="func-return">: bool</span></h4><ul class="params"><li id="/MetaphorJs.lib.Observable/hasListener/name"
+            class="
+                                                        
+    
+    param
+
+"><div class="labels"><span class="label var-required">Required</span></div><span class="var-name">name</span><span class="var-type">
+            string
+        </span><p>Event name</p></li><li id="/MetaphorJs.lib.Observable/hasListener/fn"
+        class="
+                                                                                                                
+    
+    param required
+
+"><h4 class="method" id="">fn<span class="func-sig">()</span><span class="func-return">: void</span></h4><p>Callback function</p><div class="labels"><span class="label func-required">Required</span></div></li><li id="/MetaphorJs.lib.Observable/hasListener/scope"
+            class="
+                                                        
+    
+    param
+
+"><span class="var-name">scope</span><span class="var-type">
+            object
+        </span><p>Function's "this" object</p></li></ul></li><li id="/MetaphorJs.lib.Observable/removeAllListeners"
+        class="
+                                                                                            
+                
+    method public
+
+"><div class="labels"><span class="label func-public">public</span></div><h4 class="method" id="">removeAllListeners<span class="func-sig">()</span><span class="func-return">: void</span></h4><p>Remove all listeners from all events</p></li><li id="/MetaphorJs.lib.Observable/removeAllListeners"
+        class="
+                                                                                            
+                
+    method public
+
+"><div class="labels"><span class="label func-public">public</span></div><h4 class="method" id="">removeAllListeners<span class="func-sig">(name)</span><span class="func-return">: void</span></h4><p>Remove all listeners from specific event</p><ul class="params"><li id="/MetaphorJs.lib.Observable/removeAllListeners/name"
+            class="
+                                                        
+    
+    param
+
+"><div class="labels"><span class="label var-required">Required</span></div><span class="var-name">name</span><span class="var-type">
+            string
+        </span><p>Event name</p></li></ul></li><li id="/MetaphorJs.lib.Observable/trigger"
+        class="
+                                                                                            
+                
+    method public
+
+"><div class="labels"><span class="label func-public">public</span></div><h4 class="method" id="">trigger<span class="func-sig">(name, ...)</span><span class="func-return">: mixed</span></h4><p>Trigger an event -- call all listeners.</p><ul class="params"><li id="/MetaphorJs.lib.Observable/trigger/name"
+            class="
+                                                        
+    
+    param
+
+"><div class="labels"><span class="label var-required">Required</span></div><span class="var-name">name</span><span class="var-type">
+            string
+        </span><p>Event name</p></li><li id="/MetaphorJs.lib.Observable/trigger/..."
+            class="
+                                                        
+    
+    param
+
+"><span class="var-name">...</span><span class="var-type">
+            mixed
+        </span><p>As many other params as needed</p></li></ul></li><li id="/MetaphorJs.lib.Observable/suspendEvent"
+        class="
+                                                                                            
+                
+    method public
+
+"><div class="labels"><span class="label func-public">public</span></div><h4 class="method" id="">suspendEvent<span class="func-sig">(name)</span><span class="func-return">: void</span></h4><p>Suspend an event. Suspended event will not call any listeners on trigger().</p><ul class="params"><li id="/MetaphorJs.lib.Observable/suspendEvent/name"
+            class="
+                                                        
+    
+    param
+
+"><span class="var-name">name</span><span class="var-type">
+            string
+        </span><p>Event name</p></li></ul></li><li id="/MetaphorJs.lib.Observable/suspendAllEvents"
+        class="
+                                                                                            
+                
+    method public
+
+"><div class="labels"><span class="label func-public">public</span></div><h4 class="method" id="">suspendAllEvents<span class="func-sig">()</span><span class="func-return">: void</span></h4></li><li id="/MetaphorJs.lib.Observable/resumeEvent"
+        class="
+                                                                                            
+                
+    method public
+
+"><div class="labels"><span class="label func-public">public</span></div><h4 class="method" id="">resumeEvent<span class="func-sig">(name)</span><span class="func-return">: void</span></h4><p>Resume suspended event.</p><ul class="params"><li id="/MetaphorJs.lib.Observable/resumeEvent/name"
+            class="
+                                                        
+    
+    param
+
+"><span class="var-name">name</span><span class="var-type">
+            string
+        </span><p>Event name</p></li></ul></li><li id="/MetaphorJs.lib.Observable/resumeAllEvents"
+        class="
+                                                                                            
+                
+    method public
+
+"><div class="labels"><span class="label func-public">public</span></div><h4 class="method" id="">resumeAllEvents<span class="func-sig">()</span><span class="func-return">: void</span></h4></li><li id="/MetaphorJs.lib.Observable/destroy"
+        class="
+                                                                                            
+                
+    method public
+
+"><div class="labels"><span class="label func-public">public</span></div><h4 class="method" id="">destroy<span class="func-sig">()</span><span class="func-return">: void</span></h4><p>Destroy all events and itself</p></li><li id="/MetaphorJs.lib.Observable/destroy"
+        class="
+                                                                                            
+                
+    method public
+
+"><div class="labels"><span class="label func-public">public</span></div><h4 class="method" id="">destroy<span class="func-sig">(name)</span><span class="func-return">: void</span></h4><p>Destroy specific event</p><ul class="params"><li id="/MetaphorJs.lib.Observable/destroy/name"
+            class="
+                                                        
+    
+    param
+
+"><span class="var-name">name</span><span class="var-type">
+            string
+        </span><p>Event name</p></li></ul></li><li id="/MetaphorJs.lib.Observable/getApi"
+        class="
+                                                                                            
+                
+    method public
+
+"><div class="labels"><span class="label func-public">public</span></div><h4 class="method" id="">getApi<span class="func-sig">()</span><span class="func-return">: object</span></h4><p>Get object with all functions except "destroy"</p></li></ul></li><li class="class"><h3 class="class" id="/MetaphorJs.lib.ObservableEvent"><span>class</span> MetaphorJs.lib.ObservableEvent
+                </h3><p>This class is private - you can't create an event other than via Observable.
+See MetaphorJs.lib.Observable reference.</p><ul class="fields"><li class="fieldclass-field"><strong>@file</strong>
+                        metaphorjs.observable.js
+                    </li></ul><label class="section">Methods</label><ul class="method-level"><li id="/MetaphorJs.lib.ObservableEvent/destroy"
+        class="
+                                                                                            
+                
+    method public
+
+"><div class="labels"><span class="label func-public">public</span></div><h4 class="method" id="">destroy<span class="func-sig">()</span><span class="func-return">: void</span></h4></li><li id="/MetaphorJs.lib.ObservableEvent/on"
+        class="
+                                                                                            
+                
+    method public
+
+"><div class="labels"><span class="label func-public">public</span></div><h4 class="method" id="">on<span class="func-sig">(fn, scope, options)</span><span class="func-return">: void</span></h4><ul class="params"><li id="/MetaphorJs.lib.ObservableEvent/on/fn"
+        class="
+                                                                                                                
+    
+    param required
+
+"><h4 class="method" id="">fn<span class="func-sig">()</span><span class="func-return">: void</span></h4><p>Callback function</p><div class="labels"><span class="label func-required">Required</span></div></li><li id="/MetaphorJs.lib.ObservableEvent/on/scope"
+            class="
+                                                        
+    
+    param
+
+"><span class="var-name">scope</span><span class="var-type">
+            object
+        </span><p>Function's "this" object</p></li><li id="/MetaphorJs.lib.ObservableEvent/on/options"
+            class="
+                                                        
+    
+    param
+
+"><span class="var-name">options</span><span class="var-type">
+            object
+        </span><p>See Observable's on()</p></li></ul></li><li id="/MetaphorJs.lib.ObservableEvent/un"
+        class="
+                                                                                            
+                
+    method public
+
+"><div class="labels"><span class="label func-public">public</span></div><h4 class="method" id="">un<span class="func-sig">(fn, scope)</span><span class="func-return">: void</span></h4><ul class="params"><li id="/MetaphorJs.lib.ObservableEvent/un/fn"
+        class="
+                                                                                                                
+    
+    param required
+
+"><h4 class="method" id="">fn<span class="func-sig">()</span><span class="func-return">: void</span></h4><p>Callback function</p><div class="labels"><span class="label func-required">Required</span></div></li><li id="/MetaphorJs.lib.ObservableEvent/un/scope"
+            class="
+                                                        
+    
+    param
+
+"><span class="var-name">scope</span><span class="var-type">
+            object
+        </span><p>Function's "this" object</p></li></ul></li><li id="/MetaphorJs.lib.ObservableEvent/hasListener"
+        class="
+                                                                                            
+                
+    method public
+
+"><div class="labels"><span class="label func-public">public</span></div><h4 class="method" id="">hasListener<span class="func-sig">()</span><span class="func-return">: bool</span></h4></li><li id="/MetaphorJs.lib.ObservableEvent/hasListener"
+        class="
+                                                                                            
+                
+    method public
+
+"><div class="labels"><span class="label func-public">public</span></div><h4 class="method" id="">hasListener<span class="func-sig">(fn, scope)</span><span class="func-return">: bool</span></h4><ul class="params"><li id="/MetaphorJs.lib.ObservableEvent/hasListener/fn"
+        class="
+                                                                                                                
+    
+    param required
+
+"><h4 class="method" id="">fn<span class="func-sig">()</span><span class="func-return">: void</span></h4><p>Callback function</p><div class="labels"><span class="label func-required">Required</span></div></li><li id="/MetaphorJs.lib.ObservableEvent/hasListener/scope"
+            class="
+                                                        
+    
+    param
+
+"><span class="var-name">scope</span><span class="var-type">
+            object
+        </span><p>Function's "this" object</p></li></ul></li><li id="/MetaphorJs.lib.ObservableEvent/removeAllListeners"
+        class="
+                                                                                            
+                
+    method public
+
+"><div class="labels"><span class="label func-public">public</span></div><h4 class="method" id="">removeAllListeners<span class="func-sig">()</span><span class="func-return">: void</span></h4></li><li id="/MetaphorJs.lib.ObservableEvent/suspend"
+        class="
+                                                                                            
+                
+    method public
+
+"><div class="labels"><span class="label func-public">public</span></div><h4 class="method" id="">suspend<span class="func-sig">()</span><span class="func-return">: void</span></h4></li><li id="/MetaphorJs.lib.ObservableEvent/resume"
+        class="
+                                                                                            
+                
+    method public
+
+"><div class="labels"><span class="label func-public">public</span></div><h4 class="method" id="">resume<span class="func-sig">()</span><span class="func-return">: void</span></h4></li><li id="/MetaphorJs.lib.ObservableEvent/trigger"
+        class="
+                                                                                            
+                
+    method public
+
+"><div class="labels"><span class="label func-public">public</span></div><h4 class="method" id="">trigger<span class="func-sig">()</span><span class="func-return">: mixed</span></h4></li></ul></li></ul></li></ul></div><script src="assets/jquery-1.11.0.min.js"></script>
+<script src="assets/prism.js"></script>
+<script src="assets/toggle.js"></script>
 </body>
 </html>

@@ -1,109 +1,131 @@
+@font-face {
+    font-family: 'Open Sans';
+    src: url('OpenSans-Light-webfont.eot');
+    src: url('OpenSans-Light-webfont.eot?#iefix') format('embedded-opentype'),
+                 url('OpenSans-Light-webfont.woff') format('woff'),
+                 url('OpenSans-Light-webfont.ttf') format('truetype'),
+                 url('OpenSans-Light-webfont.svg#open_sanslight') format('svg');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Open Sans';
+    src: url('OpenSans-Regular-webfont.eot');
+    src: url('OpenSans-Regular-webfont.eot?#iefix') format('embedded-opentype'),
+                 url('OpenSans-Regular-webfont.woff') format('woff'),
+                 url('OpenSans-Regular-webfont.ttf') format('truetype'),
+                 url('OpenSans-Regular-webfont.svg#open_sansregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
 
 html {
-    font-family: Helvetica, Arial, sans-serif;
+    font-family: "Open Sans", Helvetica, Arial, sans-serif;
+    line-height: 18px;
     font-size: 16px;
-    color: #000;
-    line-height: 22px;
-    background-color: #f0f0f0;
+    background-color: #fff;
 }
 
 body {
     margin: 0 auto;
     max-width: 1200px;
+    position: relative;
 }
 
 a:link, a:visited {
     text-decoration: none;
-    color: #5E709D;
+    color: #414CBB;
 }
 
 a:hover {
     text-decoration: underline;
-    color: #5E709D;
+    color: #414CBB;
 }
 
-ul {
-    list-style: none;
-    margin: 0;
-}
-
-li {
-    clear: both;
-}
-
-h1, h2, h3, h4, h5, h6 {
-    margin: 0;
-}
-h1 span, h2 span, h3 span, h4 span, h5 span, h6 span {
-    font-weight: normal;
-}
-
-h3 {
-    font-size: 22px;
-    line-height: 30px;
-}
-
-h4 {
-    font-size: 14px;
-    margin: 20px 0 10px;
-    color: #777;
-    font-weight: normal;
-    text-transform: uppercase;
-}
-
-h5 {
-    font-size: 16px;
-    margin-bottom: 5px;
-}
-
-h1 {
-    text-align: center;
-    font-size: 32px;
-    background-color: #f0f0f0;
-    margin: 0;
+#header {
+    background-color: #ebeff2;
     padding: 20px;
-}
-
-h2 {
-    padding: 20px 0 20px 10px;
-}
-
-
-
-#description {
-    font-size: 24px;
-    line-height: 30px;
     text-align: center;
 }
 
 #navigation {
-    background-color: #fff;
-    border-radius: 5px;
-    padding-top: 10px;
+    float: left;
+    width: 25%;
     font-size: 14px;
-    overflow: hidden;
 }
 
-#navigation li {
-    white-space: nowrap;
-    overflow: hidden;
-    -ms-text-overflow: ellipsis;
-    -o-text-overflow: ellipsis;
-    text-overflow: ellipsis;
+#navigation label {
+    display: block;
+    cursor: pointer;
+}
+
+#options {
+    padding: 10px;
+    border: 1px solid  #ebeff2;
+    margin: 10px 0;
 }
 
 #main {
-    margin-top: 10px;
+    float: left;
+    width: 75%;
 }
 
-#main p {
-    color: #666;
+
+
+h1, h2, h3, h4, h5 {
     margin: 0;
-    font-size: 14px;
+    font-weight: 300;
+    overflow: hidden;
 }
+h1, h2 {
+    font-weight: 300;
+}
+h1 span, h2 span, h3 span, h4 span, h5 span {
+
+}
+
+h1 {
+    line-height: 26px;
+    font-size: 26px;
+}
+h2 {
+    font-size: 24px;
+    line-height: 24px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #ebeff2;
+    margin-left: 20px;
+}
+h3 {
+    font-size: 20px;
+    line-height: 22px;
+    padding: 5px;
+    background-color: #ebeff2;
+}
+h4 {
+    font-size: 18px;
+    line-height: 20px;
+    padding: 5px;
+    margin-top: 5px;
+    background-color: #ebeff2;
+}
+h5 {
+    font-size: 16px;
+    line-height: 20px;
+}
+
+p {
+    color: #666;
+    font-size: 14px;
+    line-height: 22px;
+    margin: 5px 0 0 5px;
+}
+
+
 pre, :not(pre) > code {
-    font-size: 12px;
-    line-height: 14px;
+    font-size: 14px;
+    line-height: 16px;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) inset;
     border-radius: 3px;
 }
@@ -111,20 +133,88 @@ pre, :not(pre) > code {
     padding-left: 5px;
     padding-right: 5px;
 }
-pre code {
 
+
+.nav-gconstant-level, .nav-function-level, .nav-gvar-level {
+    padding-left: 0;
 }
 
-#options {
-    text-align: center;
-    padding: 15px;
+.nav-namespace {
+    font-weight: bold;
 }
-#options label {
-    cursor: pointer;
-    white-space: nowrap;
+
+.nav-class-level {
+    padding-left: 0;
 }
 
 
+.short {
+    font-weight: 300;
+    color: #666;
+    margin-left: 10px;
+}
+
+label.section {
+    display: block;
+    text-transform: uppercase;
+    font-size: 14px;
+    padding: 5px 0;
+}
+
+ul {
+    list-style: none;
+    padding-left: 20px;
+    margin-bottom: 20px;
+    margin-top: 5px;
+}
+
+li {
+    padding: 5px 0;
+    border-bottom: 1px solid #ebeff2;
+}
+
+ul.namespace-level {
+   padding-left: 0;
+}
+
+li.namespace-level {
+    border-bottom: 0;
+}
+
+li.class {
+    margin-top: 20px;
+    border-bottom: 2px solid #ebeff2;
+}
+
+ul.sub-level li:last-child, ul.params li:last-child {
+    border-bottom: 0;
+}
+ul.sub-level .var-name {
+    font-weight: normal;
+}
+ul.sub-level h4 {
+    font-weight: normal;
+    background-color: transparent;
+    padding: 0;
+    font-size: 16px;
+    display: inline;
+}
+ul.sub-level li.variable:before {
+    content: '\21B3';
+    color: #999;
+    display: inline-block;
+    padding-right: 5px;
+    font-size: 15px;
+}
+
+ul.params p, ul.sub-level p {
+    margin-left: 0;
+}
+
+.class-body, .interface-body {
+    padding: 0 20px;
+    overflow: hidden;
+}
 
 
 .labels {
@@ -141,6 +231,7 @@ pre code {
     padding: 2px 5px;
     line-height: 12px;
     text-shadow: rgba(0,0,0,0.2) 1px 1px;
+    margin-right: 5px;
 }
 
 .label.plain {
@@ -148,102 +239,9 @@ pre code {
     font-size: 11px;
 }
 
-
-
-ul.nav-class-level, ul.nav-interface-level,
-ul.nav-gconstant-level, ul.nav-function-level, ul.nav-gvar-level {
-    padding-left: 10px;
+.fields a {
+    margin-left: 5px;
 }
-ul.nav-method-level {
-    display: none;
-    padding-left: 15px;
-}
-ul.nav-property-level {
-    display: none;
-}
-
-li.nav-class {
-
-}
-
-.nav-namespace {
-    padding-left: 10px;
-    font-weight: bold;
-    color: #666;
-}
-
-
-
-
-
-ul.namespace-level {
-    padding-left: 0;
-}
-
-ul.class-level, ul.interface-level, ul.gconstant-level,
-ul.gfunction-level, ul.gvar-level {
-    padding-left: 0;
-}
-
-ul.sub-level {
-    margin-top: 10px;
-    border-left: 1px solid #e0e0e0;
-}
-
-ul.method-level {
-    padding-left: 10px;
-}
-
-ul.property-level {
-    padding-left: 10px;
-}
-
-ul.constant-level {
-    padding-left: 10px;
-}
-
-
-ul.params {
-    margin-top: 10px;
-}
-
-ul.fields {
-    padding-left: 0;
-    color: #666;
-    font-size: 14px;
-}
-
-
-
-li.class, li.interface, li.gconstant, li.gfunction, li.gvar {
-    margin-bottom: 20px;
-    padding: 10px;
-    border-radius: 5px;
-    background-color: #fff;
-}
-
-li.constant {
-    border-top: 1px solid #f0f0f0;
-    padding-top: 10px;
-}
-li.property {
-    border-top: 1px solid #f0f0f0;
-    padding-top: 10px;
-}
-li.method {
-    border-top: 1px solid #f0f0f0;
-    padding-top: 10px;
-}
-
-li.param, li.variable {
-    padding-bottom: 10px;
-}
-
-li.param label, li.variable label {
-}
-
-
-
 
 .class-extend {
     background-color: #8C92CE;
@@ -302,92 +300,121 @@ li.param label, li.variable label {
     background-color: #9D645E;
 }
 
-.var-name {
-    font-weight: bold;
+.func-return-value {
+    padding-left: 20px;
 }
+
 
 .var-type {
     font-weight: normal;
-    color: #444;
-}
-
-
-
-.inherited {
-    display: none;
-}
-.protected {
-    display: none;
-}
-.private {
-    display: none;
+    color: #666;
 }
 
 
 
 
 
-.clearfix:after {
-    content:  		".";
-    display:  		block;
-    clear:			both;
-    visibility:   	hidden;
-    line-height:  	0;
-    font-size:      0;
-    height:   		0;
-    float: 			none;
+.index li {
+
 }
 
-.clearfix {
-    float: 			none;
+.index .index-item {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
-html[xmlns] .clearfix {
-    display:  		block;
-}
-
-* html .clearfix {
-    height:   		1%;
+.index .namespaces {
+    padding-right: 20px;
 }
 
 
+.index .classes > li,
+.index .namespaces > li{
+    border-bottom: 0;
+}
 
 
-@media (min-width: 768px) {
+.class h2, .interface h2 {
+    padding-top: 20px;
+}
 
+
+.class ul {
+    border-left: 1px solid #ebeff2;
+}
+
+
+.varmap {
+    float: right;
+    background-color: #fff;
+    font-size: 12px;
+    line-height: 14px;
+    border: 1px solid #ebeff2;
+    padding: 5px;
+    margin-left: 5px;
+    background-color: #fff;
+}
+
+.varmap ul {
+    border-left: 0;
+    margin-bottom: 5px;
+    padding-left: 14px;
+}
+
+.varmap li {
+    border-bottom: 0;
+    padding: 0;
+}
+.varmap li:before {
+    content: '\21B3';
+    color: #999;
+    display: inline-block;
+    padding-right: 5px;
+    font-size: 15px;
+}
+.varmap li:first-child:before {
+    content: '\21B3';
+}
+.varmap > ul {
+    padding-left: 0;
+}
+
+@media (max-width: 768px) {
     #navigation {
-        width: 25%;
-        float: left;
+        float: none;
+        width: auto;
+        margin: 0 20px;
     }
-
     #main {
-        width: 75%;
-        float: left;
-        margin-top: 0;
+        float: none;
+        width: auto;
+        margin: 0 20px;
     }
-
-    h1 {
-        height: 60px;
-        line-height: 60px;
-        padding: 0;
-    }
-
-    ul.class-level, ul.interface-level, ul.gconstant-level, ul.gfunction-level, ul.gvar-level {
-        padding-left: 10px;
-    }
-
-    ul.nav-method-level {
-        display: block;
-    }
-    ul.nav-property-level {
-        display: block;
-    }
-
-    li.nav-class, li.nav-interface {
-        margin-bottom: 20px;
+    ul.class-level {
+       padding-left: 0;
     }
 
     h2 {
-        padding-left: 20px;
+        margin-left: 0;
     }
+    .varmap {
+        display: none;
+    }
+}
+
+.main-hidden {
+    display: none;
+}
+.nav-hidden {
+    display: none;
+}
+.protected-hidden {
+    display: none;
+}
+.private-hidden {
+    display: none;
+}
+.inherited-hidden {
+    display: none;
 }
