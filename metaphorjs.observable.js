@@ -52,6 +52,7 @@ var extend = function(trg) {
  * this.trigger("event");
  * </code></pre>
  *
+ * @namespace MetaphorJs
  * @class MetaphorJs.lib.Observable
  * @version 1.1
  * @author johann kuindji
@@ -81,11 +82,11 @@ var observable = function() {
         *
         * @method
         * @access public
-        * @param string name {
+        * @param {string} name {
         *       Event name
         *       @required
         * }
-        * @param bool|string returnResult {
+        * @param {bool|string} returnResult {
         *   false -- do not return results except if handler returned "false". This is how
         *   normal observables work.<br>
         *   "all" -- return all results as array<br>
@@ -106,7 +107,7 @@ var observable = function() {
         /**
         * @method
         * @access public
-        * @param string name Event name
+        * @param {string} name Event name
         * @return MetaphorJs.lib.ObservableEvent|undefined
         */
         getEvent: function(name) {
@@ -119,16 +120,16 @@ var observable = function() {
         * @method
         * @access public
         * @md-save on
-        * @param string name {
+        * @param {string} name {
         *       Event name
         *       @required
         * }
-        * @param function fn {
+        * @param {function} fn {
         *       Callback function
         *       @required
         * }
-        * @param object scope "this" object for the callback function
-        * @param object options {
+        * @param {object} scope "this" object for the callback function
+        * @param {object} options {
         *       @type bool first {
         *           True to prepend to the list of handlers
         *           @default false
@@ -141,6 +142,8 @@ var observable = function() {
         *           Start calling handler after this number of calls. Starts from 1
         *           @default 1
         *       }
+         *      @type array append Append parameters
+         *      @type array prepend Prepend parameters
         * }
         */
         on: function(name, fn, scope, options) {
@@ -168,15 +171,15 @@ var observable = function() {
         * Unsubscribe from an event
         * @method
         * @access public
-        * @param string name {
+        * @param {string} name {
         *       Event name
         *       @required
         * }
-        * @param function fn {
+        * @param {function} fn {
         *       Event handler
         *       @required
         * }
-        * @param object scope If you called on() with scope you must call un() with the same scope
+        * @param {object} scope If you called on() with scope you must call un() with the same scope
         */
         un: function(name, fn, scope) {
             name = name.toLowerCase();
@@ -189,16 +192,16 @@ var observable = function() {
         /**
         * @method hasListener
         * @access public
-        * @param string name Event name { @required }
+        * @param {string} name Event name { @required }
         * @return bool
         */
 
         /**
         * @method
         * @access public
-        * @param string name Event name { @required }
-        * @param function fn Callback function { @required }
-        * @param object scope Function's "this" object
+        * @param {string} name Event name { @required }
+        * @param {function} fn Callback function { @required }
+        * @param {object} scope Function's "this" object
         * @return bool
         */
         hasListener: function(name, fn, scope) {
@@ -219,7 +222,7 @@ var observable = function() {
         * Remove all listeners from specific event
         * @method
         * @access public
-        * @param string name Event name { @required }
+        * @param {string} name Event name { @required }
         */
         removeAllListeners: function(name) {
             if (!events[name]) {
@@ -232,8 +235,8 @@ var observable = function() {
         * Trigger an event -- call all listeners.
         * @method
         * @access public
-        * @param string name Event name { @required }
-        * @param mixed ... As many other params as needed
+        * @param {string} name Event name { @required }
+        * @param {*} ... As many other params as needed
         * @return mixed
         */
         trigger: function() {
@@ -259,7 +262,7 @@ var observable = function() {
         * Suspend an event. Suspended event will not call any listeners on trigger().
         * @method
         * @access public
-        * @param string name Event name
+        * @param {string} name Event name
         */
         suspendEvent: function(name) {
             name = name.toLowerCase();
@@ -283,7 +286,7 @@ var observable = function() {
         * Resume suspended event.
         * @method
         * @access public
-        * @param string name Event name
+        * @param {string} name Event name
         */
         resumeEvent: function(name) {
             name = name.toLowerCase();
@@ -302,6 +305,19 @@ var observable = function() {
             for (var name in events) {
                 events[name].resume();
             }
+        },
+
+        /**
+         * @method
+         * @access public
+         * @param {string} name Event name
+         */
+        destroyEvent: function(name) {
+            if (events[name]) {
+                events[name].removeAllListeners();
+                events[name].destroy();
+                delete events[name];
+            }
         }
     });
 
@@ -319,7 +335,7 @@ var observable = function() {
         * @method
         * @md-not-inheritable
         * @access public
-        * @param string name Event name
+        * @param {string} name Event name
         */
         destroy: function(name) {
 
@@ -335,7 +351,7 @@ var observable = function() {
                     events[i].destroy();
                 }
 
-                events 	= null;
+                events 	= {};
                 self	= null;
             }
         },
@@ -368,7 +384,9 @@ var event = function(name, returnResult) {
         suspended       = false,
         lid             = 0,
         self            = this,
-        returnResult    = returnResult || false; // first|last|all
+        slice           = Array.prototype.slice;
+
+    returnResult        = returnResult || false; // first|last|all
 
     extend(self, {
 
@@ -387,9 +405,9 @@ var event = function(name, returnResult) {
 
         /**
          * @method
-         * @param function fn Callback function { @required }
-         * @param object scope Function's "this" object
-         * @param object options See Observable's on()
+         * @param {function} fn Callback function { @required }
+         * @param {object} scope Function's "this" object
+         * @param {object} options See Observable's on()
          */
         on: function(fn, scope, options) {
 
@@ -419,7 +437,9 @@ var event = function(name, returnResult) {
                 called:     0, // how many times the function was triggered
                 limit:      options.limit || 0, // how many times the function is allowed to trigger
                 start:      options.start || 1, // from which attempt it is allowed to trigger the function
-                count:      0 // how many attempts to trigger the function was made
+                count:      0, // how many attempts to trigger the function was made
+                append:     options.append, // append parameters
+                prepend:    options.prepend // prepend parameters
             };
 
             if (first) {
@@ -436,8 +456,8 @@ var event = function(name, returnResult) {
 
         /**
          * @method
-         * @param function fn Callback function { @required }
-         * @param object scope Function's "this" object
+         * @param {function} fn Callback function { @required }
+         * @param {object} scope Function's "this" object
          */
         un: function(fn, scope) {
 
@@ -481,8 +501,8 @@ var event = function(name, returnResult) {
 
         /**
          * @method
-         * @param function fn Callback function { @required }
-         * @param object scope Function's "this" object
+         * @param {function} fn Callback function { @required }
+         * @param {object} scope Function's "this" object
          * @return bool
          */
         hasListener: function(fn, scope) {
@@ -550,10 +570,11 @@ var event = function(name, returnResult) {
         trigger: function() {
 
             if (suspended || listeners.length == 0) {
-                return;
+                return null;
             }
 
             var ret     = returnResult == "all" ? [] : null,
+                args,
                 q       = [],
                 i, len, l,
                 res;
@@ -568,7 +589,7 @@ var event = function(name, returnResult) {
             // index
             while (l = q.shift()) {
 
-                // listener may already have unsubsribed
+                // listener may already have unsubscribed
                 if (!l || !map[l.id]) {
                     continue;
                 }
@@ -579,7 +600,20 @@ var event = function(name, returnResult) {
                     continue;
                 }
 
-                res = l.fn.apply(l.scope, arguments);
+                if (l.append || l.prepend) {
+                    args    = slice.call(arguments);
+                    if (l.prepend) {
+                        args    = l.prepend.concat(args);
+                    }
+                    if (l.prepend) {
+                        args    = args.concat(l.append);
+                    }
+                }
+                else {
+                    args = arguments;
+                }
+
+                res = l.fn.apply(l.scope, args);
 
                 l.called++;
 
@@ -587,15 +621,15 @@ var event = function(name, returnResult) {
                     this.un(l.id);
                 }
 
-                if (returnResult == "all") {
+                if (returnResult == "all" && res !== null) {
                     ret.push(res);
                 }
 
-                if (returnResult == "first" && res) {
+                if (returnResult == "first" && res !== null) {
                     return res;
                 }
 
-                if (returnResult == "last" && res) {
+                if (returnResult == "last" && res !== null) {
                     ret = res;
                 }
 
