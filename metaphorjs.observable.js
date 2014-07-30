@@ -4,24 +4,50 @@
 
 "use strict";
 
+if (typeof window == "undefined") {
+    global.window = global;
+}
 
-var randomHash = MetaphorJs && MetaphorJs.nextUid ? MetaphorJs.nextUid : function() {
+if (!window.Promise) {
+    var Promise;
+
+    if (typeof global != "undefined") {
+        try {
+            Promise = require("metaphorjs-promise");
+        }
+        catch (e) {
+            if (global.Promise) {
+                Promise = global.Promise;
+            }
+        }
+    }
+    else if (window.MetaphorJs && MetaphorJs.lib && MetaphorJs.lib.Promise) {
+        Promise = MetaphorJs.lib.Promise;
+    }
+}
+else {
+    Promise = window.Promise;
+}
+
+var randomHash = window.MetaphorJs && MetaphorJs.nextUid ? MetaphorJs.nextUid : function() {
     var N = 10;
     return new Array(N+1).join((Math.random().toString(36)+'00000000000000000')
                 .slice(2, 18)).slice(0, N)
 };
 
-var extend = function(trg) {
-    var i, j, len, src;
-
-    for (j = 1, len = arguments.length; j < len; j++) {
-        src     = arguments[j];
-        for (i in src) {
+var extend = function(trg, src) {
+    for (var i in src) {
+        if (src.hasOwnProperty(i)) {
             trg[i] = src[i];
         }
     }
 };
 
+var slice = Array.prototype.slice;
+
+var async   = typeof process != "undefined" ? process.nextTick : function(fn) {
+    window.setTimeout(fn, 0);
+};
 
 
 /**
@@ -59,10 +85,6 @@ var extend = function(trg) {
  * @link https://github.com/kuindji/metaphorjs-observable
  */
 var Observable = function() {
-
-    //var self        = this,
-    //    events      = {},
-    //    api         = {};
 
     this.events = {};
 
@@ -179,14 +201,8 @@ extend(Observable.prototype, {
     * Unsubscribe from an event
     * @method
     * @access public
-    * @param {string} name {
-    *       Event name
-    *       @required
-    * }
-    * @param {function} fn {
-    *       Event handler
-    *       @required
-    * }
+    * @param {string} name Event name
+    * @param {function} fn Event handler
     * @param {object} scope If you called on() with scope you must call un() with the same scope
     */
     un: function(name, fn, scope) {
@@ -243,6 +259,24 @@ extend(Observable.prototype, {
     },
 
     /**
+     * @returns {[]}
+     */
+    triggerAsync: function() {
+
+        var name = arguments[0],
+            events  = this.events;
+
+        name = name.toLowerCase();
+
+        if (!events[name]) {
+            return [];
+        }
+
+        var e = events[name];
+        return e.triggerAsync.apply(e, slice.call(arguments, 1));
+    },
+
+    /**
     * Trigger an event -- call all listeners.
     * @method
     * @access public
@@ -252,8 +286,7 @@ extend(Observable.prototype, {
     */
     trigger: function() {
 
-        var //a = [],
-            name = arguments[0],
+        var name = arguments[0],
             events  = this.events;
 
         name = name.toLowerCase();
@@ -262,12 +295,8 @@ extend(Observable.prototype, {
             return null;
         }
 
-        //for (var i = 1, len = arguments.length; i < len; i++) {
-        //    a.push(arguments[i]);
-        //}
-
         var e = events[name];
-        return e.trigger.apply(e, Array.prototype.slice.call(arguments, 1));
+        return e.trigger.apply(e, slice.call(arguments, 1));
     },
 
     /**
@@ -415,13 +444,17 @@ var Event = function(name, returnResult) {
 
 extend(Event.prototype, {
 
+    getName: function() {
+        return this.name;
+    },
+
     /**
      * @method
      */
     destroy: function() {
-        var self    = this;
-        self.listeners   = null;
-        self.map         = null;
+        var self        = this;
+        self.listeners  = null;
+        self.map        = null;
     },
 
     /**
@@ -436,25 +469,27 @@ extend(Event.prototype, {
             return null;
         }
 
-        scope       = scope || fn;
+        scope       = scope || null;
         options     = options || {};
 
-        var self    = this,
-            uni     = self.uni;
+        var self        = this,
+            uni         = self.uni,
+            uniScope    = scope || fn;
 
-        if (scope[uni] && !options.allowDupes) {
+        if (uniScope[uni] && !options.allowDupes) {
             return null;
         }
 
         var id      = ++self.lid,
             first   = options.first || false;
 
-        scope[uni]  = id;
+        uniScope[uni]  = id;
 
 
         var e = {
             fn:         fn,
             scope:      scope,
+            uniScope:   uniScope,
             id:         id,
             called:     0, // how many times the function was triggered
             limit:      options.limit || 0, // how many times the function is allowed to trigger
@@ -480,13 +515,27 @@ extend(Event.prototype, {
      * @method
      * @param {function} fn Callback function { @required }
      * @param {object} scope Function's "this" object
+     * @param {object} options See Observable's on()
+     */
+    once: function(fn, scope, options) {
+
+        options = options || {};
+        options.once = true;
+
+        return this.on(fn, scope, options);
+    },
+
+    /**
+     * @method
+     * @param {function} fn Callback function { @required }
+     * @param {object} scope Function's "this" object
      */
     un: function(fn, scope) {
 
-        var self    = this,
-            inx     = -1,
-            uni     = self.uni,
-            listeners = self.listeners,
+        var self        = this,
+            inx         = -1,
+            uni         = self.uni,
+            listeners   = self.listeners,
             id;
 
         if (fn == parseInt(fn)) {
@@ -504,7 +553,7 @@ extend(Event.prototype, {
         for (var i = 0, len = listeners.length; i < len; i++) {
             if (listeners[i].id == id) {
                 inx = i;
-                delete listeners[i].scope[uni];
+                delete listeners[i].uniScope[uni];
                 break;
             }
         }
@@ -573,7 +622,7 @@ extend(Event.prototype, {
             i, len;
 
         for (i = 0, len = listeners.length; i < len; i++) {
-            delete listeners[i].scope[uni];
+            delete listeners[i].uniScope[uni];
         }
         self.listeners   = [];
         self.map         = {};
@@ -593,30 +642,129 @@ extend(Event.prototype, {
         this.suspended = false;
     },
 
+
+    _prepareArgs: function(l, triggerArgs) {
+        var args;
+
+        if (l.append || l.prepend) {
+            args    = slice.call(triggerArgs);
+            if (l.prepend) {
+                args    = l.prepend.concat(args);
+            }
+            if (l.append) {
+                args    = args.concat(l.append);
+            }
+        }
+        else {
+            args = triggerArgs;
+        }
+
+        return args;
+    },
+
+    /**
+     * Usage: Promise.all(event.triggerAsync()).done(function(returnValues){});
+     * @method
+     * @return {[]} Collection of promises
+     */
+    triggerAsync: function() {
+
+        if (typeof Promise == "undefined") {
+            throw Error("Promises are not defined");
+        }
+
+        var self            = this,
+            listeners       = self.listeners,
+            returnResult    = self.returnResult,
+            triggerArgs     = slice.call(arguments),
+            q               = [],
+            promises        = [],
+            args,
+            l, i, len;
+
+        if (self.suspended || listeners.length == 0) {
+            return Promise.resolve(null);
+        }
+
+        // create a snapshot of listeners list
+        for (i = 0, len = listeners.length; i < len; i++) {
+            q.push(listeners[i]);
+        }
+
+        var next = function(l) {
+
+            args = self._prepareArgs(l, triggerArgs);
+
+            return new Promise(function(resolve, reject){
+
+                async(function(){
+
+                    try {
+                        resolve(l.fn.apply(l.scope, args));
+                    }
+                    catch (e) {
+                        reject(e);
+                    }
+
+                    l.called++;
+
+                    if (l.called == l.limit) {
+                        self.un(l.id);
+                    }
+                }, 0);
+            });
+        };
+
+        while (l = q.shift()) {
+            // listener may already have unsubscribed
+            if (!l || !self.map[l.id]) {
+                continue;
+            }
+
+            l.count++;
+
+            if (l.count < l.start) {
+                continue;
+            }
+
+            promises.push(next(l));
+
+            if (returnResult == "first") {
+                break;
+            }
+        }
+
+        return returnResult == "last" ? [promises.pop()] : promises;
+    },
+
     /**
      * @method
-     * @return mixed
+     * @return *
      */
     trigger: function() {
 
-        var self    = this,
-            listeners = self.listeners,
-            returnResult = self.returnResult,
-            slice   = Array.prototype.slice;
+        var self            = this,
+            listeners       = self.listeners,
+            returnResult    = self.returnResult;
 
         if (self.suspended || listeners.length == 0) {
             return null;
         }
 
         var ret     = returnResult == "all" ? [] : null,
-            args,
             q       = [],
             i, len, l,
             res;
 
-        // create a snapshot of listeners list
-        for (i = 0, len = listeners.length; i < len; i++) {
-            q.push(listeners[i]);
+
+        if (returnResult == "first") {
+            q.push(listeners[0]);
+        }
+        else {
+            // create a snapshot of listeners list
+            for (i = 0, len = listeners.length; i < len; i++) {
+                q.push(listeners[i]);
+            }
         }
 
         // now if during triggering someone unsubscribes
@@ -635,20 +783,7 @@ extend(Event.prototype, {
                 continue;
             }
 
-            if (l.append || l.prepend) {
-                args    = slice.call(arguments);
-                if (l.prepend) {
-                    args    = l.prepend.concat(args);
-                }
-                if (l.append) {
-                    args    = args.concat(l.append);
-                }
-            }
-            else {
-                args = arguments;
-            }
-
-            res = l.fn.apply(l.scope, args);
+            res = l.fn.apply(l.scope, self._prepareArgs(l, arguments));
 
             l.called++;
 
@@ -656,15 +791,15 @@ extend(Event.prototype, {
                 self.un(l.id);
             }
 
-            if (returnResult == "all" && res !== null) {
+            if (returnResult == "all") {
                 ret.push(res);
             }
 
-            if (returnResult == "first" && res !== null) {
+            if (returnResult == "first") {
                 return res;
             }
 
-            if (returnResult == "last" && res !== null) {
+            if (returnResult == "last") {
                 ret = res;
             }
 
@@ -694,6 +829,10 @@ else {
     window.MetaphorJs   = window.MetaphorJs || {};
     MetaphorJs.lib      = MetaphorJs.lib || {};
     MetaphorJs.lib.Observable = Observable;
+}
+
+if (typeof global != "undefined") {
+    module.exports = Observable;
 }
 
 })();
