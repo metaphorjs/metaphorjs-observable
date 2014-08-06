@@ -49,6 +49,12 @@ var async   = typeof process != "undefined" ? process.nextTick : function(fn) {
     window.setTimeout(fn, 0);
 };
 
+var bind    = function(fn, fnScope) {
+    return function() {
+        fn.apply(fnScope, arguments);
+    };
+};
+
 
 /**
  * <p>A javascript event system implementing two patterns - observable and collector.</p>
@@ -403,16 +409,19 @@ extend(Observable.prototype, {
         var self    = this;
 
         if (!self.api) {
-            var api = {}, i;
-            for (i in self) {
-                if (typeof self[i] == "function" && i != "destroy" && i != "getApi") {
-                    api[i] = function(fn) {
-                        return function() {
-                            return fn.apply(self, arguments);
-                        }
-                    }(self[i]);
-                }
-            }
+
+            var methods = [
+                    "createEvent", "getEvent", "on", "un", "once", "hasListener", "removeAllListeners",
+                    "triggerAsync", "trigger", "suspendEvent", "suspendAllEvents", "resumeEvent",
+                    "resumeAllEvents", "destroyEvent"
+                ],
+                api = {},
+                name;
+
+            for(var i =- 1, l = methods.length>>>0;
+                    ++i !== l;
+                    name = methods[i],
+                    api[name] = bind(self[name], self)){}
 
             self.api = api;
         }
@@ -664,6 +673,7 @@ extend(Event.prototype, {
 
     /**
      * Usage: Promise.all(event.triggerAsync()).done(function(returnValues){});
+     * Requires Promise class to be present
      * @method
      * @return {[]} Collection of promises
      */
@@ -739,7 +749,7 @@ extend(Event.prototype, {
 
     /**
      * @method
-     * @return *
+     * @return {*}
      */
     trigger: function() {
 
