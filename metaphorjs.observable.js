@@ -49,11 +49,15 @@ var async   = typeof process != "undefined" ? process.nextTick : function(fn) {
     window.setTimeout(fn, 0);
 };
 
-var bind    = function(fn, fnScope) {
-    return function() {
-        fn.apply(fnScope, arguments);
-    };
-};
+var bind        = Function.prototype.bind ?
+                  function(fn, fnScope){
+                      return fn.bind(fnScope);
+                    } :
+                  function(fn, fnScope) {
+                        return function() {
+                            return fn.apply(fnScope, arguments);
+                        };
+                    };
 
 
 /**
@@ -244,6 +248,7 @@ extend(Observable.prototype, {
         return events[name].hasListener(fn, scope);
     },
 
+
     /**
     * Remove all listeners from all events
     * @method removeAllListeners
@@ -418,8 +423,8 @@ extend(Observable.prototype, {
                 api = {},
                 name;
 
-            for(var i =- 1, l = methods.length>>>0;
-                    ++i !== l;
+            for(var i =- 1, l = methods.length;
+                    ++i < l;
                     name = methods[i],
                     api[name] = bind(self[name], self)){}
 
@@ -597,7 +602,7 @@ extend(Event.prototype, {
 
             scope   = scope || fn;
 
-            if (fn == parseInt(fn)) {
+            if (typeof fn != "function") {
                 id  = fn;
             }
             else {
@@ -620,6 +625,7 @@ extend(Event.prototype, {
             return listeners.length > 0;
         }
     },
+
 
     /**
      * @method
@@ -712,8 +718,8 @@ extend(Event.prototype, {
                     try {
                         resolve(l.fn.apply(l.scope, args));
                     }
-                    catch (e) {
-                        reject(e);
+                    catch (thrownError) {
+                        reject(thrownError);
                     }
 
                     l.called++;
@@ -762,19 +768,15 @@ extend(Event.prototype, {
         }
 
         var ret     = returnResult == "all" ? [] : null,
-            q       = [],
-            i, len, l,
+            q, l,
             res;
 
-
         if (returnResult == "first") {
-            q.push(listeners[0]);
+            q = [listeners[0]];
         }
         else {
             // create a snapshot of listeners list
-            for (i = 0, len = listeners.length; i < len; i++) {
-                q.push(listeners[i]);
-            }
+            q = slice.call(listeners);
         }
 
         // now if during triggering someone unsubscribes
@@ -827,9 +829,9 @@ extend(Event.prototype, {
 
 var mjs = window.MetaphorJs;
 
-if (mjs && mjs.VERSION) {
+if (mjs) {
     var globalObservable    = new Observable;
-    extend(MetaphorJs, globalObservable.getApi());
+    extend(mjs, globalObservable.getApi());
 }
 
 if (mjs && mjs.r) {
