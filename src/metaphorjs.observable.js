@@ -1,63 +1,13 @@
-
+//#require (!module) ../../metaphorjs/src/vars/Promise.js
+//#require ../../metaphorjs/src/func/nextUid.js
+//#require ../../metaphorjs/src/func/extend.js
+//#require ../../metaphorjs/src/func/async.js
+//#require ../../metaphorjs/src/func/bind.js
+//#require ../../metaphorjs/src/func/array/slice.js
 
 (function(){
 
 "use strict";
-
-if (typeof window == "undefined") {
-    global.window = global;
-}
-
-if (!window.Promise) {
-    var Promise;
-
-    if (typeof global != "undefined") {
-        try {
-            Promise = require("metaphorjs-promise");
-        }
-        catch (e) {
-            if (global.Promise) {
-                Promise = global.Promise;
-            }
-        }
-    }
-    else if (window.MetaphorJs && MetaphorJs.lib && MetaphorJs.lib.Promise) {
-        Promise = MetaphorJs.lib.Promise;
-    }
-}
-else {
-    Promise = window.Promise;
-}
-
-var randomHash = window.MetaphorJs && MetaphorJs.nextUid ? MetaphorJs.nextUid : function() {
-    var N = 10;
-    return new Array(N+1).join((Math.random().toString(36)+'00000000000000000')
-                .slice(2, 18)).slice(0, N)
-};
-
-var extend = function(trg, src) {
-    for (var i in src) {
-        if (src.hasOwnProperty(i)) {
-            trg[i] = src[i];
-        }
-    }
-};
-
-var slice = Array.prototype.slice;
-
-var async   = typeof process != "undefined" ? process.nextTick : function(fn) {
-    window.setTimeout(fn, 0);
-};
-
-var bind        = Function.prototype.bind ?
-                  function(fn, fnScope){
-                      return fn.bind(fnScope);
-                    } :
-                  function(fn, fnScope) {
-                        return function() {
-                            return fn.apply(fnScope, arguments);
-                        };
-                    };
 
 
 /**
@@ -101,7 +51,7 @@ var Observable = function() {
 };
 
 
-extend(Observable.prototype, {
+Observable.prototype = {
 
     /**
     * <p>You don't have to call this function unless you want to pass returnResult param.
@@ -433,7 +383,7 @@ extend(Observable.prototype, {
 
         return self.api;
     }
-});
+};
 
 
 /**
@@ -448,7 +398,7 @@ var Event = function(name, returnResult) {
     self.name           = name;
     self.listeners      = [];
     self.map            = {};
-    self.hash           = randomHash();
+    self.hash           = nextUid();
     self.uni            = '$$' + name + '_' + self.hash;
     self.suspended      = false;
     self.lid            = 0;
@@ -456,7 +406,7 @@ var Event = function(name, returnResult) {
 };
 
 
-extend(Event.prototype, {
+Event.prototype = {
 
     getName: function() {
         return this.name;
@@ -824,27 +774,12 @@ extend(Event.prototype, {
             return ret;
         }
     }
-});
+};
 
 
-var mjs = window.MetaphorJs;
+var globalObservable    = new Observable;
+extend(MetaphorJs, globalObservable.getApi(), true, false);
 
-if (mjs) {
-    var globalObservable    = new Observable;
-    extend(mjs, globalObservable.getApi());
-}
-
-if (mjs && mjs.r) {
-    mjs.r("MetaphorJs.lib.Observable", Observable);
-}
-else {
-    window.MetaphorJs   = window.MetaphorJs || {};
-    MetaphorJs.lib      = MetaphorJs.lib || {};
-    MetaphorJs.lib.Observable = Observable;
-}
-
-if (typeof global != "undefined") {
-    module.exports = Observable;
-}
+MetaphorJs.lib.Observable = Observable;
 
 })();
