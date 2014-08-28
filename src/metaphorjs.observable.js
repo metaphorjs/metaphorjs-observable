@@ -1,13 +1,12 @@
-//#require (!module) ../../metaphorjs/src/vars/Promise.js
-//#require ../../metaphorjs/src/func/nextUid.js
-//#require ../../metaphorjs/src/func/extend.js
-//#require ../../metaphorjs/src/func/async.js
-//#require ../../metaphorjs/src/func/bind.js
-//#require ../../metaphorjs/src/func/array/slice.js
 
-(function(){
+var MetaphorJs = require("../../metaphorjs/src/MetaphorJs.js"),
+    nextUid = require("../../metaphorjs/src/func/nextUid.js"),
+    extend = require("../../metaphorjs/src/func/extend.js"),
+    bind = require("../../metaphorjs/src/func/bind.js"),
+    slice = require("../../metaphorjs/src/func/array/slice.js"),
+    isFunction = require("../../metaphorjs/src/func/isFunction.js"),
+    isUndefined = require("../../metaphorjs/src/func/isUndefined.js");
 
-"use strict";
 
 
 /**
@@ -220,24 +219,6 @@ Observable.prototype = {
     },
 
     /**
-     * @returns {[]}
-     */
-    triggerAsync: function() {
-
-        var name = arguments[0],
-            events  = this.events;
-
-        name = name.toLowerCase();
-
-        if (!events[name]) {
-            return [];
-        }
-
-        var e = events[name];
-        return e.triggerAsync.apply(e, slice.call(arguments, 1));
-    },
-
-    /**
     * Trigger an event -- call all listeners.
     * @method
     * @access public
@@ -367,7 +348,7 @@ Observable.prototype = {
 
             var methods = [
                     "createEvent", "getEvent", "on", "un", "once", "hasListener", "removeAllListeners",
-                    "triggerAsync", "trigger", "suspendEvent", "suspendAllEvents", "resumeEvent",
+                    "trigger", "suspendEvent", "suspendAllEvents", "resumeEvent",
                     "resumeAllEvents", "destroyEvent"
                 ],
                 api = {},
@@ -402,7 +383,7 @@ var Event = function(name, returnResult) {
     self.uni            = '$$' + name + '_' + self.hash;
     self.suspended      = false;
     self.lid            = 0;
-    self.returnResult   = returnResult || false; // first|last|all
+    self.returnResult   = isUndefined(returnResult) ? null : returnResult; // first|last|all
 };
 
 
@@ -552,7 +533,7 @@ Event.prototype = {
 
             scope   = scope || fn;
 
-            if (typeof fn != "function") {
+            if (!isFunction(fn)) {
                 id  = fn;
             }
             else {
@@ -628,82 +609,6 @@ Event.prototype = {
     },
 
     /**
-     * Usage: Promise.all(event.triggerAsync()).done(function(returnValues){});
-     * Requires Promise class to be present
-     * @method
-     * @return {[]} Collection of promises
-     */
-    triggerAsync: function() {
-
-        if (typeof Promise == "undefined") {
-            throw Error("Promises are not defined");
-        }
-
-        var self            = this,
-            listeners       = self.listeners,
-            returnResult    = self.returnResult,
-            triggerArgs     = slice.call(arguments),
-            q               = [],
-            promises        = [],
-            args,
-            l, i, len;
-
-        if (self.suspended || listeners.length == 0) {
-            return Promise.resolve(null);
-        }
-
-        // create a snapshot of listeners list
-        for (i = 0, len = listeners.length; i < len; i++) {
-            q.push(listeners[i]);
-        }
-
-        var next = function(l) {
-
-            args = self._prepareArgs(l, triggerArgs);
-
-            return new Promise(function(resolve, reject){
-
-                async(function(){
-
-                    try {
-                        resolve(l.fn.apply(l.scope, args));
-                    }
-                    catch (thrownError) {
-                        reject(thrownError);
-                    }
-
-                    l.called++;
-
-                    if (l.called == l.limit) {
-                        self.un(l.id);
-                    }
-                }, 0);
-            });
-        };
-
-        while (l = q.shift()) {
-            // listener may already have unsubscribed
-            if (!l || !self.map[l.id]) {
-                continue;
-            }
-
-            l.count++;
-
-            if (l.count < l.start) {
-                continue;
-            }
-
-            promises.push(next(l));
-
-            if (returnResult == "first") {
-                break;
-            }
-        }
-
-        return returnResult == "last" ? [promises.pop()] : promises;
-    },
-
-    /**
      * @method
      * @return {*}
      */
@@ -776,10 +681,11 @@ Event.prototype = {
     }
 };
 
-
-var globalObservable    = new Observable;
-extend(MetaphorJs, globalObservable.getApi(), true, false);
+(function(){
+    var globalObservable    = new Observable;
+    extend(MetaphorJs, globalObservable.getApi(), true, false);
+}());
 
 MetaphorJs.lib.Observable = Observable;
 
-})();
+module.exports = Observable;

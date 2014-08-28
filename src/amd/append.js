@@ -1,2 +1,2 @@
 
-module.exports = MetaphorJs.lib.Observable;
+module.exports = Observable;

@@ -11,14 +11,10 @@
 
     "module": {
         "auto": true,
-        "wrap": true,
         "target": "dist/metaphorjs.observable.amd.js",
         "files": [
-            "../metaphorjs/src/amd/MetaphorJs.js",
+            "../metaphorjs/src/MetaphorJs.js",
             "src/metaphorjs.observable.js"
-        ],
-        "prepend": [
-            "src/amd/prepend.js"
         ],
         "append": [
             "src/amd/append.js"
