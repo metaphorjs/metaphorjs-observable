@@ -1,8 +1,8 @@
 {
   "name": "metaphorjs-observable",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A javascript event system",
-  "main": "metaphorjs.observable.js",
+  "main": "dist/metaphorjs.observable.npm.js",
   "directories": {
     "doc": "docs"
   },
@@ -18,8 +18,5 @@
   "bugs": {
     "url": "https://github.com/kuindji/metaphorjs-observable/issues"
   },
-  "homepage": "https://github.com/kuindji/metaphorjs-observable",
-  "dependencies": {
-    "metaphorjs-promise": "*"
-  }
+  "homepage": "https://github.com/kuindji/metaphorjs-observable"
 }
