@@ -1,11 +1,3 @@
-(function(){
-"use strict";
-
-var MetaphorJs = {
-    lib: {},
-    cmp: {},
-    view: {}
-};
 
 
 /**
@@ -742,9 +734,4 @@ Event.prototype = {
 };
 
 
-
-MetaphorJs.lib['Observable'] = Observable;
-
-typeof global != "undefined" ? (global['MetaphorJs'] = MetaphorJs) : (window['MetaphorJs'] = MetaphorJs);
-
-}());
+module.exports = Observable;

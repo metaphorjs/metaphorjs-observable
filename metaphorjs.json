@@ -1,28 +1,42 @@
 {
     "standalone": {
-        "auto": true,
         "wrap": true,
+        "global": true,
         "target": "dist/metaphorjs.observable.js",
         "files": [
             "../metaphorjs/src/MetaphorJs.js",
             "src/metaphorjs.observable.js"
+        ],
+        "expose": [
+            ["MetaphorJs.lib", "Observable"]
         ]
     },
 
-    "module": {
-        "auto": true,
+    "npm": {
+        "target": "dist/metaphorjs.observable.npm.js",
+        "files": [
+            ["src/metaphorjs.observable.js", {"keepExports": true}]
+        ]
+    },
+
+    "amd": {
         "target": "dist/metaphorjs.observable.amd.js",
         "files": [
-            "../metaphorjs/src/MetaphorJs.js",
             "src/metaphorjs.observable.js"
         ],
-        "append": [
-            "src/amd/append.js"
-        ]
+        "define": {
+            "name": "metaphorjs-observable",
+            "return": "Observable"
+        }
     },
 
     "compile-standalone": {
         "target": "dist/metaphorjs.observable.min.js",
         "compile": "standalone"
+    },
+
+    "compile-amd": {
+        "target": "dist/metaphorjs.observable.amd.min.js",
+        "compile": "amd"
     }
 }

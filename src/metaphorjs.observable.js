@@ -1,7 +1,5 @@
 
-var MetaphorJs = require("../../metaphorjs/src/MetaphorJs.js"),
-    nextUid = require("../../metaphorjs/src/func/nextUid.js"),
-    extend = require("../../metaphorjs/src/func/extend.js"),
+var nextUid = require("../../metaphorjs/src/func/nextUid.js"),
     bind = require("../../metaphorjs/src/func/bind.js"),
     slice = require("../../metaphorjs/src/func/array/slice.js"),
     isFunction = require("../../metaphorjs/src/func/isFunction.js"),
@@ -681,11 +679,5 @@ Event.prototype = {
     }
 };
 
-(function(){
-    var globalObservable    = new Observable;
-    extend(MetaphorJs, globalObservable.getApi(), true, false);
-}());
-
-MetaphorJs.lib.Observable = Observable;
 
 module.exports = Observable;

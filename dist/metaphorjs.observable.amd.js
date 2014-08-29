@@ -1,9 +1,4 @@
-
-var MetaphorJs = {
-    lib: {}
-};
-
-
+define("metaphorjs-observable", function() {
 
 
 /**
@@ -36,94 +31,6 @@ var nextUid = function(){
     };
 }();
 
-
-var slice = Array.prototype.slice;
-/**
- * @param {*} obj
- * @returns {boolean}
- */
-var isPlainObject = function(obj) {
-    return !!(obj && obj.constructor === Object);
-};
-
-var isBool = function(value) {
-    return typeof value == "boolean";
-};
-var strUndef = "undefined";
-
-
-var isUndefined = function(any) {
-    return typeof any == strUndef;
-};
-
-var isNull = function(value) {
-    return value === null;
-};
-
-
-/**
- * @param {Object} dst
- * @param {Object} src
- * @param {Object} src2 ... srcN
- * @param {boolean} override = false
- * @param {boolean} deep = false
- * @returns {*}
- */
-var extend = function extend() {
-
-
-    var override    = false,
-        deep        = false,
-        args        = slice.call(arguments),
-        dst         = args.shift(),
-        src,
-        k,
-        value;
-
-    if (isBool(args[args.length - 1])) {
-        override    = args.pop();
-    }
-    if (isBool(args[args.length - 1])) {
-        deep        = override;
-        override    = args.pop();
-    }
-
-    while (args.length) {
-        if (src = args.shift()) {
-            for (k in src) {
-
-                if (src.hasOwnProperty(k) && !isUndefined((value = src[k]))) {
-
-                    if (deep) {
-                        if (dst[k] && isPlainObject(dst[k]) && isPlainObject(value)) {
-                            extend(dst[k], value, override, deep);
-                        }
-                        else {
-                            if (override === true || isUndefined(dst[k]) || isNull(dst[k])) {
-                                if (isPlainObject(value)) {
-                                    dst[k] = {};
-                                    extend(dst[k], value, override, true);
-                                }
-                                else {
-                                    dst[k] = value;
-                                }
-                            }
-                        }
-                    }
-                    else {
-                        if (override === true || isUndefined(dst[k]) || isNull(dst[k])) {
-                            dst[k] = value;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    return dst;
-};
-
-
 /**
  * @param {Function} fn
  * @param {*} context
@@ -139,9 +46,18 @@ var bind = Function.prototype.bind ?
               };
 
 
+
+var slice = Array.prototype.slice;
 var isFunction = function(value) {
     return typeof value === 'function';
 };
+var strUndef = "undefined";
+
+
+var isUndefined = function(any) {
+    return typeof any == strUndef;
+};
+
 
 
 
@@ -818,12 +734,7 @@ Event.prototype = {
     }
 };
 
-(function(){
-    var globalObservable    = new Observable;
-    extend(MetaphorJs, globalObservable.getApi(), true, false);
-}());
-
-MetaphorJs.lib.Observable = Observable;
 
 
-module.exports = Observable;
+return Observable;
+});
