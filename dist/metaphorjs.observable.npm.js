@@ -48,15 +48,9 @@ var bind = Function.prototype.bind ?
 
 var slice = Array.prototype.slice;
 var isFunction = function(value) {
-    return typeof value === 'function';
+    return typeof value == 'function';
 };
-var strUndef = "undefined";
-
-
-var isUndefined = function(any) {
-    return typeof any == strUndef;
-};
-
+var undf = undefined;
 
 
 
@@ -435,7 +429,7 @@ var Event = function(name, returnResult) {
     self.uni            = '$$' + name + '_' + self.hash;
     self.suspended      = false;
     self.lid            = 0;
-    self.returnResult   = isUndefined(returnResult) ? null : returnResult; // first|last|all
+    self.returnResult   = returnResult === undf ? null : returnResult; // first|last|all
 };
 
 

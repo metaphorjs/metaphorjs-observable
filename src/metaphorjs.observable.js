@@ -3,7 +3,7 @@ var nextUid = require("../../metaphorjs/src/func/nextUid.js"),
     bind = require("../../metaphorjs/src/func/bind.js"),
     slice = require("../../metaphorjs/src/func/array/slice.js"),
     isFunction = require("../../metaphorjs/src/func/isFunction.js"),
-    isUndefined = require("../../metaphorjs/src/func/isUndefined.js");
+    undf = require("../../metaphorjs/src/var/undf.js");
 
 
 
@@ -381,7 +381,7 @@ var Event = function(name, returnResult) {
     self.uni            = '$$' + name + '_' + self.hash;
     self.suspended      = false;
     self.lid            = 0;
-    self.returnResult   = isUndefined(returnResult) ? null : returnResult; // first|last|all
+    self.returnResult   = returnResult === undf ? null : returnResult; // first|last|all
 };
 
 
