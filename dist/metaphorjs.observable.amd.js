@@ -8,7 +8,7 @@ var nextUid = function(){
     var uid = ['0', '0', '0'];
 
     // from AngularJs
-    return function() {
+    return function nextUid() {
         var index = uid.length;
         var digit;
 
@@ -48,10 +48,153 @@ var bind = Function.prototype.bind ?
 
 
 var slice = Array.prototype.slice;
-var isFunction = function(value) {
+var toString = Object.prototype.toString;
+var undf = undefined;
+
+
+
+var varType = function(){
+
+    var types = {
+        '[object String]': 0,
+        '[object Number]': 1,
+        '[object Boolean]': 2,
+        '[object Object]': 3,
+        '[object Function]': 4,
+        '[object Array]': 5,
+        '[object RegExp]': 9,
+        '[object Date]': 10
+    };
+
+
+    /**
+        'string': 0,
+        'number': 1,
+        'boolean': 2,
+        'object': 3,
+        'function': 4,
+        'array': 5,
+        'null': 6,
+        'undefined': 7,
+        'NaN': 8,
+        'regexp': 9,
+        'date': 10
+    */
+
+    return function varType(val) {
+
+        if (!val) {
+            if (val === null) {
+                return 6;
+            }
+            if (val === undf) {
+                return 7;
+            }
+        }
+
+        var num = types[toString.call(val)];
+
+        if (num === undf) {
+            return -1;
+        }
+
+        if (num == 1 && isNaN(val)) {
+            return 8;
+        }
+
+        return num;
+    };
+
+}();
+
+
+function isPlainObject(value) {
+    // IE < 9 returns [object Object] from toString(htmlElement)
+    return typeof value == "object" &&
+           varType(value) === 3 &&
+            !value.nodeType &&
+            value.constructor === Object;
+
+};
+
+
+function isBool(value) {
+    return value === true || value === false;
+};
+function isNull(value) {
+    return value === null;
+};
+
+
+/**
+ * @param {Object} dst
+ * @param {Object} src
+ * @param {Object} src2 ... srcN
+ * @param {boolean} override = false
+ * @param {boolean} deep = false
+ * @returns {*}
+ */
+var extend = function(){
+
+    var extend = function extend() {
+
+
+        var override    = false,
+            deep        = false,
+            args        = slice.call(arguments),
+            dst         = args.shift(),
+            src,
+            k,
+            value;
+
+        if (isBool(args[args.length - 1])) {
+            override    = args.pop();
+        }
+        if (isBool(args[args.length - 1])) {
+            deep        = override;
+            override    = args.pop();
+        }
+
+        while (args.length) {
+            if (src = args.shift()) {
+                for (k in src) {
+
+                    if (src.hasOwnProperty(k) && (value = src[k]) !== undf) {
+
+                        if (deep) {
+                            if (dst[k] && isPlainObject(dst[k]) && isPlainObject(value)) {
+                                extend(dst[k], value, override, deep);
+                            }
+                            else {
+                                if (override === true || dst[k] == undf) { // == checks for null and undefined
+                                    if (isPlainObject(value)) {
+                                        dst[k] = {};
+                                        extend(dst[k], value, override, true);
+                                    }
+                                    else {
+                                        dst[k] = value;
+                                    }
+                                }
+                            }
+                        }
+                        else {
+                            if (override === true || dst[k] == undf) {
+                                dst[k] = value;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return dst;
+    };
+
+    return extend;
+}();
+function isFunction(value) {
     return typeof value == 'function';
 };
-var undf = undefined;
 
 
 
@@ -97,7 +240,7 @@ var Observable = function() {
 };
 
 
-Observable.prototype = {
+extend(Observable.prototype, {
 
     /**
     * <p>You don't have to call this function unless you want to pass returnResult param.
@@ -162,7 +305,7 @@ Observable.prototype = {
     *       Callback function
     *       @required
     * }
-    * @param {object} scope "this" object for the callback function
+    * @param {object} context "this" object for the callback function
     * @param {object} options {
     *       @type bool first {
     *           True to prepend to the list of handlers
@@ -181,13 +324,13 @@ Observable.prototype = {
      *      @type bool allowDupes allow the same handler twice
     * }
     */
-    on: function(name, fn, scope, options) {
+    on: function(name, fn, context, options) {
         name = name.toLowerCase();
         var events  = this.events;
         if (!events[name]) {
             events[name] = new Event(name);
         }
-        return events[name].on(fn, scope, options);
+        return events[name].on(fn, context, options);
     },
 
     /**
@@ -196,10 +339,10 @@ Observable.prototype = {
     * @md-apply on
     * @access public
     */
-    once: function(name, fn, scope, options) {
+    once: function(name, fn, context, options) {
         options     = options || {};
         options.limit = 1;
-        return this.on(name, fn, scope, options);
+        return this.on(name, fn, context, options);
     },
 
 
@@ -209,15 +352,15 @@ Observable.prototype = {
     * @access public
     * @param {string} name Event name
     * @param {function} fn Event handler
-    * @param {object} scope If you called on() with scope you must call un() with the same scope
+    * @param {object} context If you called on() with context you must call un() with the same context
     */
-    un: function(name, fn, scope) {
+    un: function(name, fn, context) {
         name = name.toLowerCase();
         var events  = this.events;
         if (!events[name]) {
             return;
         }
-        events[name].un(fn, scope);
+        events[name].un(fn, context);
     },
 
     /**
@@ -232,16 +375,16 @@ Observable.prototype = {
     * @access public
     * @param {string} name Event name { @required }
     * @param {function} fn Callback function { @required }
-    * @param {object} scope Function's "this" object
+    * @param {object} context Function's "this" object
     * @return bool
     */
-    hasListener: function(name, fn, scope) {
+    hasListener: function(name, fn, context) {
         name = name.toLowerCase();
         var events  = this.events;
         if (!events[name]) {
             return false;
         }
-        return events[name].hasListener(fn, scope);
+        return events[name].hasListener(fn, context);
     },
 
 
@@ -411,7 +554,7 @@ Observable.prototype = {
 
         return self.api;
     }
-};
+}, true, false);
 
 
 /**
@@ -434,7 +577,7 @@ var Event = function(name, returnResult) {
 };
 
 
-Event.prototype = {
+extend(Event.prototype, {
 
     getName: function() {
         return this.name;
@@ -452,36 +595,36 @@ Event.prototype = {
     /**
      * @method
      * @param {function} fn Callback function { @required }
-     * @param {object} scope Function's "this" object
+     * @param {object} context Function's "this" object
      * @param {object} options See Observable's on()
      */
-    on: function(fn, scope, options) {
+    on: function(fn, context, options) {
 
         if (!fn) {
             return null;
         }
 
-        scope       = scope || null;
+        context     = context || null;
         options     = options || {};
 
         var self        = this,
             uni         = self.uni,
-            uniScope    = scope || fn;
+            uniContext  = context || fn;
 
-        if (uniScope[uni] && !options.allowDupes) {
+        if (uniContext[uni] && !options.allowDupes) {
             return null;
         }
 
         var id      = ++self.lid,
             first   = options.first || false;
 
-        uniScope[uni]  = id;
+        uniContext[uni]  = id;
 
 
         var e = {
             fn:         fn,
-            scope:      scope,
-            uniScope:   uniScope,
+            context:    context,
+            uniContext: uniContext,
             id:         id,
             called:     0, // how many times the function was triggered
             limit:      options.limit || 0, // how many times the function is allowed to trigger
@@ -506,23 +649,23 @@ Event.prototype = {
     /**
      * @method
      * @param {function} fn Callback function { @required }
-     * @param {object} scope Function's "this" object
+     * @param {object} context Function's "this" object
      * @param {object} options See Observable's on()
      */
-    once: function(fn, scope, options) {
+    once: function(fn, context, options) {
 
         options = options || {};
         options.once = true;
 
-        return this.on(fn, scope, options);
+        return this.on(fn, context, options);
     },
 
     /**
      * @method
      * @param {function} fn Callback function { @required }
-     * @param {object} scope Function's "this" object
+     * @param {object} context Function's "this" object
      */
-    un: function(fn, scope) {
+    un: function(fn, context) {
 
         var self        = this,
             inx         = -1,
@@ -534,8 +677,8 @@ Event.prototype = {
             id      = fn;
         }
         else {
-            scope   = scope || fn;
-            id      = scope[uni];
+            context = context || fn;
+            id      = context[uni];
         }
 
         if (!id) {
@@ -545,7 +688,7 @@ Event.prototype = {
         for (var i = 0, len = listeners.length; i < len; i++) {
             if (listeners[i].id == id) {
                 inx = i;
-                delete listeners[i].uniScope[uni];
+                delete listeners[i].uniContext[uni];
                 break;
             }
         }
@@ -567,10 +710,10 @@ Event.prototype = {
     /**
      * @method
      * @param {function} fn Callback function { @required }
-     * @param {object} scope Function's "this" object
+     * @param {object} context Function's "this" object
      * @return bool
      */
-    hasListener: function(fn, scope) {
+    hasListener: function(fn, context) {
 
         var self    = this,
             listeners   = self.listeners,
@@ -578,13 +721,13 @@ Event.prototype = {
 
         if (fn) {
 
-            scope   = scope || fn;
+            context = context || fn;
 
             if (!isFunction(fn)) {
                 id  = fn;
             }
             else {
-                id  = scope[self.uni];
+                id  = context[self.uni];
             }
 
             if (!id) {
@@ -615,7 +758,7 @@ Event.prototype = {
             i, len;
 
         for (i = 0, len = listeners.length; i < len; i++) {
-            delete listeners[i].uniScope[uni];
+            delete listeners[i].uniContext[uni];
         }
         self.listeners   = [];
         self.map         = {};
@@ -697,7 +840,7 @@ Event.prototype = {
                 continue;
             }
 
-            res = l.fn.apply(l.scope, self._prepareArgs(l, arguments));
+            res = l.fn.apply(l.context, self._prepareArgs(l, arguments));
 
             l.called++;
 
@@ -726,7 +869,7 @@ Event.prototype = {
             return ret;
         }
     }
-};
+}, true, false);
 
 
 
