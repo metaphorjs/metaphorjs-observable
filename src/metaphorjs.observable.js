@@ -116,21 +116,21 @@ extend(Observable.prototype, {
     * }
     * @param {object} context "this" object for the callback function
     * @param {object} options {
-    *       @type bool first {
+    *       @type {bool} first {
     *           True to prepend to the list of handlers
     *           @default false
     *       }
-    *       @type number limit {
+    *       @type {number} limit {
     *           Call handler this number of times; 0 for unlimited
     *           @default 0
     *       }
-    *       @type number start {
+    *       @type {number} start {
     *           Start calling handler after this number of calls. Starts from 1
     *           @default 1
     *       }
-     *      @type [] append Append parameters
-     *      @type [] prepend Prepend parameters
-     *      @type bool allowDupes allow the same handler twice
+     *      @type {[]} append Append parameters
+     *      @type {[]} prepend Prepend parameters
+     *      @type {bool} allowDupes allow the same handler twice
     * }
     */
     on: function(name, fn, context, options) {

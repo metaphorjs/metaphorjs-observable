@@ -13,10 +13,7 @@
                 "src/metaphorjs.observable.js"
             ],
             "expose": [
-                [
-                    "MetaphorJs.lib",
-                    "Observable"
-                ]
+                "Observable"
             ]
         },
         "npm": {
