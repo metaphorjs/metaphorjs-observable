@@ -4,7 +4,7 @@
     "authors": [
         "kuindji <kuindji@gmail.com>"
     ],
-    "description": "MetaphorJs event system",
+    "description": "A javascript event system",
     "main": "dist/metaphorjs.observable.amd.min.js",
     "moduleType": [
         "amd"
@@ -13,7 +13,7 @@
         "events"
     ],
     "license": "MIT",
-    "homepage": "https://github.com/kuindji/metaphorjs-observable",
+    "homepage": "https://github.com/metaphorjs/metaphorjs-observable",
     "ignore": [
         "**/.*",
         "node_modules",

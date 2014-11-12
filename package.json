@@ -11,12 +11,12 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/kuindji/metaphorjs-observable.git"
+        "url": "https://github.com/metaphorjs/metaphorjs-observable.git"
     },
     "author": "johann kuindji",
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/kuindji/metaphorjs-observable/issues"
+        "url": "https://github.com/metaphorjs/metaphorjs-observable/issues"
     },
-    "homepage": "https://github.com/kuindji/metaphorjs-observable"
+    "homepage": "https://github.com/metaphorjs/metaphorjs-observable"
 }
