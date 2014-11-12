@@ -1,622 +1,2723 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>MetaphorJs.lib.Observable</title>
-    
-    <link rel="stylesheet" href="assets/stylesheet.css">
-    <link rel="stylesheet" href="assets/prism.css">
+<!DOCTYPE html><html><head lang="en">
+    <meta charset="UTF-8">
+    <title>MetaphorJs.Observable</title>
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bower_components/prism/themes/prism.css">
+    <link rel="stylesheet" href="assets/style.css">
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="bower_components/prism/prism.js"></script>
 </head>
 <body>
-<div id="header">
-    <h1>MetaphorJs.lib.Observable</h1>
-    <div id="description">Api Reference</div>
+
+
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">MetaphorJs.Observable</a>
+        </div>
+
+
+        <div class="navbar-collapse collapse">
+
+            
+                <ul class="nav navbar-nav">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Classes
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>
+                                <a href="#">Observable</a>
+                            </li><li>
+                                <a href="#">ObservableEvent</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            
+
+            
+        </div><!--/.nav-collapse -->
+
+    </div>
 </div>
-<nav id="navigation"><div id="options"><label><input type="checkbox" id="toggle-private"/> Hide private</label><label><input type="checkbox" id="toggle-protected"/> Hide protected</label><label><input type="checkbox" id="toggle-inherited"/> Hide inherited</label></div><ul class="nav-class-level"><li class="nav-class"><a class="nav-class" href="#/MetaphorJs.lib.Observable">MetaphorJs.lib.Observable</a><ul class="nav-method-level nav-hidden"><li class="nav-method 
-                                                                                
-                
-    public
 
-"><a class="nav-method" href="#/MetaphorJs.lib.Observable/createEvent">createEvent(name, returnResult)</a></li><li class="nav-method 
-                                                                                
-                
-    public
+<div class="jumbotron">
+    <div class="container">
+        <h1>MetaphorJs.Observable</h1>
+        <p>A javascript event system</p>
+        <p>v1.0.3</p>
+    </div>
+</div>
 
-"><a class="nav-method" href="#/MetaphorJs.lib.Observable/getEvent">getEvent(name)</a></li><li class="nav-method 
-                                                                                
-                
-    public
-
-"><a class="nav-method" href="#/MetaphorJs.lib.Observable/on">on(name, fn, scope, options)</a></li><li class="nav-method 
-                                                                                
-                
-    public
-
-"><a class="nav-method" href="#/MetaphorJs.lib.Observable/once">once(name, fn, scope, options)</a></li><li class="nav-method 
-                                                                                
-                
-    public
-
-"><a class="nav-method" href="#/MetaphorJs.lib.Observable/un">un(name, fn, scope)</a></li><li class="nav-method 
-                                                                                
-                
-    public
-
-"><a class="nav-method" href="#/MetaphorJs.lib.Observable/hasListener">hasListener(name)</a></li><li class="nav-method 
-                                                                                
-                
-    public
-
-"><a class="nav-method" href="#/MetaphorJs.lib.Observable/hasListener">hasListener(name, fn, scope)</a></li><li class="nav-method 
-                                                                                
-                
-    public
-
-"><a class="nav-method" href="#/MetaphorJs.lib.Observable/removeAllListeners">removeAllListeners()</a></li><li class="nav-method 
-                                                                                
-                
-    public
-
-"><a class="nav-method" href="#/MetaphorJs.lib.Observable/removeAllListeners">removeAllListeners(name)</a></li><li class="nav-method 
-                                                                                
-                
-    public
-
-"><a class="nav-method" href="#/MetaphorJs.lib.Observable/trigger">trigger(name, ...)</a></li><li class="nav-method 
-                                                                                
-                
-    public
-
-"><a class="nav-method" href="#/MetaphorJs.lib.Observable/suspendEvent">suspendEvent(name)</a></li><li class="nav-method 
-                                                                                
-                
-    public
-
-"><a class="nav-method" href="#/MetaphorJs.lib.Observable/suspendAllEvents">suspendAllEvents()</a></li><li class="nav-method 
-                                                                                
-                
-    public
-
-"><a class="nav-method" href="#/MetaphorJs.lib.Observable/resumeEvent">resumeEvent(name)</a></li><li class="nav-method 
-                                                                                
-                
-    public
-
-"><a class="nav-method" href="#/MetaphorJs.lib.Observable/resumeAllEvents">resumeAllEvents()</a></li><li class="nav-method 
-                                                                                
-                
-    public
-
-"><a class="nav-method" href="#/MetaphorJs.lib.Observable/destroy">destroy()</a></li><li class="nav-method 
-                                                                                
-                
-    public
-
-"><a class="nav-method" href="#/MetaphorJs.lib.Observable/destroy">destroy(name)</a></li><li class="nav-method 
-                                                                                
-                
-    public
-
-"><a class="nav-method" href="#/MetaphorJs.lib.Observable/getApi">getApi()</a></li></ul></li><li class="nav-class"><a class="nav-class" href="#/MetaphorJs.lib.ObservableEvent">MetaphorJs.lib.ObservableEvent</a><ul class="nav-method-level nav-hidden"><li class="nav-method 
-                                                                                
-                
-    public
-
-"><a class="nav-method" href="#/MetaphorJs.lib.ObservableEvent/destroy">destroy()</a></li><li class="nav-method 
-                                                                                
-                
-    public
-
-"><a class="nav-method" href="#/MetaphorJs.lib.ObservableEvent/on">on(fn, scope, options)</a></li><li class="nav-method 
-                                                                                
-                
-    public
-
-"><a class="nav-method" href="#/MetaphorJs.lib.ObservableEvent/un">un(fn, scope)</a></li><li class="nav-method 
-                                                                                
-                
-    public
-
-"><a class="nav-method" href="#/MetaphorJs.lib.ObservableEvent/hasListener">hasListener()</a></li><li class="nav-method 
-                                                                                
-                
-    public
-
-"><a class="nav-method" href="#/MetaphorJs.lib.ObservableEvent/hasListener">hasListener(fn, scope)</a></li><li class="nav-method 
-                                                                                
-                
-    public
-
-"><a class="nav-method" href="#/MetaphorJs.lib.ObservableEvent/removeAllListeners">removeAllListeners()</a></li><li class="nav-method 
-                                                                                
-                
-    public
-
-"><a class="nav-method" href="#/MetaphorJs.lib.ObservableEvent/suspend">suspend()</a></li><li class="nav-method 
-                                                                                
-                
-    public
-
-"><a class="nav-method" href="#/MetaphorJs.lib.ObservableEvent/resume">resume()</a></li><li class="nav-method 
-                                                                                
-                
-    public
-
-"><a class="nav-method" href="#/MetaphorJs.lib.ObservableEvent/trigger">trigger()</a></li></ul></li></ul></nav><div id="main"><ul class="namespace-level"><li class="namespace-level" id=""><ul class="class-level"><li class="class"><h3 class="class" id="/MetaphorJs.lib.Observable"><span>class</span> MetaphorJs.lib.Observable
-                </h3><p>A javascript event system implementing two patterns - observable and collector.</p><p>Observable:</p><pre><code class="language-javascript">
- var o = new MetaphorJs.lib.Observable;
- o.on("event", function(x, y, z){ console.log([x, y, z]) });
- o.trigger("event", 1, 2, 3); // [1, 2, 3]
- </code></pre><p>Collector:</p><pre><code class="language-javascript">
- var o = new MetaphorJs.lib.Observable;
- o.createEvent("collectStuff", "all");
- o.on("collectStuff", function(){ return 1; });
- o.on("collectStuff", function(){ return 2; });
- var results = o.trigger("collectStuff"); // [1, 2]
- </code></pre><p>Although all methods are public there is getApi() method that allows you
-extending your own objects without overriding "destroy" (which you probably have)</p><pre><code class="language-javascript">
- var o = new MetaphorJs.lib.Observable;
- $.extend(this, o.getApi());
- this.on("event", function(){ alert("ok") });
- this.trigger("event");
- </code></pre><ul class="fields"><li class="fieldclass-field"><strong>@author</strong>
-                        johann kuindji
-                    </li><li class="fieldclass-field"><strong>@link</strong><a href="https://github.com/kuindji/metaphorjs-observable">https://github.com/kuindji/metaphorjs-observable</a></li><li class="fieldclass-field"><strong>@version</strong>
-                        1.1
-                    </li><li class="fieldclass-field"><strong>@file</strong>
-                        metaphorjs.observable.js
-                    </li></ul><label class="section">Methods</label><ul class="method-level"><li id="/MetaphorJs.lib.Observable/createEvent"
-        class="
-                                                                                            
-                
-    method public
-
-"><div class="labels"><span class="label func-public">public</span></div><h4 class="method" id="">createEvent<span class="func-sig">(name, returnResult)</span><span class="func-return">: MetaphorJs.lib.ObservableEvent</span></h4><p>You don't have to call this function unless you want to pass returnResult param.
-This function will be automatically called from on() with
-<code class="language-javascript">returnResult = false</code>,
-so if you want to receive handler's return values, create event first, then call on().</p><pre><code class="language-javascript">
- var observable = new MetaphorJs.lib.Observable;
- observable.createEvent("collectStuff", "all");
- observable.on("collectStuff", function(){ return 1; });
- observable.on("collectStuff", function(){ return 2; });
- var results = observable.trigger("collectStuff"); // [1, 2]
- </code></pre><ul class="params"><li id="/MetaphorJs.lib.Observable/createEvent/name"
-            class="
-                                                        
+<div class="container source-container">
+    <div class="row item-group level-0">
+        
+        <div class="col-md-12 item-group-items item-group-type-class level-0">
+            <div class="item-header" id="Observable">
     
-    param
-
-"><div class="labels"><span class="label var-required">Required</span></div><span class="var-name">name</span><span class="var-type">
-            string
-        </span><p>Event name</p></li><li id="/MetaphorJs.lib.Observable/createEvent/returnResult"
-            class="
-                                                        
+        
     
-    param
+    <h3>
+        
+        <span class="item-name">Observable</span>
+        
+    </h3>
+</div>
+<ul class="item-flags">
+    <li>
+        <code>@version</code>
+        
+            <span>1.1</span>
+        
+    </li>
+</ul><ul class="item-flags">
+    <li>
+        <code>@author</code>
+        
+            <span>johann kuindji</span>
+        
+    </li>
+</ul><ul class="item-flags">
+    <li>
+        <code>@link</code>
+        
+            <span>https://github.com/kuindji/metaphorjs-observable</span>
+        
+    </li>
+</ul>
 
-"><div class="labels"><span class="label var-required">Required</span></div><span class="var-name">returnResult</span><span class="var-type">
-            bool | string
-        </span><p>false -- do not return results except if handler returned "false". This is how normal observables work.<br> "all" -- return all results as array<br> "first" -- return result of the first handler<br> "last" -- return result of the last handler</p></li></ul></li><li id="/MetaphorJs.lib.Observable/getEvent"
-        class="
-                                                                                            
+    <div class="item-description">
+        
+            <p></p><p>A javascript event system implementing two patterns - observable and collector.</p><p></p>
+<p></p><p>Observable:</p><p></p>
+<pre><code class="language-javascript">var o = new Observable;
+o.on("event", function(x, y, z){ console.log([x, y, z]) });
+o.trigger("event", 1, 2, 3); // [1, 2, 3]
+</code></pre>
+<p>Collector:</p>
+<pre><code class="language-javascript">var o = new Observable;
+o.createEvent("collectStuff", "all");
+o.on("collectStuff", function(){ return 1; });
+o.on("collectStuff", function(){ return 2; });
+var results = o.trigger("collectStuff"); // [1, 2]
+</code></pre>
+<p>Although all methods are public there is getApi() method that allows you
+extending your own objects without overriding "destroy" (which you probably have)</p>
+<pre><code class="language-javascript">var o = new Observable;
+$.extend(this, o.getApi());
+this.on("event", function(){ alert("ok") });
+this.trigger("event");
+</code></pre>
+        
+    </div>
+
+
+
+
+    <div class="col-md-2 nopadding item-nav-container">
+        <ul class="item-nav">
+    <li class="item-nav-group-name">Methods</li>
+    <li class="item-nav-property item-nav-property-method">
+
+        <a href="#Observable.createEvent">
+            <span class="item-nav-item-name">createEvent</span>
+            
                 
-    method public
-
-"><div class="labels"><span class="label func-public">public</span></div><h4 class="method" id="">getEvent<span class="func-sig">(name)</span><span class="func-return">: MetaphorJs.lib.ObservableEvent | undefined</span></h4><ul class="params"><li id="/MetaphorJs.lib.Observable/getEvent/name"
-            class="
-                                                        
-    
-    param
-
-"><span class="var-name">name</span><span class="var-type">
-            string
-        </span><p>Event name</p></li></ul></li><li id="/MetaphorJs.lib.Observable/on"
-        class="
-                                                                                            
+                    <span class="item-nav-item-arguments">(name, returnResult)</span>
                 
-    method public
-
-"><div class="labels"><span class="label func-public">public</span></div><h4 class="method" id="">on<span class="func-sig">(name, fn, scope, options)</span><span class="func-return">: void</span></h4><p>Subscribe to an event or register collector function.</p><ul class="params"><li id="/MetaphorJs.lib.Observable/on/name"
-            class="
-                                                        
-    
-    param
-
-"><div class="labels"><span class="label var-required">Required</span></div><span class="var-name">name</span><span class="var-type">
-            string
-        </span><p>Event name</p></li><li id="/MetaphorJs.lib.Observable/on/fn"
-        class="
-                                                                                                                
-    
-    param required
-
-"><h4 class="method" id="">fn<span class="func-sig">()</span><span class="func-return">: void</span></h4><p>Callback function</p><div class="labels"><span class="label func-required">Required</span></div></li><li id="/MetaphorJs.lib.Observable/on/scope"
-            class="
-                                                        
-    
-    param
-
-"><span class="var-name">scope</span><span class="var-type">
-            object
-        </span><p>"this" object for the callback function</p></li><li id="/MetaphorJs.lib.Observable/on/options"
-            class="
-                                                        
-    
-    param
-
-"><span class="var-name">options</span><span class="var-type">
-            object
-        </span><span class="var-default"> = false</span><ul class="sub-level"><li id="/MetaphorJs.lib.Observable/on/options/first"
-            class="
-                                                        
-    
-    variable
-
-"><span class="var-name">first</span><span class="var-type">
-            bool
-        </span><p>True to prepend to the list of handlers</p></li><li id="/MetaphorJs.lib.Observable/on/options/limit"
-            class="
-                                                        
-    
-    variable
-
-"><span class="var-name">limit</span><span class="var-type">
-            number
-        </span><span class="var-default"> = 0</span><p>Call handler this number of times; 0 for unlimited</p></li><li id="/MetaphorJs.lib.Observable/on/options/start"
-            class="
-                                                        
-    
-    variable
-
-"><span class="var-name">start</span><span class="var-type">
-            number
-        </span><span class="var-default"> = 1</span><p>Start calling handler after this number of calls. Starts from 1</p></li></ul></li></ul></li><li id="/MetaphorJs.lib.Observable/once"
-        class="
-                                                                                            
                 
-    method public
+            
+        </a>
+    </li><li class="item-nav-property item-nav-property-method">
 
-"><div class="labels"><span class="label func-public">public</span></div><h4 class="method" id="">once<span class="func-sig">(name, fn, scope, options)</span><span class="func-return">: void</span></h4><p>Same as on(), but options.limit is forcefully set to 1.</p><ul class="params"><li id="/MetaphorJs.lib.Observable/once/name"
-            class="
-                                                        
-    
-    param
-
-"><div class="labels"><span class="label var-required">Required</span></div><span class="var-name">name</span><span class="var-type">
-            string
-        </span><p>Event name</p></li><li id="/MetaphorJs.lib.Observable/once/fn"
-        class="
-                                                                                                                
-    
-    param required
-
-"><h4 class="method" id="">fn<span class="func-sig">()</span><span class="func-return">: void</span></h4><p>Callback function</p><div class="labels"><span class="label func-required">Required</span></div></li><li id="/MetaphorJs.lib.Observable/once/scope"
-            class="
-                                                        
-    
-    param
-
-"><span class="var-name">scope</span><span class="var-type">
-            object
-        </span><p>"this" object for the callback function</p></li><li id="/MetaphorJs.lib.Observable/once/options"
-            class="
-                                                        
-    
-    param
-
-"><span class="var-name">options</span><span class="var-type">
-            object
-        </span><span class="var-default"> = false</span><ul class="sub-level"><li id="/MetaphorJs.lib.Observable/once/options/first"
-            class="
-                                                        
-    
-    variable
-
-"><span class="var-name">first</span><span class="var-type">
-            bool
-        </span><p>True to prepend to the list of handlers</p></li><li id="/MetaphorJs.lib.Observable/once/options/limit"
-            class="
-                                                        
-    
-    variable
-
-"><span class="var-name">limit</span><span class="var-type">
-            number
-        </span><span class="var-default"> = 0</span><p>Call handler this number of times; 0 for unlimited</p></li><li id="/MetaphorJs.lib.Observable/once/options/start"
-            class="
-                                                        
-    
-    variable
-
-"><span class="var-name">start</span><span class="var-type">
-            number
-        </span><span class="var-default"> = 1</span><p>Start calling handler after this number of calls. Starts from 1</p></li></ul></li></ul></li><li id="/MetaphorJs.lib.Observable/un"
-        class="
-                                                                                            
+        <a href="#Observable.getEvent">
+            <span class="item-nav-item-name">getEvent</span>
+            
                 
-    method public
+                    <span class="item-nav-item-arguments">(name)</span>
+                
+                
+            
+        </a>
+    </li><li class="item-nav-property item-nav-property-method">
 
-"><div class="labels"><span class="label func-public">public</span></div><h4 class="method" id="">un<span class="func-sig">(name, fn, scope)</span><span class="func-return">: void</span></h4><p>Unsubscribe from an event</p><ul class="params"><li id="/MetaphorJs.lib.Observable/un/name"
-            class="
-                                                        
+        <a href="#Observable.on">
+            <span class="item-nav-item-name">on</span>
+            
+                
+                    <span class="item-nav-item-arguments">(name, fn, context, options)</span>
+                
+                
+            
+        </a>
+    </li><li class="item-nav-property item-nav-property-method">
+
+        <a href="#Observable.once">
+            <span class="item-nav-item-name">once</span>
+            
+                
+                
+                    <span class="item-nav-item-arguments">()</span>
+                
+            
+        </a>
+    </li><li class="item-nav-property item-nav-property-method">
+
+        <a href="#Observable.un">
+            <span class="item-nav-item-name">un</span>
+            
+                
+                    <span class="item-nav-item-arguments">(name, fn, context)</span>
+                
+                
+            
+        </a>
+    </li><li class="item-nav-property item-nav-property-method">
+
+        <a href="#Observable.hasListener">
+            <span class="item-nav-item-name">hasListener</span>
+            
+                
+                    <span class="item-nav-item-arguments">(name)</span>
+                
+                
+            
+        </a>
+    </li><li class="item-nav-property item-nav-property-method">
+
+        <a href="#Observable.hasListener">
+            <span class="item-nav-item-name">hasListener</span>
+            
+                
+                    <span class="item-nav-item-arguments">(name, fn, context)</span>
+                
+                
+            
+        </a>
+    </li><li class="item-nav-property item-nav-property-method">
+
+        <a href="#Observable.removeAllListeners">
+            <span class="item-nav-item-name">removeAllListeners</span>
+            
+                
+                
+                    <span class="item-nav-item-arguments">()</span>
+                
+            
+        </a>
+    </li><li class="item-nav-property item-nav-property-method">
+
+        <a href="#Observable.removeAllListeners">
+            <span class="item-nav-item-name">removeAllListeners</span>
+            
+                
+                    <span class="item-nav-item-arguments">(name)</span>
+                
+                
+            
+        </a>
+    </li><li class="item-nav-property item-nav-property-method">
+
+        <a href="#Observable.trigger">
+            <span class="item-nav-item-name">trigger</span>
+            
+                
+                    <span class="item-nav-item-arguments">(name, ...)</span>
+                
+                
+            
+        </a>
+    </li><li class="item-nav-property item-nav-property-method">
+
+        <a href="#Observable.suspendEvent">
+            <span class="item-nav-item-name">suspendEvent</span>
+            
+                
+                    <span class="item-nav-item-arguments">(name)</span>
+                
+                
+            
+        </a>
+    </li><li class="item-nav-property item-nav-property-method">
+
+        <a href="#Observable.suspendAllEvents">
+            <span class="item-nav-item-name">suspendAllEvents</span>
+            
+                
+                
+                    <span class="item-nav-item-arguments">()</span>
+                
+            
+        </a>
+    </li><li class="item-nav-property item-nav-property-method">
+
+        <a href="#Observable.resumeEvent">
+            <span class="item-nav-item-name">resumeEvent</span>
+            
+                
+                    <span class="item-nav-item-arguments">(name)</span>
+                
+                
+            
+        </a>
+    </li><li class="item-nav-property item-nav-property-method">
+
+        <a href="#Observable.resumeAllEvents">
+            <span class="item-nav-item-name">resumeAllEvents</span>
+            
+                
+                
+                    <span class="item-nav-item-arguments">()</span>
+                
+            
+        </a>
+    </li><li class="item-nav-property item-nav-property-method">
+
+        <a href="#Observable.destroyEvent">
+            <span class="item-nav-item-name">destroyEvent</span>
+            
+                
+                    <span class="item-nav-item-arguments">(name)</span>
+                
+                
+            
+        </a>
+    </li><li class="item-nav-property item-nav-property-method">
+
+        <a href="#Observable.destroy">
+            <span class="item-nav-item-name">destroy</span>
+            
+                
+                    <span class="item-nav-item-arguments">(name)</span>
+                
+                
+            
+        </a>
+    </li><li class="item-nav-property item-nav-property-method">
+
+        <a href="#Observable.getApi">
+            <span class="item-nav-item-name">getApi</span>
+            
+                
+                
+                    <span class="item-nav-item-arguments">()</span>
+                
+            
+        </a>
+    </li>
+</ul>
+    </div>
+    <div class="col-md-10 nopadding item-properties-container">
+        
+    <div class="item-property-group-name">Methods</div>
+    <ul class="item-properties item-properties-method level-0">
+        <li class="item-property item-property-method">
+            <div class="item-header" id="Observable.createEvent">
     
-    param
-
-"><div class="labels"><span class="label var-required">Required</span></div><span class="var-name">name</span><span class="var-type">
-            string
-        </span><p>Event name</p></li><li id="/MetaphorJs.lib.Observable/un/fn"
-        class="
-                                                                                                                
+        
     
-    param required
+    <h4>
+        
+        <span class="item-name">createEvent</span>
+        
+            
+                <span class="item-name-arguments">(name, returnResult)</span>
+            
+            
+            
+                <span class="item-name-returns">&nbsp;-&gt;
+                    <a href="#ObservableEvent">ObservableEvent</a>
+            </span>
+            
+        
+    </h4>
+</div>
+<ul class="item-flags">
+    <li>
+        <code>@access</code>
+        
+            <span>public</span>
+        
+    </li>
+</ul>
 
-"><h4 class="method" id="">fn<span class="func-sig">()</span><span class="func-return">: void</span></h4><p>Event handler</p><div class="labels"><span class="label func-required">Required</span></div></li><li id="/MetaphorJs.lib.Observable/un/scope"
-            class="
-                                                        
+    <div class="item-description">
+        
+            <p>You don't have to call this function unless you want to pass returnResult param.
+This function will be automatically called from <a href="on">on</a> with <code>returnResult = false</code>,
+so if you want to receive handler's return values, create event first, then call on().</p>
+<pre><code class="language-javascript">var observable = new Observable;
+observable.createEvent("collectStuff", "all");
+observable.on("collectStuff", function(){ return 1; });
+observable.on("collectStuff", function(){ return 2; });
+var results = observable.trigger("collectStuff"); // [1, 2]
+</code></pre>
+        
+    </div>
+
+
+
+
+
+
     
-    param
-
-"><span class="var-name">scope</span><span class="var-type">
-            object
-        </span><p>If you called on() with scope you must call un() with the same scope</p></li></ul></li><li id="/MetaphorJs.lib.Observable/hasListener"
-        class="
-                                                                                            
-                
-    method public
-
-"><div class="labels"><span class="label func-public">public</span></div><h4 class="method" id="">hasListener<span class="func-sig">(name)</span><span class="func-return">: bool</span></h4><ul class="params"><li id="/MetaphorJs.lib.Observable/hasListener/name"
-            class="
-                                                        
     
-    param
-
-"><div class="labels"><span class="label var-required">Required</span></div><span class="var-name">name</span><span class="var-type">
-            string
-        </span><p>Event name</p></li></ul></li><li id="/MetaphorJs.lib.Observable/hasListener"
-        class="
-                                                                                            
-                
-    method public
-
-"><div class="labels"><span class="label func-public">public</span></div><h4 class="method" id="">hasListener<span class="func-sig">(name, fn, scope)</span><span class="func-return">: bool</span></h4><ul class="params"><li id="/MetaphorJs.lib.Observable/hasListener/name"
-            class="
-                                                        
+    <ul class="item-properties item-properties-param level-1">
+        <li class="item-property item-property-param">
+            <div class="item-header" id="Observable.createEvent/name">
     
-    param
-
-"><div class="labels"><span class="label var-required">Required</span></div><span class="var-name">name</span><span class="var-type">
-            string
-        </span><p>Event name</p></li><li id="/MetaphorJs.lib.Observable/hasListener/fn"
-        class="
-                                                                                                                
+        <span class="label label-warning item-label">required</span>
     
-    param required
+    <h5>
+        
+            <span class="item-type">string </span>
+        
+        <span class="item-name">name</span>
+        
+    </h5>
+</div>
 
-"><h4 class="method" id="">fn<span class="func-sig">()</span><span class="func-return">: void</span></h4><p>Callback function</p><div class="labels"><span class="label func-required">Required</span></div></li><li id="/MetaphorJs.lib.Observable/hasListener/scope"
-            class="
-                                                        
+
+    <div class="item-description">
+        
+            <p>Event name</p>
+
+        
+    </div>
+
+
+
+
+
+
     
-    param
 
-"><span class="var-name">scope</span><span class="var-type">
-            object
-        </span><p>Function's "this" object</p></li></ul></li><li id="/MetaphorJs.lib.Observable/removeAllListeners"
-        class="
-                                                                                            
-                
-    method public
-
-"><div class="labels"><span class="label func-public">public</span></div><h4 class="method" id="">removeAllListeners<span class="func-sig">()</span><span class="func-return">: void</span></h4><p>Remove all listeners from all events</p></li><li id="/MetaphorJs.lib.Observable/removeAllListeners"
-        class="
-                                                                                            
-                
-    method public
-
-"><div class="labels"><span class="label func-public">public</span></div><h4 class="method" id="">removeAllListeners<span class="func-sig">(name)</span><span class="func-return">: void</span></h4><p>Remove all listeners from specific event</p><ul class="params"><li id="/MetaphorJs.lib.Observable/removeAllListeners/name"
-            class="
-                                                        
+        </li><li class="item-property item-property-param">
+            <div class="item-header" id="Observable.createEvent/returnResult">
     
-    param
-
-"><div class="labels"><span class="label var-required">Required</span></div><span class="var-name">name</span><span class="var-type">
-            string
-        </span><p>Event name</p></li></ul></li><li id="/MetaphorJs.lib.Observable/trigger"
-        class="
-                                                                                            
-                
-    method public
-
-"><div class="labels"><span class="label func-public">public</span></div><h4 class="method" id="">trigger<span class="func-sig">(name, ...)</span><span class="func-return">: mixed</span></h4><p>Trigger an event -- call all listeners.</p><ul class="params"><li id="/MetaphorJs.lib.Observable/trigger/name"
-            class="
-                                                        
+        <span class="label label-warning item-label">required</span>
     
-    param
+    <h5>
+        
+            <span class="item-type">boolean | string </span>
+        
+        <span class="item-name">returnResult</span>
+        
+    </h5>
+</div>
 
-"><div class="labels"><span class="label var-required">Required</span></div><span class="var-name">name</span><span class="var-type">
-            string
-        </span><p>Event name</p></li><li id="/MetaphorJs.lib.Observable/trigger/..."
-            class="
-                                                        
+
+    <div class="item-description">
+        
+            <p>false -- do not return results except if handler returned "false". This is how
+normal observables work.<br>
+"all" -- return all results as array<br>
+"merge" -- merge all results into one array (each result must be array)<br>
+"first" -- return result of the first handler<br>
+"last" -- return result of the last handler<br></p>
+
+        
+    </div>
+
+
+
+
+
+
     
-    param
 
-"><span class="var-name">...</span><span class="var-type">
-            mixed
-        </span><p>As many other params as needed</p></li></ul></li><li id="/MetaphorJs.lib.Observable/suspendEvent"
-        class="
-                                                                                            
-                
-    method public
+        </li>
+    </ul>
 
-"><div class="labels"><span class="label func-public">public</span></div><h4 class="method" id="">suspendEvent<span class="func-sig">(name)</span><span class="func-return">: void</span></h4><p>Suspend an event. Suspended event will not call any listeners on trigger().</p><ul class="params"><li id="/MetaphorJs.lib.Observable/suspendEvent/name"
-            class="
-                                                        
+
+        </li><li class="item-property item-property-method">
+            <div class="item-header" id="Observable.getEvent">
     
-    param
-
-"><span class="var-name">name</span><span class="var-type">
-            string
-        </span><p>Event name</p></li></ul></li><li id="/MetaphorJs.lib.Observable/suspendAllEvents"
-        class="
-                                                                                            
-                
-    method public
-
-"><div class="labels"><span class="label func-public">public</span></div><h4 class="method" id="">suspendAllEvents<span class="func-sig">()</span><span class="func-return">: void</span></h4></li><li id="/MetaphorJs.lib.Observable/resumeEvent"
-        class="
-                                                                                            
-                
-    method public
-
-"><div class="labels"><span class="label func-public">public</span></div><h4 class="method" id="">resumeEvent<span class="func-sig">(name)</span><span class="func-return">: void</span></h4><p>Resume suspended event.</p><ul class="params"><li id="/MetaphorJs.lib.Observable/resumeEvent/name"
-            class="
-                                                        
+        
     
-    param
+    <h4>
+        
+        <span class="item-name">getEvent</span>
+        
+            
+                <span class="item-name-arguments">(name)</span>
+            
+            
+            
+                <span class="item-name-returns">&nbsp;-&gt;
+                    <a href="#ObservableEvent">ObservableEvent</a> | undefined
+            </span>
+            
+        
+    </h4>
+</div>
+<ul class="item-flags">
+    <li>
+        <code>@access</code>
+        
+            <span>public</span>
+        
+    </li>
+</ul>
 
-"><span class="var-name">name</span><span class="var-type">
-            string
-        </span><p>Event name</p></li></ul></li><li id="/MetaphorJs.lib.Observable/resumeAllEvents"
-        class="
-                                                                                            
-                
-    method public
 
-"><div class="labels"><span class="label func-public">public</span></div><h4 class="method" id="">resumeAllEvents<span class="func-sig">()</span><span class="func-return">: void</span></h4></li><li id="/MetaphorJs.lib.Observable/destroy"
-        class="
-                                                                                            
-                
-    method public
 
-"><div class="labels"><span class="label func-public">public</span></div><h4 class="method" id="">destroy<span class="func-sig">()</span><span class="func-return">: void</span></h4><p>Destroy all events and itself</p></li><li id="/MetaphorJs.lib.Observable/destroy"
-        class="
-                                                                                            
-                
-    method public
 
-"><div class="labels"><span class="label func-public">public</span></div><h4 class="method" id="">destroy<span class="func-sig">(name)</span><span class="func-return">: void</span></h4><p>Destroy specific event</p><ul class="params"><li id="/MetaphorJs.lib.Observable/destroy/name"
-            class="
-                                                        
+
+
     
-    param
-
-"><span class="var-name">name</span><span class="var-type">
-            string
-        </span><p>Event name</p></li></ul></li><li id="/MetaphorJs.lib.Observable/getApi"
-        class="
-                                                                                            
-                
-    method public
-
-"><div class="labels"><span class="label func-public">public</span></div><h4 class="method" id="">getApi<span class="func-sig">()</span><span class="func-return">: object</span></h4><p>Get object with all functions except "destroy"</p></li></ul></li><li class="class"><h3 class="class" id="/MetaphorJs.lib.ObservableEvent"><span>class</span> MetaphorJs.lib.ObservableEvent
-                </h3><p>This class is private - you can't create an event other than via Observable.
-See MetaphorJs.lib.Observable reference.</p><ul class="fields"><li class="fieldclass-field"><strong>@file</strong>
-                        metaphorjs.observable.js
-                    </li></ul><label class="section">Methods</label><ul class="method-level"><li id="/MetaphorJs.lib.ObservableEvent/destroy"
-        class="
-                                                                                            
-                
-    method public
-
-"><div class="labels"><span class="label func-public">public</span></div><h4 class="method" id="">destroy<span class="func-sig">()</span><span class="func-return">: void</span></h4></li><li id="/MetaphorJs.lib.ObservableEvent/on"
-        class="
-                                                                                            
-                
-    method public
-
-"><div class="labels"><span class="label func-public">public</span></div><h4 class="method" id="">on<span class="func-sig">(fn, scope, options)</span><span class="func-return">: void</span></h4><ul class="params"><li id="/MetaphorJs.lib.ObservableEvent/on/fn"
-        class="
-                                                                                                                
     
-    param required
-
-"><h4 class="method" id="">fn<span class="func-sig">()</span><span class="func-return">: void</span></h4><p>Callback function</p><div class="labels"><span class="label func-required">Required</span></div></li><li id="/MetaphorJs.lib.ObservableEvent/on/scope"
-            class="
-                                                        
+    <ul class="item-properties item-properties-param level-1">
+        <li class="item-property item-property-param">
+            <div class="item-header" id="Observable.getEvent/name">
     
-    param
-
-"><span class="var-name">scope</span><span class="var-type">
-            object
-        </span><p>Function's "this" object</p></li><li id="/MetaphorJs.lib.ObservableEvent/on/options"
-            class="
-                                                        
+        
     
-    param
+    <h5>
+        
+            <span class="item-type">string </span>
+        
+        <span class="item-name">name</span>
+        
+    </h5>
+</div>
 
-"><span class="var-name">options</span><span class="var-type">
-            object
-        </span><p>See Observable's on()</p></li></ul></li><li id="/MetaphorJs.lib.ObservableEvent/un"
-        class="
-                                                                                            
-                
-    method public
 
-"><div class="labels"><span class="label func-public">public</span></div><h4 class="method" id="">un<span class="func-sig">(fn, scope)</span><span class="func-return">: void</span></h4><ul class="params"><li id="/MetaphorJs.lib.ObservableEvent/un/fn"
-        class="
-                                                                                                                
+    <div class="item-description">
+        
+            <p>Event name</p>
+
+        
+    </div>
+
+
+
+
+
+
     
-    param required
 
-"><h4 class="method" id="">fn<span class="func-sig">()</span><span class="func-return">: void</span></h4><p>Callback function</p><div class="labels"><span class="label func-required">Required</span></div></li><li id="/MetaphorJs.lib.ObservableEvent/un/scope"
-            class="
-                                                        
+        </li>
+    </ul>
+
+
+        </li><li class="item-property item-property-method">
+            <div class="item-header" id="Observable.on">
     
-    param
-
-"><span class="var-name">scope</span><span class="var-type">
-            object
-        </span><p>Function's "this" object</p></li></ul></li><li id="/MetaphorJs.lib.ObservableEvent/hasListener"
-        class="
-                                                                                            
-                
-    method public
-
-"><div class="labels"><span class="label func-public">public</span></div><h4 class="method" id="">hasListener<span class="func-sig">()</span><span class="func-return">: bool</span></h4></li><li id="/MetaphorJs.lib.ObservableEvent/hasListener"
-        class="
-                                                                                            
-                
-    method public
-
-"><div class="labels"><span class="label func-public">public</span></div><h4 class="method" id="">hasListener<span class="func-sig">(fn, scope)</span><span class="func-return">: bool</span></h4><ul class="params"><li id="/MetaphorJs.lib.ObservableEvent/hasListener/fn"
-        class="
-                                                                                                                
+        
     
-    param required
+    <h4>
+        
+        <span class="item-name">on</span>
+        
+            
+                <span class="item-name-arguments">(name, fn, context, options)</span>
+            
+            
+            
+            
+        
+    </h4>
+</div>
+<ul class="item-flags">
+    <li>
+        <code>@access</code>
+        
+            <span>public</span>
+        
+    </li>
+</ul>
 
-"><h4 class="method" id="">fn<span class="func-sig">()</span><span class="func-return">: void</span></h4><p>Callback function</p><div class="labels"><span class="label func-required">Required</span></div></li><li id="/MetaphorJs.lib.ObservableEvent/hasListener/scope"
-            class="
-                                                        
+    <div class="item-description">
+        
+            <p>Subscribe to an event or register collector function.</p>
+
+        
+    </div>
+
+
+
+
+
+
     
-    param
+    
+    <ul class="item-properties item-properties-param level-1">
+        <li class="item-property item-property-param">
+            <div class="item-header" id="Observable.on/name">
+    
+        <span class="label label-warning item-label">required</span>
+    
+    <h5>
+        
+            <span class="item-type">string </span>
+        
+        <span class="item-name">name</span>
+        
+    </h5>
+</div>
 
-"><span class="var-name">scope</span><span class="var-type">
-            object
-        </span><p>Function's "this" object</p></li></ul></li><li id="/MetaphorJs.lib.ObservableEvent/removeAllListeners"
-        class="
-                                                                                            
+
+    <div class="item-description">
+        
+            <p>Event name</p>
+
+        
+    </div>
+
+
+
+
+
+
+    
+
+        </li><li class="item-property item-property-param">
+            <div class="item-header" id="Observable.on/fn">
+    
+        <span class="label label-warning item-label">required</span>
+    
+    <h5>
+        
+            <span class="item-type">function </span>
+        
+        <span class="item-name">fn</span>
+        
+            
+            
+                <span class="item-name-arguments">()</span>
+            
+            
+            
+        
+    </h5>
+</div>
+
+
+    <div class="item-description">
+        
+            <p>Callback function</p>
+
+        
+    </div>
+
+
+
+
+
+
+    
+
+        </li><li class="item-property item-property-param">
+            <div class="item-header" id="Observable.on/context">
+    
+        
+    
+    <h5>
+        
+            <span class="item-type">object </span>
+        
+        <span class="item-name">context</span>
+        
+    </h5>
+</div>
+
+
+    <div class="item-description">
+        
+            <p>"this" object for the callback function</p>
+
+        
+    </div>
+
+
+
+
+
+
+    
+
+        </li><li class="item-property item-property-param">
+            <div class="item-header" id="Observable.on/options">
+    
+        
+    
+    <h5>
+        
+            <span class="item-type">object </span>
+        
+        <span class="item-name">options</span>
+        
+    </h5>
+</div>
+
+
+
+
+
+
+
+    
+    
+    <ul class="item-properties item-properties-property level-2">
+        <li class="item-property item-property-property">
+            <div class="item-header" id="Observable.on/options.first">
+    
+        
+    
+    <h6>
+        
+            <span class="item-type">boolean </span>
+        
+        <span class="item-name">first</span>
+        
+    </h6>
+</div>
+<ul class="item-flags">
+    <li>
+        <code>@default</code>
+        
+            <span>false</span>
+        
+    </li>
+</ul>
+
+    <div class="item-description">
+        
+            <p>True to prepend to the list of handlers</p>
+
+        
+    </div>
+
+
+
+
+
+
+    
+
+        </li><li class="item-property item-property-property">
+            <div class="item-header" id="Observable.on/options.limit">
+    
+        
+    
+    <h6>
+        
+            <span class="item-type">number </span>
+        
+        <span class="item-name">limit</span>
+        
+    </h6>
+</div>
+<ul class="item-flags">
+    <li>
+        <code>@default</code>
+        
+            <span>0</span>
+        
+    </li>
+</ul>
+
+    <div class="item-description">
+        
+            <p>Call handler this number of times; 0 for unlimited</p>
+
+        
+    </div>
+
+
+
+
+
+
+    
+
+        </li><li class="item-property item-property-property">
+            <div class="item-header" id="Observable.on/options.start">
+    
+        
+    
+    <h6>
+        
+            <span class="item-type">number </span>
+        
+        <span class="item-name">start</span>
+        
+    </h6>
+</div>
+<ul class="item-flags">
+    <li>
+        <code>@default</code>
+        
+            <span>1</span>
+        
+    </li>
+</ul>
+
+    <div class="item-description">
+        
+            <p>Start calling handler after this number of calls. Starts from 1</p>
+
+        
+    </div>
+
+
+
+
+
+
+    
+
+        </li><li class="item-property item-property-property">
+            <div class="item-header" id="Observable.on/options.append">
+    
+        
+    
+    <h6>
+        
+            <span class="item-type">array </span>
+        
+        <span class="item-name">append</span>
+        
+    </h6>
+</div>
+
+
+    <div class="item-description">
+        
+            <p>Append parameters</p>
+
+        
+    </div>
+
+
+
+
+
+
+    
+
+        </li><li class="item-property item-property-property">
+            <div class="item-header" id="Observable.on/options.prepend">
+    
+        
+    
+    <h6>
+        
+            <span class="item-type">array </span>
+        
+        <span class="item-name">prepend</span>
+        
+    </h6>
+</div>
+
+
+    <div class="item-description">
+        
+            <p>Prepend parameters</p>
+
+        
+    </div>
+
+
+
+
+
+
+    
+
+        </li><li class="item-property item-property-property">
+            <div class="item-header" id="Observable.on/options.allowDupes">
+    
+        
+    
+    <h6>
+        
+            <span class="item-type">boolean </span>
+        
+        <span class="item-name">allowDupes</span>
+        
+    </h6>
+</div>
+
+
+    <div class="item-description">
+        
+            <p>allow the same handler twice</p>
+
+        
+    </div>
+
+
+
+
+
+
+    
+
+        </li>
+    </ul>
+
+
+        </li>
+    </ul>
+
+
+        </li><li class="item-property item-property-method">
+            <div class="item-header" id="Observable.once">
+    
+        
+    
+    <h4>
+        
+        <span class="item-name">once</span>
+        
+            
+            
+                <span class="item-name-arguments">()</span>
+            
+            
+            
+        
+    </h4>
+</div>
+<ul class="item-flags">
+    <li>
+        <code>@access</code>
+        
+            <span>public</span>
+        
+    </li>
+</ul>
+
+    <div class="item-description">
+        
+            <p>Same as <a href="#Observable.on">on</a>, but options.limit is forcefully set to 1.</p>
+
+        
+    </div>
+
+
+
+
+
+
+    
+
+        </li><li class="item-property item-property-method">
+            <div class="item-header" id="Observable.un">
+    
+        
+    
+    <h4>
+        
+        <span class="item-name">un</span>
+        
+            
+                <span class="item-name-arguments">(name, fn, context)</span>
+            
+            
+            
+            
+        
+    </h4>
+</div>
+<ul class="item-flags">
+    <li>
+        <code>@access</code>
+        
+            <span>public</span>
+        
+    </li>
+</ul>
+
+    <div class="item-description">
+        
+            <p>Unsubscribe from an event</p>
+
+        
+    </div>
+
+
+
+
+
+
+    
+    
+    <ul class="item-properties item-properties-param level-1">
+        <li class="item-property item-property-param">
+            <div class="item-header" id="Observable.un/name">
+    
+        
+    
+    <h5>
+        
+            <span class="item-type">string </span>
+        
+        <span class="item-name">name</span>
+        
+    </h5>
+</div>
+
+
+    <div class="item-description">
+        
+            <p>Event name</p>
+
+        
+    </div>
+
+
+
+
+
+
+    
+
+        </li><li class="item-property item-property-param">
+            <div class="item-header" id="Observable.un/fn">
+    
+        
+    
+    <h5>
+        
+            <span class="item-type">function </span>
+        
+        <span class="item-name">fn</span>
+        
+            
+            
+                <span class="item-name-arguments">()</span>
+            
+            
+            
+        
+    </h5>
+</div>
+
+
+    <div class="item-description">
+        
+            <p>Event handler</p>
+
+        
+    </div>
+
+
+
+
+
+
+    
+
+        </li><li class="item-property item-property-param">
+            <div class="item-header" id="Observable.un/context">
+    
+        
+    
+    <h5>
+        
+            <span class="item-type">object </span>
+        
+        <span class="item-name">context</span>
+        
+    </h5>
+</div>
+
+
+    <div class="item-description">
+        
+            <p>If you called on() with context you must call un() with the same context</p>
+
+        
+    </div>
+
+
+
+
+
+
+    
+
+        </li>
+    </ul>
+
+
+        </li><li class="item-property item-property-method">
+            <div class="item-header" id="Observable.hasListener">
+    
+        
+    
+    <h4>
+        
+        <span class="item-name">hasListener</span>
+        
+            
+                <span class="item-name-arguments">(name)</span>
+            
+            
+            
+                <span class="item-name-returns">&nbsp;-&gt;
+                    boolean
+            </span>
+            
+        
+    </h4>
+</div>
+<ul class="item-flags">
+    <li>
+        <code>@access</code>
+        
+            <span>public</span>
+        
+    </li>
+</ul>
+
+
+
+
+
+
+    
+    
+    <ul class="item-properties item-properties-param level-1">
+        <li class="item-property item-property-param">
+            <div class="item-header" id="Observable.hasListener/name">
+    
+        <span class="label label-warning item-label">required</span>
+    
+    <h5>
+        
+            <span class="item-type">string </span>
+        
+        <span class="item-name">name</span>
+        
+    </h5>
+</div>
+
+
+    <div class="item-description">
+        
+            <p>Event name</p>
+
+        
+    </div>
+
+
+
+
+
+
+    
+
+        </li>
+    </ul>
+
+
+        </li><li class="item-property item-property-method">
+            <div class="item-header" id="Observable.hasListener">
+    
+        
+    
+    <h4>
+        
+        <span class="item-name">hasListener</span>
+        
+            
+                <span class="item-name-arguments">(name, fn, context)</span>
+            
+            
+            
+                <span class="item-name-returns">&nbsp;-&gt;
+                    boolean
+            </span>
+            
+        
+    </h4>
+</div>
+<ul class="item-flags">
+    <li>
+        <code>@access</code>
+        
+            <span>public</span>
+        
+    </li>
+</ul>
+
+
+
+
+
+
+    
+    
+    <ul class="item-properties item-properties-param level-1">
+        <li class="item-property item-property-param">
+            <div class="item-header" id="Observable.hasListener/name">
+    
+        <span class="label label-warning item-label">required</span>
+    
+    <h5>
+        
+            <span class="item-type">string </span>
+        
+        <span class="item-name">name</span>
+        
+    </h5>
+</div>
+
+
+    <div class="item-description">
+        
+            <p>Event name</p>
+
+        
+    </div>
+
+
+
+
+
+
+    
+
+        </li><li class="item-property item-property-param">
+            <div class="item-header" id="Observable.hasListener/fn">
+    
+        <span class="label label-warning item-label">required</span>
+    
+    <h5>
+        
+            <span class="item-type">function </span>
+        
+        <span class="item-name">fn</span>
+        
+            
+            
+                <span class="item-name-arguments">()</span>
+            
+            
+            
+        
+    </h5>
+</div>
+
+
+    <div class="item-description">
+        
+            <p>Callback function</p>
+
+        
+    </div>
+
+
+
+
+
+
+    
+
+        </li><li class="item-property item-property-param">
+            <div class="item-header" id="Observable.hasListener/context">
+    
+        
+    
+    <h5>
+        
+            <span class="item-type">object </span>
+        
+        <span class="item-name">context</span>
+        
+    </h5>
+</div>
+
+
+    <div class="item-description">
+        
+            <p>Function's "this" object</p>
+
+        
+    </div>
+
+
+
+
+
+
+    
+
+        </li>
+    </ul>
+
+
+        </li><li class="item-property item-property-method">
+            <div class="item-header" id="Observable.removeAllListeners">
+    
+        
+    
+    <h4>
+        
+        <span class="item-name">removeAllListeners</span>
+        
+            
+            
+                <span class="item-name-arguments">()</span>
+            
+            
+            
+        
+    </h4>
+</div>
+<ul class="item-flags">
+    <li>
+        <code>@access</code>
+        
+            <span>public</span>
+        
+    </li>
+</ul>
+
+    <div class="item-description">
+        
+            <p>Remove all listeners from all events</p>
+
+        
+    </div>
+
+
+
+
+
+
+    
+
+        </li><li class="item-property item-property-method">
+            <div class="item-header" id="Observable.removeAllListeners">
+    
+        
+    
+    <h4>
+        
+        <span class="item-name">removeAllListeners</span>
+        
+            
+                <span class="item-name-arguments">(name)</span>
+            
+            
+            
+            
+        
+    </h4>
+</div>
+<ul class="item-flags">
+    <li>
+        <code>@access</code>
+        
+            <span>public</span>
+        
+    </li>
+</ul>
+
+    <div class="item-description">
+        
+            <p>Remove all listeners from specific event</p>
+
+        
+    </div>
+
+
+
+
+
+
+    
+    
+    <ul class="item-properties item-properties-param level-1">
+        <li class="item-property item-property-param">
+            <div class="item-header" id="Observable.removeAllListeners/name">
+    
+        <span class="label label-warning item-label">required</span>
+    
+    <h5>
+        
+            <span class="item-type">string </span>
+        
+        <span class="item-name">name</span>
+        
+    </h5>
+</div>
+
+
+    <div class="item-description">
+        
+            <p>Event name</p>
+
+        
+    </div>
+
+
+
+
+
+
+    
+
+        </li>
+    </ul>
+
+
+        </li><li class="item-property item-property-method">
+            <div class="item-header" id="Observable.trigger">
+    
+        
+    
+    <h4>
+        
+        <span class="item-name">trigger</span>
+        
+            
+                <span class="item-name-arguments">(name, ...)</span>
+            
+            
+            
+                <span class="item-name-returns">&nbsp;-&gt;
+                    mixed
+            </span>
+            
+        
+    </h4>
+</div>
+<ul class="item-flags">
+    <li>
+        <code>@access</code>
+        
+            <span>public</span>
+        
+    </li>
+</ul>
+
+    <div class="item-description">
+        
+            <p>Trigger an event -- call all listeners.</p>
+
+        
+    </div>
+
+
+
+
+
+
+    
+    
+    <ul class="item-properties item-properties-param level-1">
+        <li class="item-property item-property-param">
+            <div class="item-header" id="Observable.trigger/name">
+    
+        <span class="label label-warning item-label">required</span>
+    
+    <h5>
+        
+            <span class="item-type">string </span>
+        
+        <span class="item-name">name</span>
+        
+    </h5>
+</div>
+
+
+    <div class="item-description">
+        
+            <p>Event name</p>
+
+        
+    </div>
+
+
+
+
+
+
+    
+
+        </li><li class="item-property item-property-param">
+            <div class="item-header" id="Observable.trigger/...">
+    
+        
+    
+    <h5>
+        
+            <span class="item-type">* </span>
+        
+        <span class="item-name">...</span>
+        
+    </h5>
+</div>
+
+
+    <div class="item-description">
+        
+            <p>As many other params as needed</p>
+
+        
+    </div>
+
+
+
+
+
+
+    
+
+        </li>
+    </ul>
+
+
+        </li><li class="item-property item-property-method">
+            <div class="item-header" id="Observable.suspendEvent">
+    
+        
+    
+    <h4>
+        
+        <span class="item-name">suspendEvent</span>
+        
+            
+                <span class="item-name-arguments">(name)</span>
+            
+            
+            
+            
+        
+    </h4>
+</div>
+<ul class="item-flags">
+    <li>
+        <code>@access</code>
+        
+            <span>public</span>
+        
+    </li>
+</ul>
+
+    <div class="item-description">
+        
+            <p>Suspend an event. Suspended event will not call any listeners on trigger().</p>
+
+        
+    </div>
+
+
+
+
+
+
+    
+    
+    <ul class="item-properties item-properties-param level-1">
+        <li class="item-property item-property-param">
+            <div class="item-header" id="Observable.suspendEvent/name">
+    
+        
+    
+    <h5>
+        
+            <span class="item-type">string </span>
+        
+        <span class="item-name">name</span>
+        
+    </h5>
+</div>
+
+
+    <div class="item-description">
+        
+            <p>Event name</p>
+
+        
+    </div>
+
+
+
+
+
+
+    
+
+        </li>
+    </ul>
+
+
+        </li><li class="item-property item-property-method">
+            <div class="item-header" id="Observable.suspendAllEvents">
+    
+        
+    
+    <h4>
+        
+        <span class="item-name">suspendAllEvents</span>
+        
+            
+            
+                <span class="item-name-arguments">()</span>
+            
+            
+            
+        
+    </h4>
+</div>
+<ul class="item-flags">
+    <li>
+        <code>@access</code>
+        
+            <span>public</span>
+        
+    </li>
+</ul>
+
+
+
+
+
+
+    
+
+        </li><li class="item-property item-property-method">
+            <div class="item-header" id="Observable.resumeEvent">
+    
+        
+    
+    <h4>
+        
+        <span class="item-name">resumeEvent</span>
+        
+            
+                <span class="item-name-arguments">(name)</span>
+            
+            
+            
+            
+        
+    </h4>
+</div>
+<ul class="item-flags">
+    <li>
+        <code>@access</code>
+        
+            <span>public</span>
+        
+    </li>
+</ul>
+
+    <div class="item-description">
+        
+            <p>Resume suspended event.</p>
+
+        
+    </div>
+
+
+
+
+
+
+    
+    
+    <ul class="item-properties item-properties-param level-1">
+        <li class="item-property item-property-param">
+            <div class="item-header" id="Observable.resumeEvent/name">
+    
+        
+    
+    <h5>
+        
+            <span class="item-type">string </span>
+        
+        <span class="item-name">name</span>
+        
+    </h5>
+</div>
+
+
+    <div class="item-description">
+        
+            <p>Event name</p>
+
+        
+    </div>
+
+
+
+
+
+
+    
+
+        </li>
+    </ul>
+
+
+        </li><li class="item-property item-property-method">
+            <div class="item-header" id="Observable.resumeAllEvents">
+    
+        
+    
+    <h4>
+        
+        <span class="item-name">resumeAllEvents</span>
+        
+            
+            
+                <span class="item-name-arguments">()</span>
+            
+            
+            
+        
+    </h4>
+</div>
+<ul class="item-flags">
+    <li>
+        <code>@access</code>
+        
+            <span>public</span>
+        
+    </li>
+</ul>
+
+
+
+
+
+
+    
+
+        </li><li class="item-property item-property-method">
+            <div class="item-header" id="Observable.destroyEvent">
+    
+        
+    
+    <h4>
+        
+        <span class="item-name">destroyEvent</span>
+        
+            
+                <span class="item-name-arguments">(name)</span>
+            
+            
+            
+            
+        
+    </h4>
+</div>
+<ul class="item-flags">
+    <li>
+        <code>@access</code>
+        
+            <span>public</span>
+        
+    </li>
+</ul>
+
+
+
+
+
+
+    
+    
+    <ul class="item-properties item-properties-param level-1">
+        <li class="item-property item-property-param">
+            <div class="item-header" id="Observable.destroyEvent/name">
+    
+        
+    
+    <h5>
+        
+            <span class="item-type">string </span>
+        
+        <span class="item-name">name</span>
+        
+    </h5>
+</div>
+
+
+    <div class="item-description">
+        
+            <p>Event name</p>
+
+        
+    </div>
+
+
+
+
+
+
+    
+
+        </li>
+    </ul>
+
+
+        </li><li class="item-property item-property-method">
+            <div class="item-header" id="Observable.destroy">
+    
+        <span class="label label-warning item-label">md-not-inheritable</span>
+    
+    <h4>
+        
+        <span class="item-name">destroy</span>
+        
+            
+                <span class="item-name-arguments">(name)</span>
+            
+            
+            
+            
+        
+    </h4>
+</div>
+<ul class="item-flags">
+    <li>
+        <code>@access</code>
+        
+            <span>public</span>
+        
+    </li>
+</ul>
+
+    <div class="item-description">
+        
+            <p>Destroy observable</p>
+
+        
+    </div>
+
+
+
+
+
+
+    
+    
+    <ul class="item-properties item-properties-param level-1">
+        <li class="item-property item-property-param">
+            <div class="item-header" id="Observable.destroy/name">
+    
+        
+    
+    <h5>
+        
+            <span class="item-type">string </span>
+        
+        <span class="item-name">name</span>
+        
+    </h5>
+</div>
+
+
+    <div class="item-description">
+        
+            <p>Event name</p>
+
+        
+    </div>
+
+
+
+
+
+
+    
+
+        </li>
+    </ul>
+
+
+        </li><li class="item-property item-property-method">
+            <div class="item-header" id="Observable.getApi">
+    
+        <span class="label label-warning item-label">md-not-inheritable</span>
+    
+    <h4>
+        
+        <span class="item-name">getApi</span>
+        
+            
+            
+                <span class="item-name-arguments">()</span>
+            
+            
+                <span class="item-name-returns">&nbsp;-&gt;
+                    object
+            </span>
+            
+        
+    </h4>
+</div>
+
+
+    <div class="item-description">
+        
+            <p>Get object with all functions except "destroy"</p>
+
+        
+    </div>
+
+
+
+
+
+
+    
+
+        </li>
+    </ul>
+
+    </div>
+
+
+
+        </div><div class="col-md-12 item-group-items item-group-type-class level-0">
+            <div class="item-header" id="ObservableEvent">
+    
+        
+    
+    <h3>
+        
+        <span class="item-name">ObservableEvent</span>
+        
+    </h3>
+</div>
+<ul class="item-flags">
+    <li>
+        <code>@access</code>
+        
+            <span>private</span>
+        
+    </li>
+</ul>
+
+    <div class="item-description">
+        
+            <p>This class is private - you can't create an event other than via Observable.
+See Observable reference.</p>
+
+        
+    </div>
+
+
+
+
+    <div class="col-md-2 nopadding item-nav-container">
+        <ul class="item-nav">
+    <li class="item-nav-group-name">Methods</li>
+    <li class="item-nav-property item-nav-property-method">
+
+        <a href="#ObservableEvent.getName">
+            <span class="item-nav-item-name">getName</span>
+            
                 
-    method public
-
-"><div class="labels"><span class="label func-public">public</span></div><h4 class="method" id="">removeAllListeners<span class="func-sig">()</span><span class="func-return">: void</span></h4></li><li id="/MetaphorJs.lib.ObservableEvent/suspend"
-        class="
-                                                                                            
                 
-    method public
-
-"><div class="labels"><span class="label func-public">public</span></div><h4 class="method" id="">suspend<span class="func-sig">()</span><span class="func-return">: void</span></h4></li><li id="/MetaphorJs.lib.ObservableEvent/resume"
-        class="
-                                                                                            
+                    <span class="item-nav-item-arguments">()</span>
                 
-    method public
+            
+        </a>
+    </li><li class="item-nav-property item-nav-property-method">
 
-"><div class="labels"><span class="label func-public">public</span></div><h4 class="method" id="">resume<span class="func-sig">()</span><span class="func-return">: void</span></h4></li><li id="/MetaphorJs.lib.ObservableEvent/trigger"
-        class="
-                                                                                            
+        <a href="#ObservableEvent.destroy">
+            <span class="item-nav-item-name">destroy</span>
+            
                 
-    method public
+                
+                    <span class="item-nav-item-arguments">()</span>
+                
+            
+        </a>
+    </li><li class="item-nav-property item-nav-property-method">
 
-"><div class="labels"><span class="label func-public">public</span></div><h4 class="method" id="">trigger<span class="func-sig">()</span><span class="func-return">: mixed</span></h4></li></ul></li></ul></li></ul></div><script src="assets/jquery-1.11.0.min.js"></script>
-<script src="assets/prism.js"></script>
-<script src="assets/toggle.js"></script>
-</body>
-</html>
+        <a href="#ObservableEvent.on">
+            <span class="item-nav-item-name">on</span>
+            
+                
+                    <span class="item-nav-item-arguments">(fn, context, options)</span>
+                
+                
+            
+        </a>
+    </li><li class="item-nav-property item-nav-property-method">
+
+        <a href="#ObservableEvent.once">
+            <span class="item-nav-item-name">once</span>
+            
+                
+                    <span class="item-nav-item-arguments">(fn, context, options)</span>
+                
+                
+            
+        </a>
+    </li><li class="item-nav-property item-nav-property-method">
+
+        <a href="#ObservableEvent.un">
+            <span class="item-nav-item-name">un</span>
+            
+                
+                    <span class="item-nav-item-arguments">(fn, context)</span>
+                
+                
+            
+        </a>
+    </li><li class="item-nav-property item-nav-property-method">
+
+        <a href="#ObservableEvent.hasListener">
+            <span class="item-nav-item-name">hasListener</span>
+            
+                
+                
+                    <span class="item-nav-item-arguments">()</span>
+                
+            
+        </a>
+    </li><li class="item-nav-property item-nav-property-method">
+
+        <a href="#ObservableEvent.hasListener">
+            <span class="item-nav-item-name">hasListener</span>
+            
+                
+                    <span class="item-nav-item-arguments">(fn, context)</span>
+                
+                
+            
+        </a>
+    </li><li class="item-nav-property item-nav-property-method">
+
+        <a href="#ObservableEvent.removeAllListeners">
+            <span class="item-nav-item-name">removeAllListeners</span>
+            
+                
+                
+                    <span class="item-nav-item-arguments">()</span>
+                
+            
+        </a>
+    </li><li class="item-nav-property item-nav-property-method">
+
+        <a href="#ObservableEvent.suspend">
+            <span class="item-nav-item-name">suspend</span>
+            
+                
+                
+                    <span class="item-nav-item-arguments">()</span>
+                
+            
+        </a>
+    </li><li class="item-nav-property item-nav-property-method">
+
+        <a href="#ObservableEvent.resume">
+            <span class="item-nav-item-name">resume</span>
+            
+                
+                
+                    <span class="item-nav-item-arguments">()</span>
+                
+            
+        </a>
+    </li><li class="item-nav-property item-nav-property-method">
+
+        <a href="#ObservableEvent.trigger">
+            <span class="item-nav-item-name">trigger</span>
+            
+                
+                
+                    <span class="item-nav-item-arguments">()</span>
+                
+            
+        </a>
+    </li>
+</ul>
+    </div>
+    <div class="col-md-10 nopadding item-properties-container">
+        
+    <div class="item-property-group-name">Methods</div>
+    <ul class="item-properties item-properties-method level-0">
+        <li class="item-property item-property-method">
+            <div class="item-header" id="ObservableEvent.getName">
+    
+        
+    
+    <h4>
+        
+        <span class="item-name">getName</span>
+        
+            
+            
+                <span class="item-name-arguments">()</span>
+            
+            
+                <span class="item-name-returns">&nbsp;-&gt;
+                    string
+            </span>
+            
+        
+    </h4>
+</div>
+
+
+    <div class="item-description">
+        
+            <p>Get event name</p>
+
+        
+    </div>
+
+
+
+
+
+
+    
+
+        </li><li class="item-property item-property-method">
+            <div class="item-header" id="ObservableEvent.destroy">
+    
+        
+    
+    <h4>
+        
+        <span class="item-name">destroy</span>
+        
+            
+            
+                <span class="item-name-arguments">()</span>
+            
+            
+            
+        
+    </h4>
+</div>
+
+
+
+
+
+
+
+    
+
+        </li><li class="item-property item-property-method">
+            <div class="item-header" id="ObservableEvent.on">
+    
+        
+    
+    <h4>
+        
+        <span class="item-name">on</span>
+        
+            
+                <span class="item-name-arguments">(fn, context, options)</span>
+            
+            
+            
+            
+        
+    </h4>
+</div>
+
+
+
+
+
+
+
+    
+    
+    <ul class="item-properties item-properties-param level-1">
+        <li class="item-property item-property-param">
+            <div class="item-header" id="ObservableEvent.on/fn">
+    
+        <span class="label label-warning item-label">required</span>
+    
+    <h5>
+        
+            <span class="item-type">function </span>
+        
+        <span class="item-name">fn</span>
+        
+            
+            
+                <span class="item-name-arguments">()</span>
+            
+            
+            
+        
+    </h5>
+</div>
+
+
+    <div class="item-description">
+        
+            <p>Callback function</p>
+
+        
+    </div>
+
+
+
+
+
+
+    
+
+        </li><li class="item-property item-property-param">
+            <div class="item-header" id="ObservableEvent.on/context">
+    
+        
+    
+    <h5>
+        
+            <span class="item-type">object </span>
+        
+        <span class="item-name">context</span>
+        
+    </h5>
+</div>
+
+
+    <div class="item-description">
+        
+            <p>Function's "this" object</p>
+
+        
+    </div>
+
+
+
+
+
+
+    
+
+        </li><li class="item-property item-property-param">
+            <div class="item-header" id="ObservableEvent.on/options">
+    
+        
+    
+    <h5>
+        
+            <span class="item-type">object </span>
+        
+        <span class="item-name">options</span>
+        
+    </h5>
+</div>
+
+
+    <div class="item-description">
+        
+            <p>See Observable's on()</p>
+
+        
+    </div>
+
+
+
+
+
+
+    
+
+        </li>
+    </ul>
+
+
+        </li><li class="item-property item-property-method">
+            <div class="item-header" id="ObservableEvent.once">
+    
+        
+    
+    <h4>
+        
+        <span class="item-name">once</span>
+        
+            
+                <span class="item-name-arguments">(fn, context, options)</span>
+            
+            
+            
+            
+        
+    </h4>
+</div>
+
+
+
+
+
+
+
+    
+    
+    <ul class="item-properties item-properties-param level-1">
+        <li class="item-property item-property-param">
+            <div class="item-header" id="ObservableEvent.once/fn">
+    
+        <span class="label label-warning item-label">required</span>
+    
+    <h5>
+        
+            <span class="item-type">function </span>
+        
+        <span class="item-name">fn</span>
+        
+            
+            
+                <span class="item-name-arguments">()</span>
+            
+            
+            
+        
+    </h5>
+</div>
+
+
+    <div class="item-description">
+        
+            <p>Callback function</p>
+
+        
+    </div>
+
+
+
+
+
+
+    
+
+        </li><li class="item-property item-property-param">
+            <div class="item-header" id="ObservableEvent.once/context">
+    
+        
+    
+    <h5>
+        
+            <span class="item-type">object </span>
+        
+        <span class="item-name">context</span>
+        
+    </h5>
+</div>
+
+
+    <div class="item-description">
+        
+            <p>Function's "this" object</p>
+
+        
+    </div>
+
+
+
+
+
+
+    
+
+        </li><li class="item-property item-property-param">
+            <div class="item-header" id="ObservableEvent.once/options">
+    
+        
+    
+    <h5>
+        
+            <span class="item-type">object </span>
+        
+        <span class="item-name">options</span>
+        
+    </h5>
+</div>
+
+
+    <div class="item-description">
+        
+            <p>See Observable's on()</p>
+
+        
+    </div>
+
+
+
+
+
+
+    
+
+        </li>
+    </ul>
+
+
+        </li><li class="item-property item-property-method">
+            <div class="item-header" id="ObservableEvent.un">
+    
+        
+    
+    <h4>
+        
+        <span class="item-name">un</span>
+        
+            
+                <span class="item-name-arguments">(fn, context)</span>
+            
+            
+            
+            
+        
+    </h4>
+</div>
+
+
+
+
+
+
+
+    
+    
+    <ul class="item-properties item-properties-param level-1">
+        <li class="item-property item-property-param">
+            <div class="item-header" id="ObservableEvent.un/fn">
+    
+        <span class="label label-warning item-label">required</span>
+    
+    <h5>
+        
+            <span class="item-type">function </span>
+        
+        <span class="item-name">fn</span>
+        
+            
+            
+                <span class="item-name-arguments">()</span>
+            
+            
+            
+        
+    </h5>
+</div>
+
+
+    <div class="item-description">
+        
+            <p>Callback function</p>
+
+        
+    </div>
+
+
+
+
+
+
+    
+
+        </li><li class="item-property item-property-param">
+            <div class="item-header" id="ObservableEvent.un/context">
+    
+        
+    
+    <h5>
+        
+            <span class="item-type">object </span>
+        
+        <span class="item-name">context</span>
+        
+    </h5>
+</div>
+
+
+    <div class="item-description">
+        
+            <p>Function's "this" object</p>
+
+        
+    </div>
+
+
+
+
+
+
+    
+
+        </li>
+    </ul>
+
+
+        </li><li class="item-property item-property-method">
+            <div class="item-header" id="ObservableEvent.hasListener">
+    
+        
+    
+    <h4>
+        
+        <span class="item-name">hasListener</span>
+        
+            
+            
+                <span class="item-name-arguments">()</span>
+            
+            
+                <span class="item-name-returns">&nbsp;-&gt;
+                    boolean
+            </span>
+            
+        
+    </h4>
+</div>
+
+
+
+
+
+
+
+    
+
+        </li><li class="item-property item-property-method">
+            <div class="item-header" id="ObservableEvent.hasListener">
+    
+        
+    
+    <h4>
+        
+        <span class="item-name">hasListener</span>
+        
+            
+                <span class="item-name-arguments">(fn, context)</span>
+            
+            
+            
+                <span class="item-name-returns">&nbsp;-&gt;
+                    boolean
+            </span>
+            
+        
+    </h4>
+</div>
+
+
+
+
+
+
+
+    
+    
+    <ul class="item-properties item-properties-param level-1">
+        <li class="item-property item-property-param">
+            <div class="item-header" id="ObservableEvent.hasListener/fn">
+    
+        <span class="label label-warning item-label">required</span>
+    
+    <h5>
+        
+            <span class="item-type">function </span>
+        
+        <span class="item-name">fn</span>
+        
+            
+            
+                <span class="item-name-arguments">()</span>
+            
+            
+            
+        
+    </h5>
+</div>
+
+
+    <div class="item-description">
+        
+            <p>Callback function</p>
+
+        
+    </div>
+
+
+
+
+
+
+    
+
+        </li><li class="item-property item-property-param">
+            <div class="item-header" id="ObservableEvent.hasListener/context">
+    
+        
+    
+    <h5>
+        
+            <span class="item-type">object </span>
+        
+        <span class="item-name">context</span>
+        
+    </h5>
+</div>
+
+
+    <div class="item-description">
+        
+            <p>Function's "this" object</p>
+
+        
+    </div>
+
+
+
+
+
+
+    
+
+        </li>
+    </ul>
+
+
+        </li><li class="item-property item-property-method">
+            <div class="item-header" id="ObservableEvent.removeAllListeners">
+    
+        
+    
+    <h4>
+        
+        <span class="item-name">removeAllListeners</span>
+        
+            
+            
+                <span class="item-name-arguments">()</span>
+            
+            
+            
+        
+    </h4>
+</div>
+
+
+
+
+
+
+
+    
+
+        </li><li class="item-property item-property-method">
+            <div class="item-header" id="ObservableEvent.suspend">
+    
+        
+    
+    <h4>
+        
+        <span class="item-name">suspend</span>
+        
+            
+            
+                <span class="item-name-arguments">()</span>
+            
+            
+            
+        
+    </h4>
+</div>
+
+
+
+
+
+
+
+    
+
+        </li><li class="item-property item-property-method">
+            <div class="item-header" id="ObservableEvent.resume">
+    
+        
+    
+    <h4>
+        
+        <span class="item-name">resume</span>
+        
+            
+            
+                <span class="item-name-arguments">()</span>
+            
+            
+            
+        
+    </h4>
+</div>
+
+
+
+
+
+
+
+    
+
+        </li><li class="item-property item-property-method">
+            <div class="item-header" id="ObservableEvent.trigger">
+    
+        
+    
+    <h4>
+        
+        <span class="item-name">trigger</span>
+        
+            
+            
+                <span class="item-name-arguments">()</span>
+            
+            
+                <span class="item-name-returns">&nbsp;-&gt;
+                    *
+            </span>
+            
+        
+    </h4>
+</div>
+
+
+
+
+
+
+
+    
+
+        </li>
+    </ul>
+
+    </div>
+
+
+
+        </div>
+    </div>
+</div>
+
+<div class="footer">
+    <div class="container"></div>
+</div>
+
+
+</body></html>

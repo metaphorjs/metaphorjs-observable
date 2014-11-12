@@ -72,19 +72,21 @@ var varType = function(){
 
 
     /**
-        'string': 0,
-        'number': 1,
-        'boolean': 2,
-        'object': 3,
-        'function': 4,
-        'array': 5,
-        'null': 6,
-        'undefined': 7,
-        'NaN': 8,
-        'regexp': 9,
-        'date': 10
-    */
-
+     * 'string': 0,
+     * 'number': 1,
+     * 'boolean': 2,
+     * 'object': 3,
+     * 'function': 4,
+     * 'array': 5,
+     * 'null': 6,
+     * 'undefined': 7,
+     * 'NaN': 8,
+     * 'regexp': 9,
+     * 'date': 10,
+     * unknown: -1
+     * @param {*} value
+     * @returns {number}
+     */
     return function varType(val) {
 
         if (!val) {
@@ -208,15 +210,13 @@ function isFunction(value) {
  * <p>A javascript event system implementing two patterns - observable and collector.</p>
  *
  * <p>Observable:</p>
- * <pre><code class="language-javascript">
- * var o = new MetaphorJs.lib.Observable;
+ * <pre><code class="language-javascript">var o = new Observable;
  * o.on("event", function(x, y, z){ console.log([x, y, z]) });
  * o.trigger("event", 1, 2, 3); // [1, 2, 3]
  * </code></pre>
  *
  * <p>Collector:</p>
- * <pre><code class="language-javascript">
- * var o = new MetaphorJs.lib.Observable;
+ * <pre><code class="language-javascript">var o = new Observable;
  * o.createEvent("collectStuff", "all");
  * o.on("collectStuff", function(){ return 1; });
  * o.on("collectStuff", function(){ return 2; });
@@ -225,15 +225,13 @@ function isFunction(value) {
  *
  * <p>Although all methods are public there is getApi() method that allows you
  * extending your own objects without overriding "destroy" (which you probably have)</p>
- * <pre><code class="language-javascript">
- * var o = new MetaphorJs.lib.Observable;
+ * <pre><code class="language-javascript">var o = new Observable;
  * $.extend(this, o.getApi());
  * this.on("event", function(){ alert("ok") });
  * this.trigger("event");
  * </code></pre>
  *
- * @namespace MetaphorJs
- * @class MetaphorJs.lib.Observable
+ * @class Observable
  * @version 1.1
  * @author johann kuindji
  * @link https://github.com/kuindji/metaphorjs-observable
@@ -248,13 +246,11 @@ var Observable = function() {
 extend(Observable.prototype, {
 
     /**
-    * <p>You don't have to call this function unless you want to pass returnResult param.
-    * This function will be automatically called from on() with
-    * <code class="language-javascript">returnResult = false</code>,
-    * so if you want to receive handler's return values, create event first, then call on().</p>
+    * You don't have to call this function unless you want to pass returnResult param.
+    * This function will be automatically called from {@link on} with <code>returnResult = false</code>,
+    * so if you want to receive handler's return values, create event first, then call on().
     *
-    * <pre><code class="language-javascript">
-    * var observable = new MetaphorJs.lib.Observable;
+    * <pre><code class="language-javascript">var observable = new Observable;
     * observable.createEvent("collectStuff", "all");
     * observable.on("collectStuff", function(){ return 1; });
     * observable.on("collectStuff", function(){ return 2; });
@@ -271,11 +267,12 @@ extend(Observable.prototype, {
     *   false -- do not return results except if handler returned "false". This is how
     *   normal observables work.<br>
     *   "all" -- return all results as array<br>
+    *   "merge" -- merge all results into one array (each result must be array)<br>
     *   "first" -- return result of the first handler<br>
-    *   "last" -- return result of the last handler
+    *   "last" -- return result of the last handler<br>
     *   @required
     * }
-    * @return MetaphorJs.lib.ObservableEvent
+    * @return {ObservableEvent}
     */
     createEvent: function(name, returnResult) {
         name = name.toLowerCase();
@@ -290,7 +287,7 @@ extend(Observable.prototype, {
     * @method
     * @access public
     * @param {string} name Event name
-    * @return MetaphorJs.lib.ObservableEvent|undefined
+    * @return {ObservableEvent|undefined}
     */
     getEvent: function(name) {
         name = name.toLowerCase();
@@ -301,7 +298,6 @@ extend(Observable.prototype, {
     * Subscribe to an event or register collector function.
     * @method
     * @access public
-    * @md-save on
     * @param {string} name {
     *       Event name
     *       @required
@@ -339,9 +335,8 @@ extend(Observable.prototype, {
     },
 
     /**
-    * Same as on(), but options.limit is forcefully set to 1.
+    * Same as {@link Observable.on}, but options.limit is forcefully set to 1.
     * @method
-    * @md-apply on
     * @access public
     */
     once: function(name, fn, context, options) {
@@ -504,7 +499,7 @@ extend(Observable.prototype, {
 
 
     /**
-    * Destroy specific event
+    * Destroy observable
     * @method
     * @md-not-inheritable
     * @access public
@@ -564,8 +559,9 @@ extend(Observable.prototype, {
 
 /**
  * This class is private - you can't create an event other than via Observable.
- * See MetaphorJs.lib.Observable reference.
- * @class MetaphorJs.lib.ObservableEvent
+ * See Observable reference.
+ * @class ObservableEvent
+ * @private
  */
 var Event = function(name, returnResult) {
 
@@ -584,6 +580,11 @@ var Event = function(name, returnResult) {
 
 extend(Event.prototype, {
 
+    /**
+     * Get event name
+     * @method
+     * @returns {string}
+     */
     getName: function() {
         return this.name;
     },
@@ -817,7 +818,8 @@ extend(Event.prototype, {
             return null;
         }
 
-        var ret     = returnResult == "all" ? [] : null,
+        var ret     = returnResult == "all" || returnResult == "merge" ?
+                        [] : null,
             q, l,
             res;
 
@@ -856,17 +858,17 @@ extend(Event.prototype, {
             if (returnResult == "all") {
                 ret.push(res);
             }
-
-            if (returnResult == "first") {
+            else if (returnResult == "merge" && res) {
+                ret = ret.concat(res);
+            }
+            else if (returnResult == "first") {
                 return res;
             }
-
-            if (returnResult == "last") {
+            else if (returnResult == "last") {
                 ret = res;
             }
-
-            if (returnResult == false && res === false) {
-                break;
+            else if (returnResult == false && res === false) {
+                return false;
             }
         }
 

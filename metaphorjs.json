@@ -3,6 +3,24 @@
     "push": [
         "github"
     ],
+
+
+    "docs": {
+        "": {
+            "out": "docs",
+            "renderer": "default",
+            "src": [
+                "src/**"
+            ],
+            "includeExternal": false,
+            "data": {
+                "title": "MetaphorJs.Observable",
+                "description": "A javascript event system",
+                "version": "v1.0.3"
+            }
+        }
+    },
+
     "build": {
         "standalone": {
             "wrap": true,
