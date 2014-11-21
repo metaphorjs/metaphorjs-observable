@@ -74,13 +74,15 @@ extend(Observable.prototype, {
     *   "last" -- return result of the last handler<br>
     *   @required
     * }
+    * @param {bool} autoTrigger -- once triggered, all future subscribers will be automatically called
+    * with last trigger params
     * @return {ObservableEvent}
     */
-    createEvent: function(name, returnResult) {
+    createEvent: function(name, returnResult, autoTrigger) {
         name = name.toLowerCase();
         var events  = this.events;
         if (!events[name]) {
-            events[name] = new Event(name, returnResult);
+            events[name] = new Event(name, returnResult, autoTrigger);
         }
         return events[name];
     },
@@ -365,7 +367,7 @@ extend(Observable.prototype, {
  * @class ObservableEvent
  * @private
  */
-var Event = function(name, returnResult) {
+var Event = function(name, returnResult, autoTrigger) {
 
     var self    = this;
 
@@ -377,10 +379,23 @@ var Event = function(name, returnResult) {
     self.suspended      = false;
     self.lid            = 0;
     self.returnResult   = returnResult === undf ? null : returnResult; // first|last|all
+    self.autoTrigger    = autoTrigger;
 };
 
 
 extend(Event.prototype, {
+
+    name: null,
+    listeners: null,
+    map: null,
+    hash: null,
+    uni: null,
+    suspended: false,
+    lid: null,
+    returnResult: null,
+    autoTrigger: null,
+    lastTrigger: null,
+    autoTriggerId: null,
 
     /**
      * Get event name
@@ -450,6 +465,12 @@ extend(Event.prototype, {
         }
 
         self.map[id] = e;
+
+        if (self.autoTrigger && self.lastTrigger && !self.suspended) {
+            self.autoTriggerId = id;
+            self.trigger.apply(self, self.lastTrigger);
+            self.autoTriggerId = null;
+        }
 
         return id;
     },
@@ -614,9 +635,18 @@ extend(Event.prototype, {
 
         var self            = this,
             listeners       = self.listeners,
-            returnResult    = self.returnResult;
+            returnResult    = self.returnResult,
+            aid             = self.autoTriggerId;
 
-        if (self.suspended || listeners.length == 0) {
+        if (self.suspended) {
+            return null;
+        }
+
+        if (self.autoTrigger) {
+            self.lastTrigger = slice.call(arguments);
+        }
+
+        if (listeners.length == 0) {
             return null;
         }
 
@@ -640,6 +670,10 @@ extend(Event.prototype, {
 
             // listener may already have unsubscribed
             if (!l || !self.map[l.id]) {
+                continue;
+            }
+
+            if (aid && l.id != aid) {
                 continue;
             }
 
