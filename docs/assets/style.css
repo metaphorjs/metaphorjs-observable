@@ -166,3 +166,8 @@ ul.level-0 > li.item-property-group-name {
 .item-flags + .item-description {
   margin-top: 10px;
 }
+
+/* line 166, ../scss/style.scss */
+.item-type {
+  margin-right: 5px;
+}

@@ -1,6 +1,6 @@
 {
     "name": "metaphorjs-observable",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "description": "A javascript event system",
     "main": "dist/metaphorjs.observable.npm.js",
     "directories": {

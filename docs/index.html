@@ -26,8 +26,8 @@
 
         <div class="navbar-collapse collapse">
 
-            
-                <ul class="nav navbar-nav">
+            <ul class="nav navbar-nav">
+                
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             Classes
@@ -35,21 +35,20 @@
                         </a>
                         <ul class="dropdown-menu" role="menu">
                             <li>
-                                <a href="#">Observable</a>
+                                <a href="#Observable">Observable</a>
                             </li><li>
-                                <a href="#">ObservableEvent</a>
+                                <a href="#ObservableEvent">ObservableEvent</a>
                             </li>
                         </ul>
                     </li>
-                </ul>
-            
+                
+            </ul>
 
             
         </div><!--/.nav-collapse -->
 
     </div>
 </div>
-
 <div class="jumbotron">
     <div class="container">
         <h1>MetaphorJs.Observable</h1>
@@ -58,15 +57,26 @@
     </div>
 </div>
 
+
 <div class="container source-container">
+    
+    
+    
     <div class="row item-group level-0">
+        <!--<div class="col-md-12 item-group-name" mjs-if=".$root.sourceTree.length > 1">
+            <h2>{{.group.name}}</h2>
+        </div>-->
         
-        <div class="col-md-12 item-group-items item-group-type-class level-0">
-            <div class="item-header" id="Observable">
+        
+            <div class="col-md-12 item-group-items item-group-type-class level-0">
+                <div class="item-header" id="Observable">
     
         
     
     <h3>
+        
+        
+            <span class="item-type">class</span>
         
         <span class="item-name">Observable</span>
         
@@ -97,26 +107,37 @@
 
     <div class="item-description">
         
-            <p></p><p>A javascript event system implementing two patterns - observable and collector.</p><p></p>
-<p></p><p>Observable:</p><p></p>
-<pre><code class="language-javascript">var o = new Observable;
+            <p>A javascript event system implementing two patterns - observable and collector.</p>
+
+        
+        
+    </div><div class="item-description">
+        
+            <p>Observable:</p>
+
+        
+        
+    </div><div class="item-description">
+        
+        
+            <pre><code class="language-javascript">var o = new Observable;
 o.on("event", function(x, y, z){ console.log([x, y, z]) });
-o.trigger("event", 1, 2, 3); // [1, 2, 3]
-</code></pre>
-<p>Collector:</p>
-<pre><code class="language-javascript">var o = new Observable;
+o.trigger("event", 1, 2, 3); // [1, 2, 3]</code></pre>
+        
+    </div><div class="item-description">
+        
+            <p>Collector:</p>
+
+        
+        
+    </div><div class="item-description">
+        
+        
+            <pre><code class="language-javascript">var o = new Observable;
 o.createEvent("collectStuff", "all");
 o.on("collectStuff", function(){ return 1; });
 o.on("collectStuff", function(){ return 2; });
-var results = o.trigger("collectStuff"); // [1, 2]
-</code></pre>
-<p>Although all methods are public there is getApi() method that allows you
-extending your own objects without overriding "destroy" (which you probably have)</p>
-<pre><code class="language-javascript">var o = new Observable;
-$.extend(this, o.getApi());
-this.on("event", function(){ alert("ok") });
-this.trigger("event");
-</code></pre>
+var results = o.trigger("collectStuff"); // [1, 2]</code></pre>
         
     </div>
 
@@ -132,7 +153,18 @@ this.trigger("event");
             <span class="item-nav-item-name">createEvent</span>
             
                 
-                    <span class="item-nav-item-arguments">(name, returnResult)</span>
+                    <span class="item-nav-item-arguments">(name, returnResult, autoTrigger, triggerFilter)</span>
+                
+                
+            
+        </a>
+    </li><li class="item-nav-property item-nav-property-method">
+
+        <a href="#Observable.createEvent">
+            <span class="item-nav-item-name">createEvent</span>
+            
+                
+                    <span class="item-nav-item-arguments">(name, options)</span>
                 
                 
             
@@ -297,8 +329,8 @@ this.trigger("event");
             <span class="item-nav-item-name">destroy</span>
             
                 
-                    <span class="item-nav-item-arguments">(name)</span>
                 
+                    <span class="item-nav-item-arguments">()</span>
                 
             
         </a>
@@ -327,10 +359,11 @@ this.trigger("event");
     
     <h4>
         
+        
         <span class="item-name">createEvent</span>
         
             
-                <span class="item-name-arguments">(name, returnResult)</span>
+                <span class="item-name-arguments">(name, returnResult, autoTrigger, triggerFilter)</span>
             
             
             
@@ -352,15 +385,10 @@ this.trigger("event");
 
     <div class="item-description">
         
-            <p>You don't have to call this function unless you want to pass returnResult param.
-This function will be automatically called from <a href="#Observable.on">on</a> with <code>returnResult = false</code>,
-so if you want to receive handler's return values, create event first, then call on().</p>
-<pre><code class="language-javascript">var observable = new Observable;
-observable.createEvent("collectStuff", "all");
-observable.on("collectStuff", function(){ return 1; });
-observable.on("collectStuff", function(){ return 2; });
-var results = observable.trigger("collectStuff"); // [1, 2]
-</code></pre>
+            <p>You don't have to call this function unless you want to pass params other than event name.
+Normally, events are created automatically.</p>
+
+        
         
     </div>
 
@@ -379,7 +407,8 @@ var results = observable.trigger("collectStuff"); // [1, 2]
     
     <h5>
         
-            <span class="item-type">string </span>
+            <span class="item-type">string</span>
+        
         
         <span class="item-name">name</span>
         
@@ -391,6 +420,7 @@ var results = observable.trigger("collectStuff"); // [1, 2]
         
             <p>Event name</p>
 
+        
         
     </div>
 
@@ -404,11 +434,12 @@ var results = observable.trigger("collectStuff"); // [1, 2]
         </li><li class="item-property item-property-param">
             <div class="item-header" id="Observable.createEvent/returnResult">
     
-        <span class="label label-warning item-label">required</span>
+        
     
     <h5>
         
-            <span class="item-type">boolean | string </span>
+            <span class="item-type">boolean | string</span>
+        
         
         <span class="item-name">returnResult</span>
         
@@ -418,15 +449,186 @@ var results = observable.trigger("collectStuff"); // [1, 2]
 
     <div class="item-description">
         
-            <p>false -- do not return results except if handler returned "false". This is how
-normal observables work.<br>
+            <p>false -- return first 'false' result and stop calling listeners after that<br>
 "all" -- return all results as array<br>
 "merge" -- merge all results into one array (each result must be array)<br>
-"first" -- return result of the first handler<br>
-"last" -- return result of the last handler<br></p>
+"first" -- return result of the first handler (next listener will not be called)<br>
+"last" -- return result of the last handler (all listeners will be called)<br></p>
 
         
+        
     </div>
+
+
+
+
+
+
+    
+
+        </li><li class="item-property item-property-param">
+            <div class="item-header" id="Observable.createEvent/autoTrigger">
+    
+        
+    
+    <h5>
+        
+            <span class="item-type">boolean</span>
+        
+        
+        <span class="item-name">autoTrigger</span>
+        
+    </h5>
+</div>
+
+
+    <div class="item-description">
+        
+            <p>once triggered, all future subscribers will be automatically called
+with last trigger params</p>
+
+        
+        
+    </div><div class="item-description">
+        
+        
+            <pre><code class="language-javascript">var o = new Observable;
+o.createEvent("auto", null, true);
+// trigger first
+o.trigger("auto", 1, 2);
+// subscribe later
+o.on("auto", function(a, b){
+    console.log(a, b); // immediately logs 1, 2
+});</code></pre>
+        
+    </div>
+
+
+
+
+
+
+    
+
+        </li><li class="item-property item-property-param">
+            <div class="item-header" id="Observable.createEvent/triggerFilter">
+    
+        
+    
+    <h5>
+        
+            <span class="item-type">function</span>
+        
+        
+        <span class="item-name">triggerFilter</span>
+        
+            
+                <span class="item-name-arguments">(listener, arguments)</span>
+            
+            
+            
+                <span class="item-name-returns">&nbsp;-&gt;
+                    boolean
+            </span>
+            
+        
+    </h5>
+</div>
+
+
+    <div class="item-description">
+        
+            <p>This function will be called each time event is triggered. Return false to skip listener.</p>
+
+        
+        
+    </div><div class="item-description">
+        
+        
+            <pre><code class="language-javascript">var o = new Observable;
+o.createEvent("filtered", null, false, function(l, args){
+    if (l.always) {
+        return true;
+    }
+    if (l.param == args[0]) {
+        return true;
+    }
+    return false;
+});
+
+o.on("filtered", function(){
+    console.log("always")
+}, null, {
+    always: true
+});
+
+o.on("filtered", function(){
+    console.log("param");
+}, null, {
+    param: 1
+});
+
+
+o.trigger("filtered", 2); // "always"
+o.trigger("filtered", 1); // "always", "param"</code></pre>
+        
+    </div>
+
+
+
+
+
+
+    
+    
+    <ul class="item-properties item-properties-param level-2">
+        <li class="item-property item-property-param">
+            <div class="item-header" id="Observable.createEvent/triggerFilter/listener">
+    
+        
+    
+    <h6>
+        
+            <span class="item-type">object</span>
+        
+        
+        <span class="item-name">listener</span>
+        
+    </h6>
+</div>
+
+
+    <div class="item-description">
+        
+            <p>This object contains all information about the listener, including
+    all data you provided in options while subscribing to the event.</p>
+
+        
+        
+    </div>
+
+
+
+
+
+
+    
+
+        </li><li class="item-property item-property-param">
+            <div class="item-header" id="Observable.createEvent/triggerFilter/arguments">
+    
+        
+    
+    <h6>
+        
+            <span class="item-type">array</span>
+        
+        
+        <span class="item-name">arguments</span>
+        
+    </h6>
+</div>
+
 
 
 
@@ -439,12 +641,185 @@ normal observables work.<br>
     </ul>
 
 
+        </li>
+    </ul>
+
+
+        </li><li class="item-property item-property-method">
+            <div class="item-header" id="Observable.createEvent">
+    
+        
+    
+    <h4>
+        
+        
+        <span class="item-name">createEvent</span>
+        
+            
+                <span class="item-name-arguments">(name, options)</span>
+            
+            
+            
+                <span class="item-name-returns">&nbsp;-&gt;
+                    <a href="#ObservableEvent">ObservableEvent</a>
+            </span>
+            
+        
+    </h4>
+</div>
+
+
+
+
+
+
+
+    
+    
+    <ul class="item-properties item-properties-param level-1">
+        <li class="item-property item-property-param">
+            <div class="item-header" id="Observable.createEvent/name">
+    
+        
+    
+    <h5>
+        
+            <span class="item-type">string</span>
+        
+        
+        <span class="item-name">name</span>
+        
+    </h5>
+</div>
+
+
+
+
+
+
+
+    
+
+        </li><li class="item-property item-property-param">
+            <div class="item-header" id="Observable.createEvent/options">
+    
+        
+    
+    <h5>
+        
+            <span class="item-type">object</span>
+        
+        
+        <span class="item-name">options</span>
+        
+    </h5>
+</div>
+
+
+
+
+
+
+
+    
+    
+    <ul class="item-properties item-properties-property level-2">
+        <li class="item-property item-property-property">
+            <div class="item-header" id="Observable.createEvent/options.returnResult">
+    
+        
+    
+    <h6>
+        
+            <span class="item-type">string</span>
+        
+        
+        <span class="item-name">returnResult</span>
+        
+    </h6>
+</div>
+
+
+
+
+
+
+
+    
+
+        </li>
+    </ul>
+
+    
+    <ul class="item-properties item-properties-param level-2">
+        <li class="item-property item-property-param">
+            <div class="item-header" id="Observable.createEvent/options/autoTrigger">
+    
+        
+    
+    <h6>
+        
+            <span class="item-type">boolean</span>
+        
+        
+        <span class="item-name">autoTrigger</span>
+        
+    </h6>
+</div>
+
+
+
+
+
+
+
+    
+
+        </li><li class="item-property item-property-param">
+            <div class="item-header" id="Observable.createEvent/options/triggerFilter">
+    
+        
+    
+    <h6>
+        
+            <span class="item-type">function</span>
+        
+        
+        <span class="item-name">triggerFilter</span>
+        
+            
+            
+                <span class="item-name-arguments">()</span>
+            
+            
+            
+        
+    </h6>
+</div>
+
+
+
+
+
+
+
+    
+
+        </li>
+    </ul>
+
+
+        </li>
+    </ul>
+
+
         </li><li class="item-property item-property-method">
             <div class="item-header" id="Observable.getEvent">
     
         
     
     <h4>
+        
         
         <span class="item-name">getEvent</span>
         
@@ -484,7 +859,8 @@ normal observables work.<br>
     
     <h5>
         
-            <span class="item-type">string </span>
+            <span class="item-type">string</span>
+        
         
         <span class="item-name">name</span>
         
@@ -496,6 +872,7 @@ normal observables work.<br>
         
             <p>Event name</p>
 
+        
         
     </div>
 
@@ -516,6 +893,7 @@ normal observables work.<br>
         
     
     <h4>
+        
         
         <span class="item-name">on</span>
         
@@ -542,6 +920,7 @@ normal observables work.<br>
             <p>Subscribe to an event or register collector function.</p>
 
         
+        
     </div>
 
 
@@ -559,7 +938,8 @@ normal observables work.<br>
     
     <h5>
         
-            <span class="item-type">string </span>
+            <span class="item-type">string</span>
+        
         
         <span class="item-name">name</span>
         
@@ -571,6 +951,7 @@ normal observables work.<br>
         
             <p>Event name</p>
 
+        
         
     </div>
 
@@ -588,7 +969,8 @@ normal observables work.<br>
     
     <h5>
         
-            <span class="item-type">function </span>
+            <span class="item-type">function</span>
+        
         
         <span class="item-name">fn</span>
         
@@ -608,6 +990,7 @@ normal observables work.<br>
             <p>Callback function</p>
 
         
+        
     </div>
 
 
@@ -624,7 +1007,8 @@ normal observables work.<br>
     
     <h5>
         
-            <span class="item-type">object </span>
+            <span class="item-type">object</span>
+        
         
         <span class="item-name">context</span>
         
@@ -636,6 +1020,7 @@ normal observables work.<br>
         
             <p>"this" object for the callback function</p>
 
+        
         
     </div>
 
@@ -653,13 +1038,23 @@ normal observables work.<br>
     
     <h5>
         
-            <span class="item-type">object </span>
+            <span class="item-type">object</span>
+        
         
         <span class="item-name">options</span>
         
     </h5>
 </div>
 
+
+    <div class="item-description">
+        
+            <p> You can pass any key-value pairs in this object. All of them will be passed to triggerFilter (if
+ you're using one).</p>
+
+        
+        
+    </div>
 
 
 
@@ -676,7 +1071,8 @@ normal observables work.<br>
     
     <h6>
         
-            <span class="item-type">boolean </span>
+            <span class="item-type">boolean</span>
+        
         
         <span class="item-name">first</span>
         
@@ -696,6 +1092,7 @@ normal observables work.<br>
             <p>True to prepend to the list of handlers</p>
 
         
+        
     </div>
 
 
@@ -712,7 +1109,8 @@ normal observables work.<br>
     
     <h6>
         
-            <span class="item-type">number </span>
+            <span class="item-type">number</span>
+        
         
         <span class="item-name">limit</span>
         
@@ -732,6 +1130,7 @@ normal observables work.<br>
             <p>Call handler this number of times; 0 for unlimited</p>
 
         
+        
     </div>
 
 
@@ -748,7 +1147,8 @@ normal observables work.<br>
     
     <h6>
         
-            <span class="item-type">number </span>
+            <span class="item-type">number</span>
+        
         
         <span class="item-name">start</span>
         
@@ -768,6 +1168,7 @@ normal observables work.<br>
             <p>Start calling handler after this number of calls. Starts from 1</p>
 
         
+        
     </div>
 
 
@@ -784,7 +1185,8 @@ normal observables work.<br>
     
     <h6>
         
-            <span class="item-type">array </span>
+            <span class="item-type">array</span>
+        
         
         <span class="item-name">append</span>
         
@@ -796,6 +1198,7 @@ normal observables work.<br>
         
             <p>Append parameters</p>
 
+        
         
     </div>
 
@@ -813,7 +1216,8 @@ normal observables work.<br>
     
     <h6>
         
-            <span class="item-type">array </span>
+            <span class="item-type">array</span>
+        
         
         <span class="item-name">prepend</span>
         
@@ -825,6 +1229,7 @@ normal observables work.<br>
         
             <p>Prepend parameters</p>
 
+        
         
     </div>
 
@@ -842,7 +1247,8 @@ normal observables work.<br>
     
     <h6>
         
-            <span class="item-type">boolean </span>
+            <span class="item-type">boolean</span>
+        
         
         <span class="item-name">allowDupes</span>
         
@@ -854,6 +1260,7 @@ normal observables work.<br>
         
             <p>allow the same handler twice</p>
 
+        
         
     </div>
 
@@ -878,6 +1285,7 @@ normal observables work.<br>
         
     
     <h4>
+        
         
         <span class="item-name">once</span>
         
@@ -904,6 +1312,7 @@ normal observables work.<br>
             <p>Same as <a href="#Observable.on">on</a>, but options.limit is forcefully set to 1.</p>
 
         
+        
     </div>
 
 
@@ -919,6 +1328,7 @@ normal observables work.<br>
         
     
     <h4>
+        
         
         <span class="item-name">un</span>
         
@@ -945,6 +1355,7 @@ normal observables work.<br>
             <p>Unsubscribe from an event</p>
 
         
+        
     </div>
 
 
@@ -962,7 +1373,8 @@ normal observables work.<br>
     
     <h5>
         
-            <span class="item-type">string </span>
+            <span class="item-type">string</span>
+        
         
         <span class="item-name">name</span>
         
@@ -974,6 +1386,7 @@ normal observables work.<br>
         
             <p>Event name</p>
 
+        
         
     </div>
 
@@ -991,7 +1404,8 @@ normal observables work.<br>
     
     <h5>
         
-            <span class="item-type">function </span>
+            <span class="item-type">function</span>
+        
         
         <span class="item-name">fn</span>
         
@@ -1011,6 +1425,7 @@ normal observables work.<br>
             <p>Event handler</p>
 
         
+        
     </div>
 
 
@@ -1027,7 +1442,8 @@ normal observables work.<br>
     
     <h5>
         
-            <span class="item-type">object </span>
+            <span class="item-type">object</span>
+        
         
         <span class="item-name">context</span>
         
@@ -1039,6 +1455,7 @@ normal observables work.<br>
         
             <p>If you called on() with context you must call un() with the same context</p>
 
+        
         
     </div>
 
@@ -1059,6 +1476,7 @@ normal observables work.<br>
         
     
     <h4>
+        
         
         <span class="item-name">hasListener</span>
         
@@ -1098,7 +1516,8 @@ normal observables work.<br>
     
     <h5>
         
-            <span class="item-type">string </span>
+            <span class="item-type">string</span>
+        
         
         <span class="item-name">name</span>
         
@@ -1110,6 +1529,7 @@ normal observables work.<br>
         
             <p>Event name</p>
 
+        
         
     </div>
 
@@ -1130,6 +1550,7 @@ normal observables work.<br>
         
     
     <h4>
+        
         
         <span class="item-name">hasListener</span>
         
@@ -1169,7 +1590,8 @@ normal observables work.<br>
     
     <h5>
         
-            <span class="item-type">string </span>
+            <span class="item-type">string</span>
+        
         
         <span class="item-name">name</span>
         
@@ -1181,6 +1603,7 @@ normal observables work.<br>
         
             <p>Event name</p>
 
+        
         
     </div>
 
@@ -1198,7 +1621,8 @@ normal observables work.<br>
     
     <h5>
         
-            <span class="item-type">function </span>
+            <span class="item-type">function</span>
+        
         
         <span class="item-name">fn</span>
         
@@ -1218,6 +1642,7 @@ normal observables work.<br>
             <p>Callback function</p>
 
         
+        
     </div>
 
 
@@ -1234,7 +1659,8 @@ normal observables work.<br>
     
     <h5>
         
-            <span class="item-type">object </span>
+            <span class="item-type">object</span>
+        
         
         <span class="item-name">context</span>
         
@@ -1246,6 +1672,7 @@ normal observables work.<br>
         
             <p>Function's "this" object</p>
 
+        
         
     </div>
 
@@ -1266,6 +1693,7 @@ normal observables work.<br>
         
     
     <h4>
+        
         
         <span class="item-name">removeAllListeners</span>
         
@@ -1292,6 +1720,7 @@ normal observables work.<br>
             <p>Remove all listeners from all events</p>
 
         
+        
     </div>
 
 
@@ -1307,6 +1736,7 @@ normal observables work.<br>
         
     
     <h4>
+        
         
         <span class="item-name">removeAllListeners</span>
         
@@ -1333,6 +1763,7 @@ normal observables work.<br>
             <p>Remove all listeners from specific event</p>
 
         
+        
     </div>
 
 
@@ -1350,7 +1781,8 @@ normal observables work.<br>
     
     <h5>
         
-            <span class="item-type">string </span>
+            <span class="item-type">string</span>
+        
         
         <span class="item-name">name</span>
         
@@ -1362,6 +1794,7 @@ normal observables work.<br>
         
             <p>Event name</p>
 
+        
         
     </div>
 
@@ -1382,6 +1815,7 @@ normal observables work.<br>
         
     
     <h4>
+        
         
         <span class="item-name">trigger</span>
         
@@ -1411,6 +1845,7 @@ normal observables work.<br>
             <p>Trigger an event -- call all listeners.</p>
 
         
+        
     </div>
 
 
@@ -1428,7 +1863,8 @@ normal observables work.<br>
     
     <h5>
         
-            <span class="item-type">string </span>
+            <span class="item-type">string</span>
+        
         
         <span class="item-name">name</span>
         
@@ -1440,6 +1876,7 @@ normal observables work.<br>
         
             <p>Event name</p>
 
+        
         
     </div>
 
@@ -1457,7 +1894,8 @@ normal observables work.<br>
     
     <h5>
         
-            <span class="item-type">* </span>
+            <span class="item-type">*</span>
+        
         
         <span class="item-name">...</span>
         
@@ -1469,6 +1907,7 @@ normal observables work.<br>
         
             <p>As many other params as needed</p>
 
+        
         
     </div>
 
@@ -1489,6 +1928,7 @@ normal observables work.<br>
         
     
     <h4>
+        
         
         <span class="item-name">suspendEvent</span>
         
@@ -1515,6 +1955,7 @@ normal observables work.<br>
             <p>Suspend an event. Suspended event will not call any listeners on trigger().</p>
 
         
+        
     </div>
 
 
@@ -1532,7 +1973,8 @@ normal observables work.<br>
     
     <h5>
         
-            <span class="item-type">string </span>
+            <span class="item-type">string</span>
+        
         
         <span class="item-name">name</span>
         
@@ -1544,6 +1986,7 @@ normal observables work.<br>
         
             <p>Event name</p>
 
+        
         
     </div>
 
@@ -1564,6 +2007,7 @@ normal observables work.<br>
         
     
     <h4>
+        
         
         <span class="item-name">suspendAllEvents</span>
         
@@ -1599,6 +2043,7 @@ normal observables work.<br>
     
     <h4>
         
+        
         <span class="item-name">resumeEvent</span>
         
             
@@ -1624,6 +2069,7 @@ normal observables work.<br>
             <p>Resume suspended event.</p>
 
         
+        
     </div>
 
 
@@ -1641,7 +2087,8 @@ normal observables work.<br>
     
     <h5>
         
-            <span class="item-type">string </span>
+            <span class="item-type">string</span>
+        
         
         <span class="item-name">name</span>
         
@@ -1653,6 +2100,7 @@ normal observables work.<br>
         
             <p>Event name</p>
 
+        
         
     </div>
 
@@ -1673,6 +2121,7 @@ normal observables work.<br>
         
     
     <h4>
+        
         
         <span class="item-name">resumeAllEvents</span>
         
@@ -1707,6 +2156,7 @@ normal observables work.<br>
         
     
     <h4>
+        
         
         <span class="item-name">destroyEvent</span>
         
@@ -1743,7 +2193,8 @@ normal observables work.<br>
     
     <h5>
         
-            <span class="item-type">string </span>
+            <span class="item-type">string</span>
+        
         
         <span class="item-name">name</span>
         
@@ -1755,6 +2206,7 @@ normal observables work.<br>
         
             <p>Event name</p>
 
+        
         
     </div>
 
@@ -1776,11 +2228,12 @@ normal observables work.<br>
     
     <h4>
         
+        
         <span class="item-name">destroy</span>
         
             
-                <span class="item-name-arguments">(name)</span>
             
+                <span class="item-name-arguments">()</span>
             
             
             
@@ -1801,35 +2254,6 @@ normal observables work.<br>
             <p>Destroy observable</p>
 
         
-    </div>
-
-
-
-
-
-
-    
-    
-    <ul class="item-properties item-properties-param level-1">
-        <li class="item-property item-property-param">
-            <div class="item-header" id="Observable.destroy/name">
-    
-        
-    
-    <h5>
-        
-            <span class="item-type">string </span>
-        
-        <span class="item-name">name</span>
-        
-    </h5>
-</div>
-
-
-    <div class="item-description">
-        
-            <p>Event name</p>
-
         
     </div>
 
@@ -1839,10 +2263,6 @@ normal observables work.<br>
 
 
     
-
-        </li>
-    </ul>
-
 
         </li><li class="item-property item-property-method">
             <div class="item-header" id="Observable.getApi">
@@ -1850,6 +2270,7 @@ normal observables work.<br>
         <span class="label label-warning item-label">md-not-inheritable</span>
     
     <h4>
+        
         
         <span class="item-name">getApi</span>
         
@@ -1869,8 +2290,18 @@ normal observables work.<br>
 
     <div class="item-description">
         
-            <p>Get object with all functions except "destroy"</p>
+            <p>Although all methods are public there is getApi() method that allows you
+extending your own objects without overriding "destroy" (which you probably have)</p>
 
+        
+        
+    </div><div class="item-description">
+        
+        
+            <pre><code class="language-javascript">var o = new Observable;
+$.extend(this, o.getApi());
+this.on("event", function(){ alert("ok") });
+this.trigger("event");</code></pre>
         
     </div>
 
@@ -1888,12 +2319,15 @@ normal observables work.<br>
 
 
 
-        </div><div class="col-md-12 item-group-items item-group-type-class level-0">
-            <div class="item-header" id="ObservableEvent">
+            </div><div class="col-md-12 item-group-items item-group-type-class level-0">
+                <div class="item-header" id="ObservableEvent">
     
         
     
     <h3>
+        
+        
+            <span class="item-type">class</span>
         
         <span class="item-name">ObservableEvent</span>
         
@@ -1913,6 +2347,7 @@ normal observables work.<br>
             <p>This class is private - you can't create an event other than via Observable.
 See Observable reference.</p>
 
+        
         
     </div>
 
@@ -2057,6 +2492,7 @@ See Observable reference.</p>
     
     <h4>
         
+        
         <span class="item-name">getName</span>
         
             
@@ -2078,6 +2514,7 @@ See Observable reference.</p>
             <p>Get event name</p>
 
         
+        
     </div>
 
 
@@ -2093,6 +2530,7 @@ See Observable reference.</p>
         
     
     <h4>
+        
         
         <span class="item-name">destroy</span>
         
@@ -2120,6 +2558,7 @@ See Observable reference.</p>
         
     
     <h4>
+        
         
         <span class="item-name">on</span>
         
@@ -2149,7 +2588,8 @@ See Observable reference.</p>
     
     <h5>
         
-            <span class="item-type">function </span>
+            <span class="item-type">function</span>
+        
         
         <span class="item-name">fn</span>
         
@@ -2169,6 +2609,7 @@ See Observable reference.</p>
             <p>Callback function</p>
 
         
+        
     </div>
 
 
@@ -2185,7 +2626,8 @@ See Observable reference.</p>
     
     <h5>
         
-            <span class="item-type">object </span>
+            <span class="item-type">object</span>
+        
         
         <span class="item-name">context</span>
         
@@ -2197,6 +2639,7 @@ See Observable reference.</p>
         
             <p>Function's "this" object</p>
 
+        
         
     </div>
 
@@ -2214,7 +2657,8 @@ See Observable reference.</p>
     
     <h5>
         
-            <span class="item-type">object </span>
+            <span class="item-type">object</span>
+        
         
         <span class="item-name">options</span>
         
@@ -2226,6 +2670,7 @@ See Observable reference.</p>
         
             <p>See Observable's on()</p>
 
+        
         
     </div>
 
@@ -2246,6 +2691,7 @@ See Observable reference.</p>
         
     
     <h4>
+        
         
         <span class="item-name">once</span>
         
@@ -2275,7 +2721,8 @@ See Observable reference.</p>
     
     <h5>
         
-            <span class="item-type">function </span>
+            <span class="item-type">function</span>
+        
         
         <span class="item-name">fn</span>
         
@@ -2295,6 +2742,7 @@ See Observable reference.</p>
             <p>Callback function</p>
 
         
+        
     </div>
 
 
@@ -2311,7 +2759,8 @@ See Observable reference.</p>
     
     <h5>
         
-            <span class="item-type">object </span>
+            <span class="item-type">object</span>
+        
         
         <span class="item-name">context</span>
         
@@ -2323,6 +2772,7 @@ See Observable reference.</p>
         
             <p>Function's "this" object</p>
 
+        
         
     </div>
 
@@ -2340,7 +2790,8 @@ See Observable reference.</p>
     
     <h5>
         
-            <span class="item-type">object </span>
+            <span class="item-type">object</span>
+        
         
         <span class="item-name">options</span>
         
@@ -2352,6 +2803,7 @@ See Observable reference.</p>
         
             <p>See Observable's on()</p>
 
+        
         
     </div>
 
@@ -2372,6 +2824,7 @@ See Observable reference.</p>
         
     
     <h4>
+        
         
         <span class="item-name">un</span>
         
@@ -2401,7 +2854,8 @@ See Observable reference.</p>
     
     <h5>
         
-            <span class="item-type">function </span>
+            <span class="item-type">function</span>
+        
         
         <span class="item-name">fn</span>
         
@@ -2421,6 +2875,7 @@ See Observable reference.</p>
             <p>Callback function</p>
 
         
+        
     </div>
 
 
@@ -2437,7 +2892,8 @@ See Observable reference.</p>
     
     <h5>
         
-            <span class="item-type">object </span>
+            <span class="item-type">object</span>
+        
         
         <span class="item-name">context</span>
         
@@ -2449,6 +2905,7 @@ See Observable reference.</p>
         
             <p>Function's "this" object</p>
 
+        
         
     </div>
 
@@ -2469,6 +2926,7 @@ See Observable reference.</p>
         
     
     <h4>
+        
         
         <span class="item-name">hasListener</span>
         
@@ -2499,6 +2957,7 @@ See Observable reference.</p>
         
     
     <h4>
+        
         
         <span class="item-name">hasListener</span>
         
@@ -2531,7 +2990,8 @@ See Observable reference.</p>
     
     <h5>
         
-            <span class="item-type">function </span>
+            <span class="item-type">function</span>
+        
         
         <span class="item-name">fn</span>
         
@@ -2551,6 +3011,7 @@ See Observable reference.</p>
             <p>Callback function</p>
 
         
+        
     </div>
 
 
@@ -2567,7 +3028,8 @@ See Observable reference.</p>
     
     <h5>
         
-            <span class="item-type">object </span>
+            <span class="item-type">object</span>
+        
         
         <span class="item-name">context</span>
         
@@ -2579,6 +3041,7 @@ See Observable reference.</p>
         
             <p>Function's "this" object</p>
 
+        
         
     </div>
 
@@ -2599,6 +3062,7 @@ See Observable reference.</p>
         
     
     <h4>
+        
         
         <span class="item-name">removeAllListeners</span>
         
@@ -2627,6 +3091,7 @@ See Observable reference.</p>
     
     <h4>
         
+        
         <span class="item-name">suspend</span>
         
             
@@ -2654,6 +3119,7 @@ See Observable reference.</p>
     
     <h4>
         
+        
         <span class="item-name">resume</span>
         
             
@@ -2680,6 +3146,7 @@ See Observable reference.</p>
         
     
     <h4>
+        
         
         <span class="item-name">trigger</span>
         
@@ -2711,9 +3178,14 @@ See Observable reference.</p>
 
 
 
-        </div>
+            </div>
+        
     </div>
+    
+    
+    
 </div>
+
 
 <div class="footer">
     <div class="container"></div>

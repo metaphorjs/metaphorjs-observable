@@ -1,12 +1,9 @@
 {
-    "version": "1.0.3",
+    "version": "1.0.4",
     "description": "A javascript event system",
-
     "push": [
         "github"
     ],
-
-
     "docs": {
         "": {
             "out": "docs",
@@ -17,12 +14,11 @@
             "includeExternal": false,
             "data": {
                 "title": "MetaphorJs.Observable",
-                "description": "@{description}",
-                "version": "v@{version}"
+                "description": "A javascript event system",
+                "version": "v1.0.3"
             }
         }
     },
-
     "build": {
         "standalone": {
             "wrap": true,
