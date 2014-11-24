@@ -555,7 +555,7 @@ extend(Observable.prototype, {
         }
 
         return self.api;
-        
+
     }
 }, true, false);
 
