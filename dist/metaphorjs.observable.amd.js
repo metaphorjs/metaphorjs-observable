@@ -936,6 +936,9 @@ extend(Event.prototype, {
             else if (returnResult == "first") {
                 return res;
             }
+            else if (returnResult == "nonempty" && res) {
+                return res;
+            }
             else if (returnResult == "last") {
                 ret = res;
             }

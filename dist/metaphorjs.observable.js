@@ -2,7 +2,10 @@
 "use strict";
 
 
+var MetaphorJs = {
 
+
+};
 
 
 
@@ -939,6 +942,9 @@ extend(Event.prototype, {
                 ret = ret.concat(res);
             }
             else if (returnResult == "first") {
+                return res;
+            }
+            else if (returnResult == "nonempty" && res) {
                 return res;
             }
             else if (returnResult == "last") {
