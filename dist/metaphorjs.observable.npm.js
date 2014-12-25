@@ -715,7 +715,7 @@ extend(Event.prototype, {
     once: function(fn, context, options) {
 
         options = options || {};
-        options.once = true;
+        options.limit = 1;
 
         return this.on(fn, context, options);
     },
