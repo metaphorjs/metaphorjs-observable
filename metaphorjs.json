@@ -25,8 +25,8 @@
             "global": true,
             "target": "dist/metaphorjs.observable.js",
             "files": [
-                "../metaphorjs/src/MetaphorJs.js",
-                "src/metaphorjs.observable.js"
+                "metaphorjs/src/MetaphorJs.js",
+                ["src/lib/Observable.js", {"as": "*"}]
             ],
             "expose": [
                 "Observable"
@@ -37,7 +37,7 @@
             "compile": false,
             "files": [
                 [
-                    "src/metaphorjs.observable.js",
+                    "src/lib/Observable.js",
                     {
                         "keepExports": true
                     }
@@ -47,7 +47,7 @@
         "amd": {
             "target": "dist/metaphorjs.observable.amd.js",
             "files": [
-                "src/metaphorjs.observable.js"
+                ["src/lib/Observable.js", {"as": "*"}]
             ],
             "define": {
                 "name": "metaphorjs-observable",
