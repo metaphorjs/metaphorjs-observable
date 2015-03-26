@@ -57,22 +57,22 @@ module.exports = ns.register("mixin.Observable", {
 
     on: function() {
         var o = this.$$observable;
-        return o.on.apply(o, arguments);
+        return o ? o.on.apply(o, arguments) : null;
     },
 
     un: function() {
         var o = this.$$observable;
-        return o.un.apply(o, arguments);
+        return o ? o.un.apply(o, arguments) : null;
     },
 
     once: function() {
         var o = this.$$observable;
-        return o.once.apply(o, arguments);
+        return o ? o.once.apply(o, arguments) : null;
     },
 
     trigger: function() {
         var o = this.$$observable;
-        return o.trigger.apply(o, arguments);
+        return o ? o.trigger.apply(o, arguments) : null;
     },
 
     $beforeDestroy: function() {
