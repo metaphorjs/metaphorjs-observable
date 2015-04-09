@@ -549,6 +549,10 @@ var ObservableEvent = (function(){
                     continue;
                 }
 
+                if (l.filter && l.filter.apply(l.filterContext || l.context, args) === false) {
+                    continue;
+                }
+
                 l.count++;
 
                 if (l.count < l.start) {
