@@ -2,6 +2,7 @@
 var nextUid = require("metaphorjs/src/func/nextUid.js"),
     extend = require("metaphorjs/src/func/extend.js"),
     slice = require("metaphorjs/src/func/array/slice.js"),
+    async = require("metaphorjs/src/func/async.js"),
     isFunction = require("metaphorjs/src/func/isFunction.js"),
     undf = require("metaphorjs/src/var/undf.js");
 
@@ -14,7 +15,8 @@ module.exports = (function(){
      * @class ObservableEvent
      * @private
      */
-    var ObservableEvent = function(name, returnResult, autoTrigger, triggerFilter, filterContext) {
+    var ObservableEvent = function(name, returnResult, autoTrigger,
+                                   triggerFilter, filterContext) {
 
         var self    = this;
 
@@ -26,11 +28,12 @@ module.exports = (function(){
         self.suspended      = false;
         self.lid            = 0;
 
-        if (typeof returnResult == "object" && returnResult !== null) {
+        if (typeof returnResult === "object" && returnResult !== null) {
             extend(self, returnResult, true, false);
         }
         else {
-            self.returnResult = returnResult === undf ? null : returnResult; // first|last|all
+            // first|last|all
+            self.returnResult = returnResult === undf ? null : returnResult;
             self.autoTrigger = autoTrigger;
             self.triggerFilter = triggerFilter;
             self.filterContext = filterContext;
@@ -130,7 +133,7 @@ module.exports = (function(){
             if (self.autoTrigger && self.lastTrigger && !self.suspended) {
                 var prevFilter = self.triggerFilter;
                 self.triggerFilter = function(l){
-                    if (l.id == id) {
+                    if (l.id === id) {
                         return prevFilter ? prevFilter(l) !== false : true;
                     }
                     return false;
@@ -170,7 +173,7 @@ module.exports = (function(){
                 id;
 
             if (fn == parseInt(fn)) {
-                id      = fn;
+                id      = parseInt(fn);
             }
             else {
                 context = context || fn;
@@ -182,14 +185,14 @@ module.exports = (function(){
             }
 
             for (var i = 0, len = listeners.length; i < len; i++) {
-                if (listeners[i].id == id) {
+                if (listeners[i].id === id) {
                     inx = i;
                     delete listeners[i].uniContext[uni];
                     break;
                 }
             }
 
-            if (inx == -1) {
+            if (inx === -1) {
                 return false;
             }
 
@@ -207,7 +210,7 @@ module.exports = (function(){
          * @method
          * @param {function} fn Callback function { @required }
          * @param {object} context Function's "this" object
-         * @return bool
+         * @return boolean
          */
         hasListener: function(fn, context) {
 
@@ -220,7 +223,7 @@ module.exports = (function(){
                 context = context || fn;
 
                 if (!isFunction(fn)) {
-                    id  = fn;
+                    id  = parseInt(fn);
                 }
                 else {
                     id  = context[self.uni];
@@ -231,7 +234,7 @@ module.exports = (function(){
                 }
 
                 for (var i = 0, len = listeners.length; i < len; i++) {
-                    if (listeners[i].id == id) {
+                    if (listeners[i].id === id) {
                         return true;
                     }
                 }
@@ -315,16 +318,18 @@ module.exports = (function(){
                 self.lastTrigger = slice.call(arguments);
             }
 
-            if (listeners.length == 0) {
+            if (listeners.length === 0) {
                 return null;
             }
 
-            var ret     = returnResult == "all" || returnResult == "merge" ?
+            var ret     = returnResult === "all" || returnResult === "merge" ?
                           [] : null,
                 q, l,
                 res;
 
-            if (returnResult == "first") {
+
+
+            if (returnResult === "first") {
                 q = [listeners[0]];
             }
             else {
@@ -358,30 +363,36 @@ module.exports = (function(){
                     continue;
                 }
 
-                res = l.fn.apply(l.context, args);
+                if (l.async) {
+                    res = null;
+                    async(l.fn, l.context, args);
+                }
+                else {
+                    res = l.fn.apply(l.context, args);
+                }
 
                 l.called++;
 
-                if (l.called == l.limit) {
+                if (l.called === l.limit) {
                     self.un(l.id);
                 }
 
-                if (returnResult == "all") {
+                if (returnResult === "all") {
                     ret.push(res);
                 }
-                else if (returnResult == "merge" && res) {
+                else if (returnResult === "merge" && res) {
                     ret = ret.concat(res);
                 }
-                else if (returnResult == "first") {
+                else if (returnResult === "first") {
                     return res;
                 }
-                else if (returnResult == "nonempty" && res) {
+                else if (returnResult === "nonempty" && res) {
                     return res;
                 }
-                else if (returnResult == "last") {
+                else if (returnResult === "last") {
                     ret = res;
                 }
-                else if (returnResult == false && res === false) {
+                else if (returnResult === false && res === false) {
                     return false;
                 }
             }
