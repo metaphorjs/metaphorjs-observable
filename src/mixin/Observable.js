@@ -26,13 +26,13 @@ module.exports = ns.register("mixin.Observable", {
     $initObservable: function(cfg) {
 
         var self    = this,
-            obs     = self.$$observable;
+            obs     = self.$$observable,
+            i;
 
         if (cfg && cfg.callback) {
             var ls = cfg.callback,
                 context = ls.context || ls.scope || ls.$context,
-                events = extend({}, self.$$events, ls.$events, true, false),
-                i;
+                events = extend({}, self.$$events, ls.$events, true, false);
 
             for (i in events) {
                 obs.createEvent(i, events[i]);
@@ -51,6 +51,11 @@ module.exports = ns.register("mixin.Observable", {
 
             if (context) {
                 self.$$callbackContext = context;
+            }
+        }
+        else if (self.$$events) {
+            for (i in self.$$events) {
+                obs.createEvent(i, self.$$events[i]);
             }
         }
     },
