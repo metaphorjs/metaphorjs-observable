@@ -17,8 +17,8 @@ module.exports = (function(){
      * @code examples/collector.js
      *
      * @class Observable
-     * @version 1.1
-     * @author johann kuindji
+     * @version 1.2
+     * @author Ivan Kuindzhi
      * @link https://github.com/kuindji/metaphorjs-observable
      */
     var Observable = function() {
@@ -47,6 +47,7 @@ module.exports = (function(){
         *   "all" -- return all results as array<br>
         *   "merge" -- merge all results into one array (each result must be array)<br>
         *   "first" -- return result of the first handler (next listener will not be called)<br>
+        *   "nonempty" -- return first nonempty result<br>
         *   "last" -- return result of the last handler (all listeners will be called)<br>
         * }
         * @param {bool} autoTrigger {
@@ -62,6 +63,7 @@ module.exports = (function(){
         *   @param {[]} arguments
         *   @return {bool}
         * }
+        * @param {object} filterContext triggerFilter's context
         * @return {ObservableEvent}
         */
 
@@ -70,10 +72,10 @@ module.exports = (function(){
          * @param {string} name
          * @param {object} options {
          *  @type {string} returnResult
-         *  @param {bool} autoTrigger
-         *  @param {function} triggerFilter
+         *  @type {bool} autoTrigger
+         *  @type {function} triggerFilter
+         *  @type {object} filterContext
          * }
-         * @param {object} filterContext
          * @returns {ObservableEvent}
          */
         createEvent: function(name, returnResult, autoTrigger, triggerFilter, filterContext) {
@@ -127,6 +129,7 @@ module.exports = (function(){
          *      @type {[]} append Append parameters
          *      @type {[]} prepend Prepend parameters
          *      @type {bool} allowDupes allow the same handler twice
+         *      @type {bool} async run event asynchronously
         * }
         */
         on: function(name, fn, context, options) {
@@ -139,7 +142,7 @@ module.exports = (function(){
         },
 
         /**
-        * Same as {@link Observable.on}, but options.limit is forcefully set to 1.
+        * Same as {@link class:Observable.on}, but options.limit is forcefully set to 1.
         * @method
         * @access public
         */
@@ -196,7 +199,7 @@ module.exports = (function(){
                 if (!events[name]) {
                     return false;
                 }
-                return events[name].hasListener(fn, context);
+                return fn ? events[name].hasListener(fn, context) : true;
             }
             else {
                 for (name in events) {
@@ -206,6 +209,16 @@ module.exports = (function(){
                 }
                 return false;
             }
+        },
+
+        /**
+        * @method
+        * @access public
+        * @param {string} name Event name { @required }
+        * @return bool
+        */
+        hasEvent: function(name) {
+            return !!this.events[name];
         },
 
 
@@ -223,10 +236,17 @@ module.exports = (function(){
         */
         removeAllListeners: function(name) {
             var events  = this.events;
-            if (!events[name]) {
-                return;
+            if (name) {
+                if (!events[name]) {
+                    return;
+                }
+                events[name].removeAllListeners();
             }
-            events[name].removeAllListeners();
+            else {
+                for (name in events) {
+                    events[name].removeAllListeners();
+                }
+            }
         },
 
         /**

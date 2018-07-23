@@ -11,7 +11,7 @@ module.exports = (function(){
 
     /**
      * This class is private - you can't create an event other than via Observable.
-     * See Observable reference.
+     * See {@link class:Observable} reference.
      * @class ObservableEvent
      * @private
      */
@@ -81,7 +81,7 @@ module.exports = (function(){
          * @method
          * @param {function} fn Callback function { @required }
          * @param {object} context Function's "this" object
-         * @param {object} options See Observable's on()
+         * @param {object} options See {@link class:Observable.on}
          */
         on: function(fn, context, options) {
 
@@ -149,7 +149,7 @@ module.exports = (function(){
          * @method
          * @param {function} fn Callback function { @required }
          * @param {object} context Function's "this" object
-         * @param {object} options See Observable's on()
+         * @param {object} options See {@link class:Observable.on}
          */
         once: function(fn, context, options) {
 
@@ -162,7 +162,7 @@ module.exports = (function(){
         /**
          * @method
          * @param {function} fn Callback function { @required }
-         * @param {object} context Function's "this" object
+         * @param {object} context Callback context
          */
         un: function(fn, context) {
 
@@ -209,7 +209,7 @@ module.exports = (function(){
         /**
          * @method
          * @param {function} fn Callback function { @required }
-         * @param {object} context Function's "this" object
+         * @param {object} context Callback context
          * @return boolean
          */
         hasListener: function(fn, context) {

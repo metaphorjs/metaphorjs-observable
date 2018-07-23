@@ -1,5 +1,5 @@
-var observable = new Observable;
-observable.createEvent("collectStuff", "all");
-observable.on("collectStuff", function(){ return 1; });
-observable.on("collectStuff", function(){ return 2; });
-var results = observable.trigger("collectStuff"); // [1, 2]
+var o = new Observable;
+o.createEvent("collectStuff", "all");
+o.on("collectStuff", function(){ return 1; });
+o.on("collectStuff", function(){ return 2; });
+var results = o.trigger("collectStuff"); // [1, 2]
