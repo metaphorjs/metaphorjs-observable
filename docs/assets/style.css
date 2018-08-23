@@ -51,9 +51,6 @@ html.multipage .jumbotron {
 .item-properties.item-properties-param.level-0 {
   padding-left: 40px;
 }
-.item-properties.level-0 > li, .item-properties.level-1 > li {
-  padding: 10px 0;
-}
 .item-properties.level-0 > li:first-child, .item-properties.level-1 > li:first-child {
   padding-top: 5px;
 }
@@ -64,6 +61,37 @@ ul.level-0 > li.item-property-group-name {
   padding: 5px 15px;
   margin-left: -15px;
   border-bottom: 1px solid #d0d0d0;
+}
+
+.dropdown-item {
+  position: relative;
+}
+
+.dropdown-item > a.dropdown-item {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.dropdown-submenu {
+  font-size: 1rem;
+  color: #212529;
+  text-align: left;
+  list-style: none;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 0.25rem;
+}
+
+div.dropdown-item > .dropdown-submenu {
+  position: absolute;
+  left: 100%;
+  top: 0;
+  display: none;
+}
+
+div.dropdown-item:hover > .dropdown-submenu {
+  display: block;
 }
 
 .item-header h1, .item-header h2, .item-header h3, .item-header h4, .item-header h5, .item-header h6 {
@@ -147,6 +175,32 @@ ul.level-0 > li.item-property-group-name {
 .item-label {
   margin-bottom: 5px;
   margin-right: 5px;
+}
+
+.item-returns {
+  margin-left: 40px;
+  color: #999;
+  font-weight: normal;
+  border-top: 1px dotted #d0d0d0;
+  padding-bottom: 10px;
+}
+.item-returns.level-0 {
+  font-size: 28px;
+}
+.item-returns.level-1 {
+  font-size: 24px;
+}
+.item-returns.level-2 {
+  font-size: 20px;
+}
+.item-returns.level-3 {
+  font-size: 16px;
+}
+.item-returns.level-4 {
+  font-size: 12px;
+}
+.item-returns.level-5 {
+  font-size: 8px;
 }
 
 .item-inheritance-toggler {

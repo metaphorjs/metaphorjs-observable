@@ -116,8 +116,11 @@ var Cache = function(){
 
     /**
      * @class Cache
-     * @param {bool} cacheRewritable
+     */
+
+    /**
      * @constructor
+     * @param {bool} cacheRewritable
      */
     var Cache = function(cacheRewritable) {
 
@@ -12244,7 +12247,7 @@ var mhistory = function(){
 
 
         if (pushStateSupported) {
-            return history.state[stateKeyId];
+            return history.state ? history.state[stateKeyId] : null;
         }
         else {
             return parseOutHashStateId(location.hash).id;
@@ -15125,7 +15128,8 @@ var EventHandler = defineClass({
 
         if (cfg.async) {
             return function(e) {
-                async(handler, null, [e], null);
+                async(handler, null, [e], 
+                        typeof cfg.async == "number" ? cfg.async : null);
             };
         }
         else {
@@ -15240,6 +15244,9 @@ var EventHandler = defineClass({
                     }
                     if (cfg.stopPropagation) {
                         cfg.stopPropagation = createGetter(cfg.stopPropagation)(scope);
+                    }
+                    if (cfg.async) {
+                        cfg.async = createGetter(cfg.async)(scope);
                     }
                 }
 
@@ -25288,8 +25295,9 @@ App.$extend({
     },
 
     goto: function(url) {
+        console.log(url)
         if (url.substr(0,1) === '#') {
-            window.location.href = url;
+            window.location.hash = url;
         }
         else {
             mhistory.push(url);
