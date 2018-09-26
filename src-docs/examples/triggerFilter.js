@@ -1,5 +1,5 @@
 var o = new Observable;
-o.createEvent("filtered", null, false, function(l, args){
+o.createEvent("filtered", {triggerFilter: function(l, args){
     if (l.always) {
         return true;
     }
@@ -7,7 +7,7 @@ o.createEvent("filtered", null, false, function(l, args){
         return true;
     }
     return false;
-});
+}});
 
 o.on("filtered", function(){
     console.log("always")

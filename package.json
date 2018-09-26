@@ -1,12 +1,13 @@
 {
     "name": "metaphorjs-observable",
-    "version": "1.0.4",
+    "version": "1.2.0",
     "description": "A javascript event system",
     "directories": {
-        "doc": "docs"
+        "doc": "docs",
+        "test": "test"
     },
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "mocha"
     },
     "repository": {
         "type": "git",

@@ -1,6 +1,6 @@
 
 var Observable = require("../lib/Observable.js"),
-    ns = require("metaphorjs-namespace/src/var/ns.js"),
+    MetaphorJs = require("metaphorjs/src/MetaphorJs.js"),
     extend = require("metaphorjs/src/func/extend.js");
 
 /**
@@ -8,9 +8,9 @@ var Observable = require("../lib/Observable.js"),
  * @description Mixin adds observable features to the host object.
  *              It adds 'callback' option to the host config. See $beforeInit.
  *              Mixin is designed for MetaphorJs class system.
- * @code examples/mixin.js
+ * @code src-docs/examples/mixin.js
  */
-module.exports = ns.register("mixin.Observable", {
+module.exports = MetaphorJs.mixin.Observable = {
 
     /**
      * @private
@@ -151,7 +151,7 @@ module.exports = ns.register("mixin.Observable", {
     $afterDestroy: function() {
         var self = this;
         self.$$observable.trigger("destroy", self);
-        self.$$observable.destroy();
+        self.$$observable.$destroy();
         self.$$observable = null;
     }
-});
+};

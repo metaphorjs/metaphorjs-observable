@@ -1,16 +1,15 @@
 
-var defineClass = require("metaphorjs-class/src/func/defineClass.js"),
-    nsAdd = require("metaphorjs-namespace/src/func/nsAdd.js");
+var cls = require("metaphorjs-class/src/cls.js"),
+    MetaphorJs = require("metaphorjs/src/MetaphorJs.js");
 
 require("../mixin/Observable.js");
 
-module.exports = defineClass({
+module.exports = cls({
 
-    $class: "plugin.Observable",
-    $mixins: ["mixin.Observable"],
+    $class: "MetaphorJs.plugin.Observable",
+    $mixins: [MetaphorJs.mixin.Observable],
 
     $init: function(cmp) {
-
         cmp.$implement({
             $$observable: this.$$observable,
             on: this.on,
@@ -18,7 +17,5 @@ module.exports = defineClass({
             un: this.un,
             trigger: this.trigger
         });
-
     }
-
 });

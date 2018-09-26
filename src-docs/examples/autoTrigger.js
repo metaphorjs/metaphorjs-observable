@@ -1,5 +1,5 @@
 var o = new Observable;
-o.createEvent("auto", null, true);
+o.createEvent("auto", {autoTrigger: true});
 // trigger first
 o.trigger("auto", 1, 2);
 // subscribe later
