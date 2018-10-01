@@ -1,9 +1,12 @@
 
-var bind = require("metaphorjs/src/func/bind.js"),
-    extend = require("metaphorjs/src/func/extend.js"),
-    slice = require("metaphorjs/src/func/array/slice.js"),
-    ObservableEvent = require("./ObservableEvent.js");
+var bind = require("metaphorjs-shared/src/func/bind.js"),
+    extend = require("metaphorjs-shared/src/func/extend.js"),
+    toArray = require("metaphorjs-shared/src/func/toArray.js"),
+    MetaphorJs = require("metaphorjs-shared/src/MetaphorJs.js"),
+    lib_ObservableEvent = require("./ObservableEvent.js");
 
+
+module.exports = MetaphorJs.lib.Observable = (function(){
 
 /**
  * @description A javascript event system implementing multiple patterns: 
@@ -17,7 +20,7 @@ var bind = require("metaphorjs/src/func/bind.js"),
  * @description Pipe:
  * @code src-docs/examples/pipe.js
  *
- * @class Observable
+ * @class MetaphorJs.lib.Observable
  * @author Ivan Kuindzhi
  */
 var Observable = function() {
@@ -80,13 +83,13 @@ extend(Observable.prototype, {
      *      to the next promise.
      *  }
      * }
-     * @returns {ObservableEvent}
+     * @returns {lib_ObservableEvent}
      */
     createEvent: function(name, options) {
         name = name.toLowerCase();
         var events  = this.events;
         if (!events[name]) {
-            events[name] = new ObservableEvent(name, options);
+            events[name] = new lib_ObservableEvent(name, options);
         }
         return events[name];
     },
@@ -95,7 +98,7 @@ extend(Observable.prototype, {
     * @method
     * @access public
     * @param {string} name Event name
-    * @return {ObservableEvent|undefined}
+    * @return {lib_ObservableEvent|undefined}
     */
     getEvent: function(name) {
         name = name.toLowerCase();
@@ -142,7 +145,7 @@ extend(Observable.prototype, {
         name = name.toLowerCase();
         var events  = this.events;
         if (!events[name]) {
-            events[name] = new ObservableEvent(name);
+            events[name] = new lib_ObservableEvent(name);
         }
         return events[name].on(fn, context, options);
     },
@@ -299,7 +302,7 @@ extend(Observable.prototype, {
 
         if (events[name]) {
             e = events[name];
-            res = e.trigger.apply(e, slice.call(arguments, 1));
+            res = e.trigger.apply(e, toArray(arguments).slice(1));
         }
 
         // trigger * event with current event name
@@ -433,5 +436,5 @@ extend(Observable.prototype, {
     }
 }, true, false);
 
-
-module.exports = Observable;
+return Observable;
+}());

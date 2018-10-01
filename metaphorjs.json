@@ -9,7 +9,7 @@
         "renderer": {
             "type": "default",
             "data": {
-                "title": "MetaphorJs.Observable",
+                "title": "MetaphorJs.lib.Observable",
                 "description": "A javascript event system",
                 "version": "v1.2"
             }
@@ -24,9 +24,9 @@
             "sort": {
                 "type": "exact",
                 "order": [
-                    "class:Observable", 
-                    "mixin:Observable", 
-                    "class:ObservableEvent"
+                    "class:MetaphorJs.lib.Observable", 
+                    "mixin:MetaphorJs.mixin.Observable", 
+                    "class:MetaphorJs.lib.ObservableEvent"
                 ]
             }
         }
@@ -37,14 +37,13 @@
         "standalone": {
             "target": "dist/metaphorjs.observable.js",
             "files": [
-                ["metaphorjs/src/MetaphorJs.js", {"as": "*"}],
-                ["src/lib/Observable.js", {"as": "*"}]
+                ["src/lib/Observable.js", {"as": "lib_Observable"}]
             ],
             "options": {
                 "wrap": true,
                 "global": true,
                 "expose": [
-                    "Observable"
+                    {"name": "lib_Observable", "as": "Observable"}
                 ]
             }
         },
@@ -52,39 +51,28 @@
         "standalone-min": {
             "extend": "standalone",
             "target": "dist/metaphorjs.observable.min.js",
-            "pipe": ["build", "compile", "write"],
-            "options": {
-                "wrap": true,
-                "global": true,
-                "return": "Observable",
-                "expose": [
-                    "Observable"
-                ]
-            }
+            "pipe": ["build", "compile", "write"]
         },
 
         "npm": {
             "target": "dist/metaphorjs.observable.npm.js",
-            "compile": false,
             "files": [
-                [
-                    "src/lib/Observable.js"
-                ]
+                "src/lib/Observable.js"
             ],
             "options": {
-                "exports": "Observable"
+                "exports": "MetaphorJs.lib.Observable"
             }
         },
 
         "amd": {
             "target": "dist/metaphorjs.observable.amd.js",
             "files": [
-                ["src/lib/Observable.js", {"as": "*"}]
+                "src/lib/Observable.js"
             ],
             "options": {
                 "amd": {
                     "name": "metaphorjs-observable",
-                    "return": "Observable"
+                    "return": "MetaphorJs.lib.Observable"
                 }
             }
         },

@@ -1,15 +1,19 @@
 
-var nextUid = require("metaphorjs/src/func/nextUid.js"),
-    extend = require("metaphorjs/src/func/extend.js"),
-    slice = require("metaphorjs/src/func/array/slice.js"),
-    async = require("metaphorjs/src/func/async.js"),
-    isFunction = require("metaphorjs/src/func/isFunction.js");
+var nextUid = require("metaphorjs-shared/src/func/nextUid.js"),
+    extend = require("metaphorjs-shared/src/func/extend.js"),
+    toArray = require("metaphorjs-shared/src/func/toArray.js"),
+    async = require("metaphorjs-shared/src/func/async.js"),
+    error = require("metaphorjs-shared/src/func/error.js"),
+    isFunction = require("metaphorjs-shared/src/func/isFunction.js"),
+    MetaphorJs = require("metaphorjs-shared/src/MetaphorJs.js");
 
+
+module.exports = MetaphorJs.lib.ObservableEvent = (function(){
 
 /**
  * This class is private - you can't create an event other than via Observable.
  * See {@link class:Observable} reference.
- * @class ObservableEvent
+ * @class MetaphorJs.lib.ObservableEvent
  * @private
  */
 var ObservableEvent = function(name, options) {
@@ -294,7 +298,7 @@ extend(ObservableEvent.prototype, {
         var args;
 
         if (l.append || l.prepend) {
-            args    = slice.call(triggerArgs);
+            args    = triggerArgs.slice();
             if (l.prepend) {
                 args    = l.prepend.concat(args);
             }
@@ -323,6 +327,7 @@ extend(ObservableEvent.prototype, {
             expectPromises  = self.expectPromises,
             keepPromiseOrder= self.keepPromiseOrder,
             results         = [],
+            origArgs        = toArray(arguments),
             prevPromise,
             resPromise,
             args, 
@@ -333,7 +338,7 @@ extend(ObservableEvent.prototype, {
         }
 
         if (self.autoTrigger) {
-            self.lastTrigger = slice.call(arguments);
+            self.lastTrigger = origArgs.slice();
         }
 
         if (listeners.length === 0) {
@@ -351,7 +356,7 @@ extend(ObservableEvent.prototype, {
         }
         else {
             // create a snapshot of listeners list
-            q = slice.call(listeners);
+            q = listeners.slice();
         }
 
         if (expectPromises && rr === "last") {
@@ -368,7 +373,7 @@ extend(ObservableEvent.prototype, {
                 continue;
             }
 
-            args = self._prepareArgs(l, arguments);
+            args = self._prepareArgs(l, origArgs);
 
             if (filter && filter.call(filterContext, l, args, self) === false) {
                 continue;
@@ -400,7 +405,7 @@ extend(ObservableEvent.prototype, {
                             
                             return l.fn.apply(l.context, args);
                         }
-                    }(l, rr, slice.call(arguments));
+                    }(l, rr, origArgs.slice());
 
                     if (prevPromise) {
                         res = prevPromise.then(resolver);
@@ -409,9 +414,7 @@ extend(ObservableEvent.prototype, {
                         res = l.fn.apply(l.context, args);
                     }
 
-                    res.catch(function(err){
-                        console.log(err);
-                    });
+                    res.catch(error);
                 }
                 else {
                     res = l.fn.apply(l.context, args);
@@ -456,7 +459,7 @@ extend(ObservableEvent.prototype, {
                     }
                     else if (rr === "pipe") {
                         ret = res;
-                        arguments[0] = res;
+                        origArgs[0] = res;
                     }
                     else if (rr === "last") {
                         ret = res;
@@ -509,6 +512,5 @@ extend(ObservableEvent.prototype, {
     }
 }, true, false);
 
-
-
-module.exports = ObservableEvent;
+return ObservableEvent;
+}());

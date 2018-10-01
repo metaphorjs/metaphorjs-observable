@@ -1,10 +1,10 @@
 
-var Observable = require("../lib/Observable.js"),
-    MetaphorJs = require("metaphorjs/src/MetaphorJs.js"),
-    extend = require("metaphorjs/src/func/extend.js");
+var lib_Observable = require("../lib/Observable.js"),
+    MetaphorJs = require("metaphorjs-shared/src/MetaphorJs.js"),
+    extend = require("metaphorjs-shared/src/func/extend.js");
 
 /**
- * @mixin Observable
+ * @mixin MetaphorJs.mixin.Observable
  * @description Mixin adds observable features to the host object.
  *              It adds 'callback' option to the host config. See $beforeInit.
  *              Mixin is designed for MetaphorJs class system.
@@ -51,7 +51,7 @@ module.exports = MetaphorJs.mixin.Observable = {
      */
     $beforeInit: function(cfg) {
         var self = this;
-        self.$$observable = new Observable;
+        self.$$observable = new lib_Observable;
         self.$initObservable(cfg);
     },
 

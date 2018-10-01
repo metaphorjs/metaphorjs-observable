@@ -1,33 +1,51 @@
-/* BUNDLE START 0MR */
+/* BUNDLE START 0QF */
 "use strict";
 
 /**
+ * Bind function to context (Function.bind wrapper)
+ * @function bind
  * @param {Function} fn
  * @param {*} context
  */
-var bind = Function.prototype.bind ?
-              function(fn, context){
-                  return fn.bind(context);
-              } :
-              function(fn, context) {
-                  return function() {
-                      return fn.apply(context, arguments);
-                  };
-              };
-
-
-
-
-var slice = Array.prototype.slice;
-
-var toString = Object.prototype.toString;
+function bind(fn, context){
+    return fn.bind(context);
+};
 
 var undf = undefined;
 
 
 
+/**
+ * Transform anything into array
+ * @function toArray
+ * @param {*} list
+ * @returns {array}
+ */
+function toArray(list) {
+    if (list && !list.length != undf && list !== ""+list) {
+        for(var a = [], i =- 1, l = list.length>>>0; ++i !== l; a[i] = list[i]){}
+        return a;
+    }
+    else if (list) {
+        return [list];
+    }
+    else {
+        return [];
+    }
+};
 
-var varType = function(){
+/**
+ * Convert anything to string
+ * @function toString
+ * @param {*} value
+ * @returns {string}
+ */
+var toString = Object.prototype.toString;
+
+
+
+
+var _varType = function(){
 
     var types = {
         '[object String]': 0,
@@ -60,7 +78,7 @@ var varType = function(){
 
 
 
-    return function varType(val) {
+    return function _varType(val) {
 
         if (!val) {
             if (val === null) {
@@ -88,126 +106,148 @@ var varType = function(){
 
 
 
+/**
+ * Check if given value is plain object
+ * @function isPlainObject
+ * @param {*} value 
+ * @returns {boolean}
+ */
 function isPlainObject(value) {
     // IE < 9 returns [object Object] from toString(htmlElement)
     return typeof value == "object" &&
-           varType(value) === 3 &&
+           _varType(value) === 3 &&
             !value.nodeType &&
             value.constructor === Object;
-
 };
 
+/**
+ * Check if given value is a boolean value
+ * @function isBool
+ * @param {*} value 
+ * @returns {boolean}
+ */
 function isBool(value) {
     return value === true || value === false;
 };
 
 
+/**
+ * Copy properties from one object to another
+ * @function extend
+ * @param {Object} dst
+ * @param {Object} src
+ * @param {Object} src2 ... srcN
+ * @param {boolean} override {
+ *  Override already existing keys 
+ *  @default false
+ * }
+ * @param {boolean} deep {
+ *  Do not copy objects by link, deep copy by value
+ *  @default false
+ * }
+ * @returns {object}
+ */
+function extend() {
 
+    var override    = false,
+        deep        = false,
+        args        = toArray(arguments),
+        dst         = args.shift(),
+        src,
+        k,
+        value;
 
-var extend = function(){
+    if (isBool(args[args.length - 1])) {
+        override    = args.pop();
+    }
+    if (isBool(args[args.length - 1])) {
+        deep        = override;
+        override    = args.pop();
+    }
 
-    /**
-     * @param {Object} dst
-     * @param {Object} src
-     * @param {Object} src2 ... srcN
-     * @param {boolean} override = false
-     * @param {boolean} deep = false
-     * @returns {object}
-     */
-    var extend = function extend() {
+    while (src = args.shift()) {
+        for (k in src) {
 
+            if (src.hasOwnProperty(k) && (value = src[k]) !== undf) {
 
-        var override    = false,
-            deep        = false,
-            args        = slice.call(arguments),
-            dst         = args.shift(),
-            src,
-            k,
-            value;
-
-        if (isBool(args[args.length - 1])) {
-            override    = args.pop();
-        }
-        if (isBool(args[args.length - 1])) {
-            deep        = override;
-            override    = args.pop();
-        }
-
-        while (args.length) {
-            // IE < 9 fix: check for hasOwnProperty presence
-            if ((src = args.shift()) && src.hasOwnProperty) {
-                for (k in src) {
-
-                    if (src.hasOwnProperty(k) && (value = src[k]) !== undf) {
-
-                        if (deep) {
-                            if (dst[k] && isPlainObject(dst[k]) && isPlainObject(value)) {
-                                extend(dst[k], value, override, deep);
+                if (deep) {
+                    if (dst[k] && isPlainObject(dst[k]) && isPlainObject(value)) {
+                        extend(dst[k], value, override, deep);
+                    }
+                    else {
+                        if (override === true || dst[k] == undf) { // == checks for null and undefined
+                            if (isPlainObject(value)) {
+                                dst[k] = {};
+                                extend(dst[k], value, override, true);
                             }
                             else {
-                                if (override === true || dst[k] == undf) { // == checks for null and undefined
-                                    if (isPlainObject(value)) {
-                                        dst[k] = {};
-                                        extend(dst[k], value, override, true);
-                                    }
-                                    else {
-                                        dst[k] = value;
-                                    }
-                                }
-                            }
-                        }
-                        else {
-                            if (override === true || dst[k] == undf) {
                                 dst[k] = value;
                             }
                         }
                     }
                 }
+                else {
+                    if (override === true || dst[k] == undf) {
+                        dst[k] = value;
+                    }
+                }
             }
         }
+    }
 
-        return dst;
-    };
-
-    return extend;
-}();
+    return dst;
+};
 
 
-var nextUid = function(){
-    var uid = ['0', '0', '0'];
 
-    // from AngularJs
-    /**
-     * @returns {String}
-     */
-    return function nextUid() {
-        var index = uid.length;
-        var digit;
+var MetaphorJs = {
+    plugin: {},
+    mixin: {},
+    lib: {}
+};
 
-        while(index) {
-            index--;
-            digit = uid[index].charCodeAt(0);
-            if (digit == 57 /*'9'*/) {
-                uid[index] = 'A';
-                return uid.join('');
-            }
-            if (digit == 90  /*'Z'*/) {
-                uid[index] = '0';
-            } else {
-                uid[index] = String.fromCharCode(digit + 1);
-                return uid.join('');
-            }
-        }
-        uid.unshift('0');
-        return uid.join('');
-    };
-}();
+var nextUid = (function(){
 
+var uid = ['0', '0', '0'];
+
+// from AngularJs
 /**
- * @param {Function} fn
- * @param {Object} context
- * @param {[]} args
- * @param {number} timeout
+ * Generates new alphanumeric id with starting 
+ * length of 3 characters. IDs are consequential.
+ * @function nextUid
+ * @returns {string}
+ */
+function nextUid() {
+    var index = uid.length;
+    var digit;
+
+    while(index) {
+        index--;
+        digit = uid[index].charCodeAt(0);
+        if (digit == 57 /*'9'*/) {
+            uid[index] = 'A';
+            return uid.join('');
+        }
+        if (digit == 90  /*'Z'*/) {
+            uid[index] = '0';
+        } else {
+            uid[index] = String.fromCharCode(digit + 1);
+            return uid.join('');
+        }
+    }
+    uid.unshift('0');
+    return uid.join('');
+};
+
+return nextUid;
+}());
+/**
+ * Execute <code>fn</code> asynchronously
+ * @function async
+ * @param {Function} fn Function to execute
+ * @param {Object} context Function's context (this)
+ * @param {[]} args Arguments to pass to fn
+ * @param {number} timeout Execute after timeout (number of ms)
  */
 function async(fn, context, args, timeout) {
     return setTimeout(function(){
@@ -215,12 +255,81 @@ function async(fn, context, args, timeout) {
     }, timeout || 0);
 };
 
+var strUndef = "undefined";
+
+
+
+/**
+ * Log thrown error to console (in debug mode) and 
+ * call all error listeners
+ * @function error
+ * @param {Error} e 
+ */
+var error = (function(){
+
+    var listeners = [];
+
+    var error = function error(e) {
+
+        var i, l;
+
+        for (i = 0, l = listeners.length; i < l; i++) {
+            listeners[i][0].call(listeners[i][1], e)
+        }
+
+        /*DEBUG-START*/
+        if (typeof console != strUndef && console.error) {
+            console.error(e);
+        }
+        /*DEBUG-END*/
+    };
+
+    /**
+     * Subscribe to all errors
+     * @method on
+     * @param {function} fn 
+     * @param {object} context 
+     */
+    error.on = function(fn, context) {
+        error.un(fn, context);
+        listeners.push([fn, context]);
+    };
+
+    /**
+     * Unsubscribe from all errors
+     * @method un
+     * @param {function} fn 
+     * @param {object} context 
+     */
+    error.un = function(fn, context) {
+        var i, l;
+        for (i = 0, l = listeners.length; i < l; i++) {
+            if (listeners[i][0] === fn && listeners[i][1] === context) {
+                listeners.splice(i, 1);
+                break;
+            }
+        }
+    };
+
+    return error;
+}());
+
+
+
+/**
+ * Check if given value is a function
+ * @function isFunction
+ * @param {*} value 
+ * @returns {boolean}
+ */
 function isFunction(value) {
     return typeof value == 'function';
 };
 
 
 
+
+var lib_ObservableEvent = MetaphorJs.lib.ObservableEvent = (function(){
 
 /**
  * This class is private - you can't create an event other than via Observable.
@@ -510,7 +619,7 @@ extend(ObservableEvent.prototype, {
         var args;
 
         if (l.append || l.prepend) {
-            args    = slice.call(triggerArgs);
+            args    = triggerArgs.slice();
             if (l.prepend) {
                 args    = l.prepend.concat(args);
             }
@@ -539,6 +648,7 @@ extend(ObservableEvent.prototype, {
             expectPromises  = self.expectPromises,
             keepPromiseOrder= self.keepPromiseOrder,
             results         = [],
+            origArgs        = toArray(arguments),
             prevPromise,
             resPromise,
             args, 
@@ -549,7 +659,7 @@ extend(ObservableEvent.prototype, {
         }
 
         if (self.autoTrigger) {
-            self.lastTrigger = slice.call(arguments);
+            self.lastTrigger = origArgs.slice();
         }
 
         if (listeners.length === 0) {
@@ -567,7 +677,7 @@ extend(ObservableEvent.prototype, {
         }
         else {
             // create a snapshot of listeners list
-            q = slice.call(listeners);
+            q = listeners.slice();
         }
 
         if (expectPromises && rr === "last") {
@@ -584,7 +694,7 @@ extend(ObservableEvent.prototype, {
                 continue;
             }
 
-            args = self._prepareArgs(l, arguments);
+            args = self._prepareArgs(l, origArgs);
 
             if (filter && filter.call(filterContext, l, args, self) === false) {
                 continue;
@@ -616,7 +726,7 @@ extend(ObservableEvent.prototype, {
                             
                             return l.fn.apply(l.context, args);
                         }
-                    }(l, rr, slice.call(arguments));
+                    }(l, rr, origArgs.slice());
 
                     if (prevPromise) {
                         res = prevPromise.then(resolver);
@@ -625,9 +735,7 @@ extend(ObservableEvent.prototype, {
                         res = l.fn.apply(l.context, args);
                     }
 
-                    res.catch(function(err){
-                        console.log(err);
-                    });
+                    res.catch(error);
                 }
                 else {
                     res = l.fn.apply(l.context, args);
@@ -672,7 +780,7 @@ extend(ObservableEvent.prototype, {
                     }
                     else if (rr === "pipe") {
                         ret = res;
-                        arguments[0] = res;
+                        origArgs[0] = res;
                     }
                     else if (rr === "last") {
                         ret = res;
@@ -725,12 +833,13 @@ extend(ObservableEvent.prototype, {
     }
 }, true, false);
 
+return ObservableEvent;
+}());
 
 
 
 
-
-
+MetaphorJs.lib.Observable = (function(){
 
 /**
  * @description A javascript event system implementing multiple patterns: 
@@ -807,13 +916,13 @@ extend(Observable.prototype, {
      *      to the next promise.
      *  }
      * }
-     * @returns {ObservableEvent}
+     * @returns {lib_ObservableEvent}
      */
     createEvent: function(name, options) {
         name = name.toLowerCase();
         var events  = this.events;
         if (!events[name]) {
-            events[name] = new ObservableEvent(name, options);
+            events[name] = new lib_ObservableEvent(name, options);
         }
         return events[name];
     },
@@ -822,7 +931,7 @@ extend(Observable.prototype, {
     * @method
     * @access public
     * @param {string} name Event name
-    * @return {ObservableEvent|undefined}
+    * @return {lib_ObservableEvent|undefined}
     */
     getEvent: function(name) {
         name = name.toLowerCase();
@@ -869,7 +978,7 @@ extend(Observable.prototype, {
         name = name.toLowerCase();
         var events  = this.events;
         if (!events[name]) {
-            events[name] = new ObservableEvent(name);
+            events[name] = new lib_ObservableEvent(name);
         }
         return events[name].on(fn, context, options);
     },
@@ -1026,7 +1135,7 @@ extend(Observable.prototype, {
 
         if (events[name]) {
             e = events[name];
-            res = e.trigger.apply(e, slice.call(arguments, 1));
+            res = e.trigger.apply(e, toArray(arguments).slice(1));
         }
 
         // trigger * event with current event name
@@ -1160,7 +1269,7 @@ extend(Observable.prototype, {
     }
 }, true, false);
 
-
-
-module.exports = Observable;
-/* BUNDLE END 0MR */
+return Observable;
+}());
+module.exports = MetaphorJs.lib.Observable;
+/* BUNDLE END 0QF */
