@@ -838,6 +838,7 @@ return ObservableEvent;
 }());
 
 
+    
 
 
 var lib_Observable = MetaphorJs.lib.Observable = (function(){

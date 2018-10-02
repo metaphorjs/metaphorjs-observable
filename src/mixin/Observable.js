@@ -1,6 +1,6 @@
+require("../lib/Observable.js");
 
-var lib_Observable = require("../lib/Observable.js"),
-    MetaphorJs = require("metaphorjs-shared/src/MetaphorJs.js"),
+var MetaphorJs = require("metaphorjs-shared/src/MetaphorJs.js"),
     extend = require("metaphorjs-shared/src/func/extend.js");
 
 /**
@@ -30,7 +30,7 @@ module.exports = MetaphorJs.mixin.Observable = {
      * @type {object} {
      *      Override this to define event properties. 
      *      Object's key is event name, value - either returnResult or 
-     *      options object. See {@link class:Observable.createEvent}
+     *      options object. See {@link class:MetaphorJs.lib.Observable.createEvent}
      * }
      */
     $$events: null,
@@ -51,7 +51,7 @@ module.exports = MetaphorJs.mixin.Observable = {
      */
     $beforeInit: function(cfg) {
         var self = this;
-        self.$$observable = new lib_Observable;
+        self.$$observable = new MetaphorJs.lib.Observable;
         self.$initObservable(cfg);
     },
 

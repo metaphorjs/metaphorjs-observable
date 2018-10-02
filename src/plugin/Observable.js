@@ -1,11 +1,12 @@
 
 var cls = require("metaphorjs-class/src/cls.js"),
-    MetaphorJs = require("metaphorjs-shared/src/MetaphorJs.js"),
-    mixin_Observable = require("../mixin/Observable.js");
+    MetaphorJs = require("metaphorjs-shared/src/MetaphorJs.js");
+
+require("../mixin/Observable.js");
 
 module.exports = MetaphorJs.plugin.Observable = cls({
 
-    $mixins: [mixin_Observable],
+    $mixins: [MetaphorJs.mixin.Observable],
 
     $init: function(cmp) {
         cmp.$implement({

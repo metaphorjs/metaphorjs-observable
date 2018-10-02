@@ -2,9 +2,9 @@
 var bind = require("metaphorjs-shared/src/func/bind.js"),
     extend = require("metaphorjs-shared/src/func/extend.js"),
     toArray = require("metaphorjs-shared/src/func/toArray.js"),
-    MetaphorJs = require("metaphorjs-shared/src/MetaphorJs.js"),
-    lib_ObservableEvent = require("./ObservableEvent.js");
-
+    MetaphorJs = require("metaphorjs-shared/src/MetaphorJs.js");
+    
+require("./ObservableEvent.js");
 
 module.exports = MetaphorJs.lib.Observable = (function(){
 
@@ -83,13 +83,13 @@ extend(Observable.prototype, {
      *      to the next promise.
      *  }
      * }
-     * @returns {lib_ObservableEvent}
+     * @returns {MetaphorJs.lib.ObservableEvent}
      */
     createEvent: function(name, options) {
         name = name.toLowerCase();
         var events  = this.events;
         if (!events[name]) {
-            events[name] = new lib_ObservableEvent(name, options);
+            events[name] = new MetaphorJs.lib.ObservableEvent(name, options);
         }
         return events[name];
     },
@@ -98,7 +98,7 @@ extend(Observable.prototype, {
     * @method
     * @access public
     * @param {string} name Event name
-    * @return {lib_ObservableEvent|undefined}
+    * @return {MetaphorJs.lib.ObservableEvent|undefined}
     */
     getEvent: function(name) {
         name = name.toLowerCase();
@@ -145,7 +145,7 @@ extend(Observable.prototype, {
         name = name.toLowerCase();
         var events  = this.events;
         if (!events[name]) {
-            events[name] = new lib_ObservableEvent(name);
+            events[name] = new MetaphorJs.lib.ObservableEvent(name);
         }
         return events[name].on(fn, context, options);
     },
