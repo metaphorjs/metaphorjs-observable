@@ -335,7 +335,7 @@ var lib_ObservableEvent = MetaphorJs.lib.ObservableEvent = (function(){
 /**
  * This class is private - you can't create an event other than via Observable.
  * See {@link class:Observable} reference.
- * @class ObservableEvent
+ * @class MetaphorJs.lib.ObservableEvent
  * @private
  */
 var ObservableEvent = function(name, options) {
@@ -854,7 +854,7 @@ MetaphorJs.lib.Observable = (function(){
  * @description Pipe:
  * @code src-docs/examples/pipe.js
  *
- * @class Observable
+ * @class MetaphorJs.lib.Observable
  * @author Ivan Kuindzhi
  */
 var Observable = function() {

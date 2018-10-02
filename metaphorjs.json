@@ -41,10 +41,9 @@
             ],
             "options": {
                 "wrap": true,
-                "global": true,
-                "expose": [
-                    {"name": "lib_Observable", "as": "Observable"}
-                ]
+                "global": {
+                    "expose": "MetaphorJs"
+                }
             }
         },
 
