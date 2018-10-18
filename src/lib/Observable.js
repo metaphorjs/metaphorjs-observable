@@ -133,12 +133,12 @@ extend(Observable.prototype, {
     *           Start calling handler after this number of calls. Starts from 1
     *           @default 1
     *       }
-        *      @type {[]} append Append parameters
-        *      @type {[]} prepend Prepend parameters
-        *      @type {bool} allowDupes allow the same handler twice
-        *      @type {bool|int} async run event asynchronously. If event was
-        *                      created with <code>expectPromises: true</code>, 
-        *                      this option is ignored.
+    *       @type {array} append Append parameters
+    *       @type {array} prepend Prepend parameters
+    *       @type {bool} allowDupes allow the same handler twice
+    *       @type {bool|int} async run event asynchronously. If event was
+    *                      created with <code>expectPromises: true</code>, 
+    *                      this option is ignored.
     * }
     */
     on: function(name, fn, context, options) {
