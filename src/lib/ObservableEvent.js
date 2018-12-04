@@ -342,6 +342,9 @@ extend(ObservableEvent.prototype, {
         }
 
         if (listeners.length === 0) {
+            if (rr === "pipe") {
+                return origArgs[0];
+            }
             return null;
         }
 
