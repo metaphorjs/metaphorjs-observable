@@ -1,6 +1,8 @@
 
+require("../../metaphorjs/dev/env.js");
+
 var assert = require("assert"),
-    Observable = require("../dist/metaphorjs.observable.npm.js"),
+    Observable = require("../src/lib/Observable.js"),
     util = require("./_util");
 
 describe("Observable", function(){
@@ -90,6 +92,30 @@ describe("Observable", function(){
         o.trigger("event");
 
         assert.deepStrictEqual([1], triggered);
+    });
+
+    it("should unsubscribe dupes correctly", function() {
+
+        var SomeClass = function(){},
+            res = 0;
+        SomeClass.prototype.handler = function(){
+            res++;
+        };
+
+        var h1 = new SomeClass,
+            h2 = new SomeClass,
+            h3 = new SomeClass,
+            o = new Observable;
+
+        o.on("event", h1.handler, h1);
+        o.on("event", h2.handler, h2);
+        o.on("event", h3.handler, h3);
+
+        o.trigger("event");
+        o.un("event", h3.handler, h3);
+        o.trigger("event");
+
+        assert.strictEqual(5, res, "handlers should've been called 5 times");
     });
 });
 

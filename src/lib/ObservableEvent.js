@@ -26,7 +26,8 @@ var ObservableEvent = function(name, options) {
     self.hash           = nextUid();
     self.uni            = '$$' + name + '_' + self.hash;
     self.suspended      = false;
-    self.lid            = 0;
+    self.lid            = 0; // listener id
+    self.fid            = 0; // function id (same function can be different listeners)
 
     if (typeof options === "object" && options !== null) {
         extend(self, options, true, false);
@@ -46,6 +47,7 @@ extend(ObservableEvent.prototype, {
     uni: null,
     suspended: false,
     lid: null,
+    fid: null,
     returnResult: null,
     autoTrigger: null,
     lastTrigger: null,
@@ -92,15 +94,16 @@ extend(ObservableEvent.prototype, {
 
         var self    = this,
             uni     = self.uni,
-            id      = fn[uni] || ++self.lid,
-            ctxUni  = uni + "_" + id,
+            lid     = ++self.lid,
+            fid     = fn[uni] || ++self.fid,
+            ctxUni  = uni + "_" + fid,
             first   = options.first || false;
 
         if (fn[uni] && (!context || context[ctxUni]) && !options.allowDupes) {
             return null;
         }
         if (!fn[uni]) {
-            fn[uni]  = id;
+            fn[uni]  = fid;
         }
         if (context && !context[ctxUni]) {
             context[ctxUni] = true;
@@ -109,7 +112,8 @@ extend(ObservableEvent.prototype, {
         var e = {
             fn:         fn,
             context:    context,
-            id:         id,
+            id:         lid,
+            fid:        fid,
             async:      false,
             called:     0, // how many times the function was triggered
             limit:      0, // how many times the function is allowed to trigger
@@ -132,12 +136,12 @@ extend(ObservableEvent.prototype, {
             self.listeners.push(e);
         }
 
-        self.map[id] = e;
+        self.map[lid] = e;
 
         if (self.autoTrigger && self.lastTrigger && !self.suspended) {
             var prevFilter = self.triggerFilter;
             self.triggerFilter = function(l){
-                if (l.id === id) {
+                if (l.id === lid) {
                     return prevFilter ? prevFilter(l) !== false : true;
                 }
                 return false;
@@ -146,7 +150,7 @@ extend(ObservableEvent.prototype, {
             self.triggerFilter = prevFilter;
         }
 
-        return id;
+        return lid;
     },
 
     /**
@@ -174,26 +178,31 @@ extend(ObservableEvent.prototype, {
             inx         = -1,
             uni         = self.uni,
             listeners   = self.listeners,
-            id;
+            fid, lid;
 
         if (fn == parseInt(fn)) {
-            id      = parseInt(fn);
+            lid = parseInt(fn);
+            if (!self.map[lid]) {
+                return false;
+            }
+            fid = self.map[lid].fid;
         }
         else {
-            id      = fn[uni];
+            fid = fn[uni];
         }
 
-        if (!id) {
+        if (!fid) {
             return false;
         }
 
-        var ctxUni  = uni + "_" + id;
+        var ctxUni  = uni + "_" + fid;
         context     = context || null;
 
         for (var i = 0, len = listeners.length; i < len; i++) {
-            if (listeners[i].id === id && 
+            if (listeners[i].fid === fid && 
                 listeners[i].context === context) {
                 inx = i;
+                lid = listeners[i].id;
                 delete fn[uni];
                 if (context) {
                     delete context[ctxUni];
@@ -207,7 +216,7 @@ extend(ObservableEvent.prototype, {
         }
 
         listeners.splice(inx, 1);
-        delete self.map[id];
+        delete self.map[lid];
         return true;
     },
 
@@ -226,25 +235,25 @@ extend(ObservableEvent.prototype, {
 
         var self    = this,
             listeners   = self.listeners,
-            id;
+            fid;
 
         if (fn) {
 
             if (!isFunction(fn)) {
-                id  = parseInt(fn);
+                fid  = parseInt(fn);
             }
             else {
-                id  = fn[self.uni];
+                fid  = fn[self.uni];
             }
 
-            if (!id) {
+            if (!fid) {
                 return false;
             }
 
-            var ctxUni  = self.uni + "_" + id;
+            var ctxUni  = self.uni + "_" + fid;
 
             for (var i = 0, len = listeners.length; i < len; i++) {
-                if (listeners[i].id === id) {
+                if (listeners[i].fid === fid) {
                     if (!context || context[ctxUni]) {
                         return true;
                     }
@@ -263,9 +272,9 @@ extend(ObservableEvent.prototype, {
      * @method
      */
     removeAllListeners: function() {
-        var self    = this,
-            listeners = self.listeners,
-            uni     = self.uni,
+        var self        = this,
+            listeners   = self.listeners,
+            uni         = self.uni,
             i, len, ctxUni;
 
         for (i = 0, len = listeners.length; i < len; i++) {
@@ -341,6 +350,8 @@ extend(ObservableEvent.prototype, {
             self.lastTrigger = origArgs.slice();
         }
 
+        // in pipe mode if there is no listeners,
+        // we just return piped value
         if (listeners.length === 0) {
             if (rr === "pipe") {
                 return origArgs[0];
