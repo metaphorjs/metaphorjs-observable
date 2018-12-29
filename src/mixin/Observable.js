@@ -62,40 +62,7 @@ module.exports = MetaphorJs.mixin.Observable = {
      * @param {object} cfg
      */
     $initObservable: function(cfg) {
-
-        var self    = this,
-            obs     = self.$$observable,
-            i;
-
-        if (cfg && cfg.callback) {
-            var ls = cfg.callback,
-                context = ls.context || ls.scope || ls.$context,
-                events = extend({}, self.$$events, ls.$events, true, false);
-
-            for (i in events) {
-                obs.createEvent(i, events[i]);
-            }
-
-            ls.context = null;
-            ls.scope = null;
-
-            for (i in ls) {
-                if (ls[i]) {
-                    obs.on(i, ls[i], context || self);
-                }
-            }
-
-            cfg.callback = null;
-
-            if (context) {
-                self.$$callbackContext = context;
-            }
-        }
-        else if (self.$$events) {
-            for (i in self.$$events) {
-                obs.createEvent(i, self.$$events[i]);
-            }
-        }
+        MetaphorJs.lib.Observable.$initHost(this, cfg, this.$$observable);
     },
 
     /**

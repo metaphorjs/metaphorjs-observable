@@ -186,10 +186,11 @@ extend(Observable.prototype, {
      * @code src-docs/examples/relay.js
      * @param {object} eventSource
      * @param {string} eventName
+     * @param {string} triggerName
      */
-    relayEvent: function(eventSource, eventName) {
+    relayEvent: function(eventSource, eventName, triggerName) {
         eventSource.on(eventName, this.trigger, this, {
-            prepend: eventName === "*" ? null : [eventName]
+            prepend: eventName === "*" ? null : [triggerName || eventName]
         });
     },
 
@@ -435,6 +436,48 @@ extend(Observable.prototype, {
 
     }
 }, true, false);
+
+
+Observable.$initHost = function(host, hostCfg, observable)  {
+    var i;
+
+    if (hostCfg && hostCfg.callback) {
+        var ls = hostCfg.callback,
+            context = ls.context || ls.scope || ls.$context,
+            events = extend({}, host.$$events, ls.$events, true, false);
+
+        for (i in events) {
+            host.createEvent ? 
+                host.createEvent(i, events[i]) :
+                observable.createEvent(i, events[i]);
+        }
+
+        ls.context = null;
+        ls.scope = null;
+
+        for (i in ls) {
+            if (ls[i]) {
+                host.on ?
+                    host.on(i, ls[i], context || host) :
+                    observable.on(i, ls[i], context || host);
+            }
+        }
+
+        hostCfg.callback = null;
+
+        if (context) {
+            host.$$callbackContext = context;
+        }
+    }
+    else if (host.$$events) {
+        for (i in host.$$events) {
+            host.createEvent ?
+                host.createEvent(i, host.$$events[i]) :
+                observable.createEvent(i, host.$$events[i]);
+        }
+    }
+};
+
 
 return Observable;
 }());
