@@ -1,7 +1,6 @@
 require("../lib/Observable.js");
 
-var MetaphorJs = require("metaphorjs-shared/src/MetaphorJs.js"),
-    extend = require("metaphorjs-shared/src/func/extend.js");
+var MetaphorJs = require("metaphorjs-shared/src/MetaphorJs.js");
 
 /**
  * @mixin MetaphorJs.mixin.Observable

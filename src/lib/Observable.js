@@ -438,28 +438,40 @@ extend(Observable.prototype, {
 }, true, false);
 
 
+var __createEvents = function(host, obs, events) {
+    for (var i in events) {
+        host.createEvent ?
+            host.createEvent(i, events[i]) :
+            obs.createEvent(i, events[i]);
+    }
+};
+
+var __on = function(host, obs, event, fn, context) {
+    host.on ?
+        host.on(event, fn, context || host) :
+        obs.on(event, fn, context || host);
+};
+
 Observable.$initHost = function(host, hostCfg, observable)  {
     var i;
 
+    if (host.$$events) {
+        __createEvents(host, observable, host.$$events);
+    }
+
     if (hostCfg && hostCfg.callback) {
         var ls = hostCfg.callback,
-            context = ls.context || ls.scope || ls.$context,
-            events = extend({}, host.$$events, ls.$events, true, false);
+            context = ls.context || ls.scope || ls.$context;
 
-        for (i in events) {
-            host.createEvent ? 
-                host.createEvent(i, events[i]) :
-                observable.createEvent(i, events[i]);
-        }
+        if (ls.$events)
+            __createEvents(host, observable, ls.$events);
 
         ls.context = null;
         ls.scope = null;
 
         for (i in ls) {
             if (ls[i]) {
-                host.on ?
-                    host.on(i, ls[i], context || host) :
-                    observable.on(i, ls[i], context || host);
+                __on(host, observable, i, ls[i], context);
             }
         }
 
@@ -467,13 +479,6 @@ Observable.$initHost = function(host, hostCfg, observable)  {
 
         if (context) {
             host.$$callbackContext = context;
-        }
-    }
-    else if (host.$$events) {
-        for (i in host.$$events) {
-            host.createEvent ?
-                host.createEvent(i, host.$$events[i]) :
-                observable.createEvent(i, host.$$events[i]);
         }
     }
 };
