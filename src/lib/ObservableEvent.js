@@ -128,6 +128,9 @@ extend(ObservableEvent.prototype, {
         if (e.async === true) {
             e.async = 1;
         }
+        if (options.once) {
+            e.limit = 1;
+        }
 
         if (first) {
             self.listeners.unshift(e);
