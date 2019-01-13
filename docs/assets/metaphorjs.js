@@ -2603,14 +2603,14 @@ var error = (function(){
         var stack = (e ? e.stack : null) || (new Error).stack;
 
         if (typeof console != strUndef && console.error) {
-            async(function(){
+            //async(function(){
                 if (e) {
                     console.error(e);
                 }
                 if (stack) {
                     console.error(stack);
                 }
-            });
+            //});
         }
         else {
             throw e;
@@ -10167,7 +10167,7 @@ var Template = function(){
         deferRendering:     false,
         replace:            false,
         shadow:             false,
-        animate:            true,
+        animate:            false,
 
         passAttrs:          null,
 
@@ -10199,7 +10199,7 @@ var Template = function(){
             var node    = self.node,
                 tpl     = self.tpl || self.url;
 
-            node && removeAttr(node, "include");
+            //node && removeAttr(node, "include");
 
             if (self.replace && node) {
                 self._prevEl = window.document.createComment(self.id + " - start");
@@ -10425,10 +10425,17 @@ var Template = function(){
                 i, l;
 
             if (el) {
-                if (isArray(el)) {
-                    for (i = 0, l = el.length; i < l; i++) {
-                        el[i].parentNode.removeChild[el[i]];
+                if (self.replace) {
+                    var next = self._nextEl, prev = self._prevEl;
+                    while (prev.parentNode && prev.nextSibling && 
+                            prev.nextSibling !== next) {
+                        prev.parentNode.removeChild(prev.nextSibling);
                     }
+                    /*for (i = 0, l = el.length; i < l; i++) {
+                        if (el[i].parentNode) {
+                            el[i].parentNode.removeChild(el[i]);
+                        }
+                    }*/
                 }
                 else if (el.firstChild) {
                     while (el.firstChild) {
@@ -10456,7 +10463,7 @@ var Template = function(){
                         }
                     }
 
-                    el.parentNode.removeChild(el);
+                    el.parentNode && el.parentNode.removeChild(el);
                 }
 
                 self._nextEl.parentNode.insertBefore(frg, self._nextEl);
@@ -11809,12 +11816,14 @@ var ListRenderer = defineClass({
             r = rs[i];
             if (r && r.attached) {
                 r.attached = false;
-                if (!self.tagMode) {
-                    parent.removeChild(r.el);
+                if (!self.tagMode && r.el.parentNode) {
+                    r.el.parentNode.removeChild(r.el);
                 }
                 else {
                     for (j = 0, jl = r.el.length; j < jl; j++) {
-                        parent.removeChild(r.el[j]);
+                        if (r.el[j].parentNode) {
+                            r.el[j].parentNode.removeChild(r.el[j]);
+                        }
                     }
                 }
             }
@@ -17282,20 +17291,23 @@ Directive.registerTag("if", defineClass({
     $class: "Directive.tag.If",
     $extends: "Directive.attr.If",
     autoOnChange: false,
+    children: null,
+    childrenFrag: null,
 
     $init: function(scope, node, expr, renderer, attr) {
 
         var self    = this;
         
         self.children = toArray(node.childNodes);
+        self.childrenFrag = toFragment(self.children);
         expr = getAttr(node, "value");
 
         self.$super(scope, node, expr, renderer, attr);   
         
         if (node.parentNode) {
-            node.parentNode.removeChild(node);
+            node.parentNode.removeChild(node); 
         }
-        
+
         var val = self.watcher.getLastResult();
         self.onChange(val || false, undf);
     },
@@ -17310,15 +17322,23 @@ Directive.registerTag("if", defineClass({
             parent  = self.prevEl.parentNode;
 
         if (val) {
-            parent.insertBefore(toFragment(self.children), self.nextEl);
+            parent.insertBefore(self.childrenFrag, self.nextEl);
         }
         else if (!self.initial) {
-            var i, l;
-            for (i = 0, l = self.children.length; i < l; i++) {
-                if (parent.contains(self.children[i])) {
-                    parent.removeChild(self.children[i]);
-                }
+            var prev = self.prevEl, 
+                next = self.nextEl, 
+                children = [],
+                sib;
+
+            self.childrenFrag = window.document.createDocumentFragment();
+            while (prev.parentNode && prev.nextSibling && 
+                    prev.nextSibling !== next) {
+                sib = prev.nextSibling;
+                prev.parentNode.removeChild(sib);
+                children.push(sib);
+                self.childrenFrag.appendChild(sib);
             }
+            self.children = children;
         }
 
         if (self.initial) {
@@ -25087,8 +25107,8 @@ var generateTemplateNames = function(name){
 
     var list        = [],
         path        = name.split("."),
-        max         = path.length - 2,
-        last        = path.length - 1,
+        //max         = path.length - 3,
+        //last        = path.length - 1,
         exts        = [path[0], '*'],
         tmp, i, j, ext, e;
 
@@ -25098,14 +25118,15 @@ var generateTemplateNames = function(name){
         tmp = path.slice();
         tmp[0] = ext;
         list.push(tmp.join("."));
+        tmp[2] = "*";
+        list.push(tmp.join("."));
 
-        for (j = 1; j <= max; j++) {
-
+        /*for (j = 1; j <= max; j++) {
             for (i = last; i > last - j; i--) {
                 tmp[i] = "*";
                 list.push(tmp.join("."));
             }
-        }
+        }*/
     }
 
     return list.filter(function(value, index, self){
@@ -25295,7 +25316,6 @@ App.$extend({
     },
 
     goto: function(url) {
-        console.log(url)
         if (url.substr(0,1) === '#') {
             window.location.hash = url;
         }
@@ -25467,6 +25487,17 @@ View.$extend({
 });
 
 
+nsAdd("filter.getChildren", function(item, scope, type) {
+    var i, l;
+    for (i = 0, l = item.children.length; i < l; i++) {
+        if (item.children[i].type == type) {
+            return item.children[i].items;
+        }
+    }
+    return [];
+});
+
+
 nsAdd("filter.highlightJson", function(input, scope, prop) {
     
     var hl = Prism.highlight(input, Prism.languages.javascript),
@@ -25528,6 +25559,18 @@ var globalCache = Cache.global();
 
 
 
+/**
+ * @group hook
+ * @function 
+ * Extract part of comment between curly brakets
+ * @param {string} content Full comment
+ * @param {int} start Start position
+ * @param {bool} backwards Backward lookup
+ * @param {bool} returnIndexes Return array with start and last index
+ * @param {string|array} brakets {
+ *  @default '{}'
+ * }
+ */
 var getCurly = globalCache.add("file.*.comment.getCurly", 
     function(content, start, backwards, returnIndexes, brakets) {
 

@@ -1,16 +1,15 @@
+require("../lib/Observable.js");
 
-var Observable = require("../lib/Observable.js"),
-    ns = require("metaphorjs-namespace/src/var/ns.js"),
-    extend = require("metaphorjs/src/func/extend.js");
+var MetaphorJs = require("metaphorjs-shared/src/MetaphorJs.js");
 
 /**
- * @mixin Observable
+ * @mixin MetaphorJs.mixin.Observable
  * @description Mixin adds observable features to the host object.
  *              It adds 'callback' option to the host config. See $beforeInit.
  *              Mixin is designed for MetaphorJs class system.
- * @code examples/mixin.js
+ * @code src-docs/examples/mixin.js
  */
-module.exports = ns.register("mixin.Observable", {
+module.exports = MetaphorJs.mixin.Observable = {
 
     /**
      * @private
@@ -30,7 +29,7 @@ module.exports = ns.register("mixin.Observable", {
      * @type {object} {
      *      Override this to define event properties. 
      *      Object's key is event name, value - either returnResult or 
-     *      options object. See {@link class:Observable.createEvent}
+     *      options object. See {@link class:MetaphorJs.lib.Observable.createEvent}
      * }
      */
     $$events: null,
@@ -51,7 +50,7 @@ module.exports = ns.register("mixin.Observable", {
      */
     $beforeInit: function(cfg) {
         var self = this;
-        self.$$observable = new Observable;
+        self.$$observable = new MetaphorJs.lib.Observable;
         self.$initObservable(cfg);
     },
 
@@ -62,40 +61,7 @@ module.exports = ns.register("mixin.Observable", {
      * @param {object} cfg
      */
     $initObservable: function(cfg) {
-
-        var self    = this,
-            obs     = self.$$observable,
-            i;
-
-        if (cfg && cfg.callback) {
-            var ls = cfg.callback,
-                context = ls.context || ls.scope || ls.$context,
-                events = extend({}, self.$$events, ls.$events, true, false);
-
-            for (i in events) {
-                obs.createEvent(i, events[i]);
-            }
-
-            ls.context = null;
-            ls.scope = null;
-
-            for (i in ls) {
-                if (ls[i]) {
-                    obs.on(i, ls[i], context || self);
-                }
-            }
-
-            cfg.callback = null;
-
-            if (context) {
-                self.$$callbackContext = context;
-            }
-        }
-        else if (self.$$events) {
-            for (i in self.$$events) {
-                obs.createEvent(i, self.$$events[i]);
-            }
-        }
+        MetaphorJs.lib.Observable.$initHost(this, cfg, this.$$observable);
     },
 
     /**
@@ -151,7 +117,7 @@ module.exports = ns.register("mixin.Observable", {
     $afterDestroy: function() {
         var self = this;
         self.$$observable.trigger("destroy", self);
-        self.$$observable.destroy();
+        self.$$observable.$destroy();
         self.$$observable = null;
     }
-});
+};
