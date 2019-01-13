@@ -1,11 +1,17 @@
-/* BUNDLE START 0QF */
+/* BUNDLE START 004 */
 "use strict";
+
+var MetaphorJsPrebuilt = {"templates":{},"templateOptions":{},"expressionOpts":{}}
+MetaphorJsPrebuilt['funcs'] = {
+
+};
 
 /**
  * Bind function to context (Function.bind wrapper)
  * @function bind
- * @param {Function} fn
+ * @param {function} fn
  * @param {*} context
+ * @returns {function}
  */
 function bind(fn, context){
     return fn.bind(context);
@@ -165,7 +171,15 @@ function extend() {
         override    = args.pop();
     }
 
-    while (src = args.shift()) {
+    while (args.length) {
+        
+        // src can be empty
+        src = args.shift();
+        
+        if (!src) {
+            continue;
+        }
+
         for (k in src) {
 
             if (src.hasOwnProperty(k) && (value = src[k]) !== undf) {
@@ -203,7 +217,12 @@ function extend() {
 var MetaphorJs = {
     plugin: {},
     mixin: {},
-    lib: {}
+    lib: {},
+    dom: {},
+    regexp: {},
+    browser: {},
+    app: {},
+    prebuilt: typeof MetaphorJsPrebuilt !== "undefined" ? MetaphorJsPrebuilt : null
 };
 
 var nextUid = (function(){
@@ -347,7 +366,8 @@ var ObservableEvent = function(name, options) {
     self.hash           = nextUid();
     self.uni            = '$$' + name + '_' + self.hash;
     self.suspended      = false;
-    self.lid            = 0;
+    self.lid            = 0; // listener id
+    self.fid            = 0; // function id (same function can be different listeners)
 
     if (typeof options === "object" && options !== null) {
         extend(self, options, true, false);
@@ -367,6 +387,7 @@ extend(ObservableEvent.prototype, {
     uni: null,
     suspended: false,
     lid: null,
+    fid: null,
     returnResult: null,
     autoTrigger: null,
     lastTrigger: null,
@@ -413,15 +434,16 @@ extend(ObservableEvent.prototype, {
 
         var self    = this,
             uni     = self.uni,
-            id      = fn[uni] || ++self.lid,
-            ctxUni  = uni + "_" + id,
+            lid     = ++self.lid,
+            fid     = fn[uni] || ++self.fid,
+            ctxUni  = uni + "_" + fid,
             first   = options.first || false;
 
         if (fn[uni] && (!context || context[ctxUni]) && !options.allowDupes) {
             return null;
         }
         if (!fn[uni]) {
-            fn[uni]  = id;
+            fn[uni]  = fid;
         }
         if (context && !context[ctxUni]) {
             context[ctxUni] = true;
@@ -430,7 +452,8 @@ extend(ObservableEvent.prototype, {
         var e = {
             fn:         fn,
             context:    context,
-            id:         id,
+            id:         lid,
+            fid:        fid,
             async:      false,
             called:     0, // how many times the function was triggered
             limit:      0, // how many times the function is allowed to trigger
@@ -445,6 +468,9 @@ extend(ObservableEvent.prototype, {
         if (e.async === true) {
             e.async = 1;
         }
+        if (options.once) {
+            e.limit = 1;
+        }
 
         if (first) {
             self.listeners.unshift(e);
@@ -453,12 +479,12 @@ extend(ObservableEvent.prototype, {
             self.listeners.push(e);
         }
 
-        self.map[id] = e;
+        self.map[lid] = e;
 
         if (self.autoTrigger && self.lastTrigger && !self.suspended) {
             var prevFilter = self.triggerFilter;
             self.triggerFilter = function(l){
-                if (l.id === id) {
+                if (l.id === lid) {
                     return prevFilter ? prevFilter(l) !== false : true;
                 }
                 return false;
@@ -467,7 +493,7 @@ extend(ObservableEvent.prototype, {
             self.triggerFilter = prevFilter;
         }
 
-        return id;
+        return lid;
     },
 
     /**
@@ -495,26 +521,31 @@ extend(ObservableEvent.prototype, {
             inx         = -1,
             uni         = self.uni,
             listeners   = self.listeners,
-            id;
+            fid, lid;
 
         if (fn == parseInt(fn)) {
-            id      = parseInt(fn);
+            lid = parseInt(fn);
+            if (!self.map[lid]) {
+                return false;
+            }
+            fid = self.map[lid].fid;
         }
         else {
-            id      = fn[uni];
+            fid = fn[uni];
         }
 
-        if (!id) {
+        if (!fid) {
             return false;
         }
 
-        var ctxUni  = uni + "_" + id;
+        var ctxUni  = uni + "_" + fid;
         context     = context || null;
 
         for (var i = 0, len = listeners.length; i < len; i++) {
-            if (listeners[i].id === id && 
+            if (listeners[i].fid === fid && 
                 listeners[i].context === context) {
                 inx = i;
+                lid = listeners[i].id;
                 delete fn[uni];
                 if (context) {
                     delete context[ctxUni];
@@ -528,7 +559,7 @@ extend(ObservableEvent.prototype, {
         }
 
         listeners.splice(inx, 1);
-        delete self.map[id];
+        delete self.map[lid];
         return true;
     },
 
@@ -547,25 +578,25 @@ extend(ObservableEvent.prototype, {
 
         var self    = this,
             listeners   = self.listeners,
-            id;
+            fid;
 
         if (fn) {
 
             if (!isFunction(fn)) {
-                id  = parseInt(fn);
+                fid  = parseInt(fn);
             }
             else {
-                id  = fn[self.uni];
+                fid  = fn[self.uni];
             }
 
-            if (!id) {
+            if (!fid) {
                 return false;
             }
 
-            var ctxUni  = self.uni + "_" + id;
+            var ctxUni  = self.uni + "_" + fid;
 
             for (var i = 0, len = listeners.length; i < len; i++) {
-                if (listeners[i].id === id) {
+                if (listeners[i].fid === fid) {
                     if (!context || context[ctxUni]) {
                         return true;
                     }
@@ -584,9 +615,9 @@ extend(ObservableEvent.prototype, {
      * @method
      */
     removeAllListeners: function() {
-        var self    = this,
-            listeners = self.listeners,
-            uni     = self.uni,
+        var self        = this,
+            listeners   = self.listeners,
+            uni         = self.uni,
             i, len, ctxUni;
 
         for (i = 0, len = listeners.length; i < len; i++) {
@@ -662,7 +693,12 @@ extend(ObservableEvent.prototype, {
             self.lastTrigger = origArgs.slice();
         }
 
+        // in pipe mode if there is no listeners,
+        // we just return piped value
         if (listeners.length === 0) {
+            if (rr === "pipe") {
+                return origArgs[0];
+            }
             return null;
         }
 
@@ -967,12 +1003,12 @@ extend(Observable.prototype, {
     *           Start calling handler after this number of calls. Starts from 1
     *           @default 1
     *       }
-        *      @type {[]} append Append parameters
-        *      @type {[]} prepend Prepend parameters
-        *      @type {bool} allowDupes allow the same handler twice
-        *      @type {bool|int} async run event asynchronously. If event was
-        *                      created with <code>expectPromises: true</code>, 
-        *                      this option is ignored.
+    *       @type {array} append Append parameters
+    *       @type {array} prepend Prepend parameters
+    *       @type {bool} allowDupes allow the same handler twice
+    *       @type {bool|int} async run event asynchronously. If event was
+    *                      created with <code>expectPromises: true</code>, 
+    *                      this option is ignored.
     * }
     */
     on: function(name, fn, context, options) {
@@ -1020,10 +1056,11 @@ extend(Observable.prototype, {
      * @code src-docs/examples/relay.js
      * @param {object} eventSource
      * @param {string} eventName
+     * @param {string} triggerName
      */
-    relayEvent: function(eventSource, eventName) {
+    relayEvent: function(eventSource, eventName, triggerName) {
         eventSource.on(eventName, this.trigger, this, {
-            prepend: eventName === "*" ? null : [eventName]
+            prepend: eventName === "*" ? null : [triggerName || eventName]
         });
     },
 
@@ -1232,45 +1269,57 @@ extend(Observable.prototype, {
         for (i in self) {
             self[i] = null;
         }
-    },
-
-    /**
-    * Although all methods are public there is getApi() method that allows you
-    * extending your own objects without overriding "destroy" (which you probably have)
-    * @code src-docs/examples/api.js
-    * @method
-    * @md-not-inheritable
-    * @returns object
-    */
-    getApi: function() {
-
-        var self    = this;
-
-        if (!self.api) {
-
-            var methods = [
-                    "createEvent", "getEvent", "on", "un", "once", "hasListener", "removeAllListeners",
-                    "trigger", "suspendEvent", "suspendAllEvents", "resumeEvent",
-                    "resumeAllEvents", "destroyEvent",
-                    "relayEvent", "unrelayEvent"
-                ],
-                api = {},
-                name;
-
-            for(var i =- 1, l = methods.length;
-                    ++i < l;
-                    name = methods[i],
-                    api[name] = bind(self[name], self)){}
-
-            self.api = api;
-        }
-
-        return self.api;
-
     }
 }, true, false);
+
+
+var __createEvents = function(host, obs, events) {
+    for (var i in events) {
+        host.createEvent ?
+            host.createEvent(i, events[i]) :
+            obs.createEvent(i, events[i]);
+    }
+};
+
+var __on = function(host, obs, event, fn, context) {
+    host.on ?
+        host.on(event, fn, context || host) :
+        obs.on(event, fn, context || host);
+};
+
+Observable.$initHost = function(host, hostCfg, observable)  {
+    var i;
+
+    if (host.$$events) {
+        __createEvents(host, observable, host.$$events);
+    }
+
+    if (hostCfg && hostCfg.callback) {
+        var ls = hostCfg.callback,
+            context = ls.context || ls.scope || ls.$context;
+
+        if (ls.$events)
+            __createEvents(host, observable, ls.$events);
+
+        ls.context = null;
+        ls.scope = null;
+
+        for (i in ls) {
+            if (ls[i]) {
+                __on(host, observable, i, ls[i], context);
+            }
+        }
+
+        hostCfg.callback = null;
+
+        if (context) {
+            host.$$callbackContext = context;
+        }
+    }
+};
+
 
 return Observable;
 }());
 module.exports = MetaphorJs.lib.Observable;
-/* BUNDLE END 0QF */
+/* BUNDLE END 004 */

@@ -399,41 +399,6 @@ extend(Observable.prototype, {
         for (i in self) {
             self[i] = null;
         }
-    },
-
-    /**
-    * Although all methods are public there is getApi() method that allows you
-    * extending your own objects without overriding "destroy" (which you probably have)
-    * @code src-docs/examples/api.js
-    * @method
-    * @md-not-inheritable
-    * @returns object
-    */
-    getApi: function() {
-
-        var self    = this;
-
-        if (!self.api) {
-
-            var methods = [
-                    "createEvent", "getEvent", "on", "un", "once", "hasListener", "removeAllListeners",
-                    "trigger", "suspendEvent", "suspendAllEvents", "resumeEvent",
-                    "resumeAllEvents", "destroyEvent",
-                    "relayEvent", "unrelayEvent"
-                ],
-                api = {},
-                name;
-
-            for(var i =- 1, l = methods.length;
-                    ++i < l;
-                    name = methods[i],
-                    api[name] = bind(self[name], self)){}
-
-            self.api = api;
-        }
-
-        return self.api;
-
     }
 }, true, false);
 
