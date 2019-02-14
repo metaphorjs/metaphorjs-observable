@@ -28,13 +28,16 @@ var ObservableEvent = function(name, options) {
     self.suspended      = false;
     self.lid            = 0; // listener id
     self.fid            = 0; // function id (same function can be different listeners)
-
+    //self.limit          = 0;
+    
     if (typeof options === "object" && options !== null) {
         extend(self, options, true, false);
     }
     else {
         self.returnResult = options;
     }
+
+    self.triggered      = 0;
 };
 
 
@@ -48,6 +51,8 @@ extend(ObservableEvent.prototype, {
     suspended: false,
     lid: null,
     fid: null,
+    limit: 0,
+    triggered: 0,
     returnResult: null,
     autoTrigger: null,
     lastTrigger: null,
@@ -348,6 +353,10 @@ extend(ObservableEvent.prototype, {
         if (self.suspended) {
             return null;
         }
+        if (self.limit > 0 && self.triggered >= self.limit) {
+            return null;
+        }
+        self.triggered++;
 
         if (self.autoTrigger) {
             self.lastTrigger = origArgs.slice();
