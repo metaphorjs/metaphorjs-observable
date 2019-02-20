@@ -447,6 +447,27 @@ Observable.$initHost = function(host, hostCfg, observable)  {
     }
 };
 
+Observable.$initHostConfig = function(host, config, scope, node) {
+    var msl = MetaphorJs.lib.Config.MODE_LISTENER,
+        ctx;
+    config.setDefaultMode("callbackContext", MetaphorJs.lib.Config.MODE_SINGLE);
+    config.eachProperty(function(name) {
+        if (name.substring(0,4) === 'on--') {
+            config.setMode(name, msl);
+            if (!ctx) {
+                if (scope.$app)
+                    ctx = config.get("callbackContext") ||
+                            (node ? scope.$app.getParentCmp(node) : null) ||
+                            scope.$app ||
+                            scope;
+                else 
+                    ctx = config.get("callbackContext") || scope;
+            }
+            host.on(name.substring(4), config.get(name), ctx);
+        }
+    });
+};
+
 
 return Observable;
 }());
