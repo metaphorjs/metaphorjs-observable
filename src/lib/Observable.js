@@ -134,6 +134,7 @@ extend(Observable.prototype, {
     *       }
     *       @type {array} append Append parameters
     *       @type {array} prepend Prepend parameters
+    *       @type {array} replaceArgs Replace parameters
     *       @type {bool} allowDupes allow the same handler twice
     *       @type {bool|int} async run event asynchronously. If event was
     *                      created with <code>expectPromises: true</code>, 

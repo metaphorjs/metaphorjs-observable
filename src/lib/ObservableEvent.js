@@ -125,7 +125,8 @@ extend(ObservableEvent.prototype, {
             start:      1, // from which attempt it is allowed to trigger the function
             count:      0, // how many attempts to trigger the function was made
             append:     null, // append parameters
-            prepend:    null // prepend parameters
+            prepend:    null, // prepend parameters
+            replaceArgs:null // replace parameters
         };
 
         extend(e, options, true, false);
@@ -322,6 +323,9 @@ extend(ObservableEvent.prototype, {
             if (l.append) {
                 args    = args.concat(l.append);
             }
+        }
+        else if (l.replaceArgs) {
+            args = [].concat(l.replaceArgs);
         }
         else {
             args = triggerArgs;
