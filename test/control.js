@@ -23,6 +23,38 @@ describe("Observable", function(){
         assert.deepStrictEqual([1, 2, 2], triggered);
     });
 
+    it("should relay * events", function(){
+
+        var o1 = new Observable;
+        var o2 = new Observable;
+        var triggered = [];
+        var l = util.listenerFactory("log-id", triggered);
+
+        o1.relayEvent(o2, "*");
+        o1.on("event1", l(1));
+        o1.on("event2", l(2));
+        o2.trigger("event1");
+        o2.trigger("event2");
+
+        assert.deepStrictEqual([1, 2], triggered);
+    });
+
+    it("should relay * events with prefix", function(){
+
+        var o1 = new Observable;
+        var o2 = new Observable;
+        var triggered = [];
+        var l = util.listenerFactory("log-id", triggered);
+
+        o1.relayEvent(o2, "*", null, "pfx-");
+        o1.on("pfx-event1", l(1));
+        o1.on("pfx-event2", l(2));
+        o2.trigger("event1");
+        o2.trigger("event2");
+
+        assert.deepStrictEqual([1, 2], triggered);
+    });
+
     it("should suspend and resume events", function(){
         var o = new Observable;
         var triggered = [];

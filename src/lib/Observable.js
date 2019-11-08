@@ -187,10 +187,20 @@ extend(Observable.prototype, {
      * @param {object} eventSource
      * @param {string} eventName
      * @param {string} triggerName
+     * @param {string} triggerNamePfx prefix all relayed event names
      */
-    relayEvent: function(eventSource, eventName, triggerName) {
+    relayEvent: function(eventSource, eventName, triggerName, triggerNamePfx) {
         eventSource.on(eventName, this.trigger, this, {
-            prepend: eventName === "*" ? null : [triggerName || eventName]
+            prepend: eventName === "*" ? 
+                        null: 
+                        // use provided new event name or original name
+                        [triggerName || eventName],
+            replaceArgs: eventName === "*" && triggerNamePfx ? 
+                            function(l, args) {
+                                args[0] = triggerNamePfx + args[0]
+                                return args;
+                            } : 
+                            null
         });
     },
 

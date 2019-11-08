@@ -313,19 +313,32 @@ extend(ObservableEvent.prototype, {
 
 
     _prepareArgs: function(l, triggerArgs) {
-        var args;
+        var args, prepend, append, repl;
 
         if (l.append || l.prepend) {
+            prepend = l.prepend;
+            append  = l.append;
             args    = triggerArgs.slice();
-            if (l.prepend) {
-                args    = l.prepend.concat(args);
+
+            if (prepend) {
+                if (typeof prepend === "function") {
+                    prepend = prepend(l, triggerArgs);
+                }
+                args    = prepend.concat(args);
             }
-            if (l.append) {
-                args    = args.concat(l.append);
+            if (append) {
+                if (typeof append === "function") {
+                    append = append(l, triggerArgs);
+                }
+                args    = args.concat(append);
             }
         }
         else if (l.replaceArgs) {
-            args = [].concat(l.replaceArgs);
+            repl = l.replaceArgs;
+            if (typeof repl === "function") {
+                repl = repl(l, triggerArgs);
+            }
+            args = [].concat(repl);
         }
         else {
             args = triggerArgs;
