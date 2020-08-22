@@ -1,6 +1,5 @@
 
-var bind = require("metaphorjs-shared/src/func/bind.js"),
-    extend = require("metaphorjs-shared/src/func/extend.js"),
+var extend = require("metaphorjs-shared/src/func/extend.js"),
     toArray = require("metaphorjs-shared/src/func/toArray.js"),
     MetaphorJs = require("metaphorjs-shared/src/MetaphorJs.js");
     
@@ -135,6 +134,7 @@ extend(Observable.prototype, {
     *       }
     *       @type {array} append Append parameters
     *       @type {array} prepend Prepend parameters
+    *       @type {array} replaceArgs Replace parameters
     *       @type {bool} allowDupes allow the same handler twice
     *       @type {bool|int} async run event asynchronously. If event was
     *                      created with <code>expectPromises: true</code>, 
@@ -187,10 +187,20 @@ extend(Observable.prototype, {
      * @param {object} eventSource
      * @param {string} eventName
      * @param {string} triggerName
+     * @param {string} triggerNamePfx prefix all relayed event names
      */
-    relayEvent: function(eventSource, eventName, triggerName) {
+    relayEvent: function(eventSource, eventName, triggerName, triggerNamePfx) {
         eventSource.on(eventName, this.trigger, this, {
-            prepend: eventName === "*" ? null : [triggerName || eventName]
+            prepend: eventName === "*" ? 
+                        null: 
+                        // use provided new event name or original name
+                        [triggerName || eventName],
+            replaceArgs: eventName === "*" && triggerNamePfx ? 
+                            function(l, args) {
+                                args[0] = triggerNamePfx + args[0]
+                                return args;
+                            } : 
+                            null
         });
     },
 
@@ -446,6 +456,27 @@ Observable.$initHost = function(host, hostCfg, observable)  {
             host.$$callbackContext = context;
         }
     }
+};
+
+Observable.$initHostConfig = function(host, config, scope, node) {
+    var msl = MetaphorJs.lib.Config.MODE_LISTENER,
+        ctx;
+    config.setDefaultMode("callbackContext", MetaphorJs.lib.Config.MODE_SINGLE);
+    config.eachProperty(function(name) {
+        if (name.substring(0,4) === 'on--') {
+            config.setMode(name, msl);
+            if (!ctx) {
+                if (scope.$app)
+                    ctx = config.get("callbackContext") ||
+                            (node ? scope.$app.getParentCmp(node) : null) ||
+                            scope.$app ||
+                            scope;
+                else 
+                    ctx = config.get("callbackContext") || scope;
+            }
+            host.on(name.substring(4), config.get(name), ctx);
+        }
+    });
 };
 
 

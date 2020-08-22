@@ -28,13 +28,16 @@ var ObservableEvent = function(name, options) {
     self.suspended      = false;
     self.lid            = 0; // listener id
     self.fid            = 0; // function id (same function can be different listeners)
-
+    //self.limit          = 0;
+    
     if (typeof options === "object" && options !== null) {
         extend(self, options, true, false);
     }
     else {
         self.returnResult = options;
     }
+
+    self.triggered      = 0;
 };
 
 
@@ -48,6 +51,8 @@ extend(ObservableEvent.prototype, {
     suspended: false,
     lid: null,
     fid: null,
+    limit: 0,
+    triggered: 0,
     returnResult: null,
     autoTrigger: null,
     lastTrigger: null,
@@ -120,7 +125,8 @@ extend(ObservableEvent.prototype, {
             start:      1, // from which attempt it is allowed to trigger the function
             count:      0, // how many attempts to trigger the function was made
             append:     null, // append parameters
-            prepend:    null // prepend parameters
+            prepend:    null, // prepend parameters
+            replaceArgs:null // replace parameters
         };
 
         extend(e, options, true, false);
@@ -307,16 +313,32 @@ extend(ObservableEvent.prototype, {
 
 
     _prepareArgs: function(l, triggerArgs) {
-        var args;
+        var args, prepend, append, repl;
 
         if (l.append || l.prepend) {
+            prepend = l.prepend;
+            append  = l.append;
             args    = triggerArgs.slice();
-            if (l.prepend) {
-                args    = l.prepend.concat(args);
+
+            if (prepend) {
+                if (typeof prepend === "function") {
+                    prepend = prepend(l, triggerArgs);
+                }
+                args    = prepend.concat(args);
             }
-            if (l.append) {
-                args    = args.concat(l.append);
+            if (append) {
+                if (typeof append === "function") {
+                    append = append(l, triggerArgs);
+                }
+                args    = args.concat(append);
             }
+        }
+        else if (l.replaceArgs) {
+            repl = l.replaceArgs;
+            if (typeof repl === "function") {
+                repl = repl(l, triggerArgs);
+            }
+            args = [].concat(repl);
         }
         else {
             args = triggerArgs;
@@ -348,6 +370,10 @@ extend(ObservableEvent.prototype, {
         if (self.suspended) {
             return null;
         }
+        if (self.limit > 0 && self.triggered >= self.limit) {
+            return null;
+        }
+        self.triggered++;
 
         if (self.autoTrigger) {
             self.lastTrigger = origArgs.slice();

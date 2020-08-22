@@ -1,17 +1,8 @@
 (function(){
-/* BUNDLE START 003 */
+/* BUNDLE START 004 */
 "use strict";
 
-/**
- * Bind function to context (Function.bind wrapper)
- * @function bind
- * @param {Function} fn
- * @param {*} context
- */
-function bind(fn, context){
-    return fn.bind(context);
-};
-
+var MetaphorJsPrebuilt = {}
 var undf = undefined;
 
 
@@ -166,7 +157,15 @@ function extend() {
         override    = args.pop();
     }
 
-    while (src = args.shift()) {
+    while (args.length) {
+        
+        // src can be empty
+        src = args.shift();
+        
+        if (!src) {
+            continue;
+        }
+
         for (k in src) {
 
             if (src.hasOwnProperty(k) && (value = src[k]) !== undf) {
@@ -204,7 +203,12 @@ function extend() {
 var MetaphorJs = {
     plugin: {},
     mixin: {},
-    lib: {}
+    lib: {},
+    dom: {},
+    regexp: {},
+    browser: {},
+    app: {},
+    prebuilt: typeof MetaphorJsPrebuilt !== "undefined" ? MetaphorJsPrebuilt : null
 };
 
 var nextUid = (function(){
@@ -348,14 +352,18 @@ var ObservableEvent = function(name, options) {
     self.hash           = nextUid();
     self.uni            = '$$' + name + '_' + self.hash;
     self.suspended      = false;
-    self.lid            = 0;
-
+    self.lid            = 0; // listener id
+    self.fid            = 0; // function id (same function can be different listeners)
+    //self.limit          = 0;
+    
     if (typeof options === "object" && options !== null) {
         extend(self, options, true, false);
     }
     else {
         self.returnResult = options;
     }
+
+    self.triggered      = 0;
 };
 
 
@@ -368,6 +376,9 @@ extend(ObservableEvent.prototype, {
     uni: null,
     suspended: false,
     lid: null,
+    fid: null,
+    limit: 0,
+    triggered: 0,
     returnResult: null,
     autoTrigger: null,
     lastTrigger: null,
@@ -414,15 +425,16 @@ extend(ObservableEvent.prototype, {
 
         var self    = this,
             uni     = self.uni,
-            id      = fn[uni] || ++self.lid,
-            ctxUni  = uni + "_" + id,
+            lid     = ++self.lid,
+            fid     = fn[uni] || ++self.fid,
+            ctxUni  = uni + "_" + fid,
             first   = options.first || false;
 
         if (fn[uni] && (!context || context[ctxUni]) && !options.allowDupes) {
             return null;
         }
         if (!fn[uni]) {
-            fn[uni]  = id;
+            fn[uni]  = fid;
         }
         if (context && !context[ctxUni]) {
             context[ctxUni] = true;
@@ -431,20 +443,25 @@ extend(ObservableEvent.prototype, {
         var e = {
             fn:         fn,
             context:    context,
-            id:         id,
+            id:         lid,
+            fid:        fid,
             async:      false,
             called:     0, // how many times the function was triggered
             limit:      0, // how many times the function is allowed to trigger
             start:      1, // from which attempt it is allowed to trigger the function
             count:      0, // how many attempts to trigger the function was made
             append:     null, // append parameters
-            prepend:    null // prepend parameters
+            prepend:    null, // prepend parameters
+            replaceArgs:null // replace parameters
         };
 
         extend(e, options, true, false);
 
         if (e.async === true) {
             e.async = 1;
+        }
+        if (options.once) {
+            e.limit = 1;
         }
 
         if (first) {
@@ -454,12 +471,12 @@ extend(ObservableEvent.prototype, {
             self.listeners.push(e);
         }
 
-        self.map[id] = e;
+        self.map[lid] = e;
 
         if (self.autoTrigger && self.lastTrigger && !self.suspended) {
             var prevFilter = self.triggerFilter;
             self.triggerFilter = function(l){
-                if (l.id === id) {
+                if (l.id === lid) {
                     return prevFilter ? prevFilter(l) !== false : true;
                 }
                 return false;
@@ -468,7 +485,7 @@ extend(ObservableEvent.prototype, {
             self.triggerFilter = prevFilter;
         }
 
-        return id;
+        return lid;
     },
 
     /**
@@ -496,26 +513,31 @@ extend(ObservableEvent.prototype, {
             inx         = -1,
             uni         = self.uni,
             listeners   = self.listeners,
-            id;
+            fid, lid;
 
         if (fn == parseInt(fn)) {
-            id      = parseInt(fn);
+            lid = parseInt(fn);
+            if (!self.map[lid]) {
+                return false;
+            }
+            fid = self.map[lid].fid;
         }
         else {
-            id      = fn[uni];
+            fid = fn[uni];
         }
 
-        if (!id) {
+        if (!fid) {
             return false;
         }
 
-        var ctxUni  = uni + "_" + id;
+        var ctxUni  = uni + "_" + fid;
         context     = context || null;
 
         for (var i = 0, len = listeners.length; i < len; i++) {
-            if (listeners[i].id === id && 
+            if (listeners[i].fid === fid && 
                 listeners[i].context === context) {
                 inx = i;
+                lid = listeners[i].id;
                 delete fn[uni];
                 if (context) {
                     delete context[ctxUni];
@@ -529,7 +551,7 @@ extend(ObservableEvent.prototype, {
         }
 
         listeners.splice(inx, 1);
-        delete self.map[id];
+        delete self.map[lid];
         return true;
     },
 
@@ -548,25 +570,25 @@ extend(ObservableEvent.prototype, {
 
         var self    = this,
             listeners   = self.listeners,
-            id;
+            fid;
 
         if (fn) {
 
             if (!isFunction(fn)) {
-                id  = parseInt(fn);
+                fid  = parseInt(fn);
             }
             else {
-                id  = fn[self.uni];
+                fid  = fn[self.uni];
             }
 
-            if (!id) {
+            if (!fid) {
                 return false;
             }
 
-            var ctxUni  = self.uni + "_" + id;
+            var ctxUni  = self.uni + "_" + fid;
 
             for (var i = 0, len = listeners.length; i < len; i++) {
-                if (listeners[i].id === id) {
+                if (listeners[i].fid === fid) {
                     if (!context || context[ctxUni]) {
                         return true;
                     }
@@ -585,9 +607,9 @@ extend(ObservableEvent.prototype, {
      * @method
      */
     removeAllListeners: function() {
-        var self    = this,
-            listeners = self.listeners,
-            uni     = self.uni,
+        var self        = this,
+            listeners   = self.listeners,
+            uni         = self.uni,
             i, len, ctxUni;
 
         for (i = 0, len = listeners.length; i < len; i++) {
@@ -617,16 +639,32 @@ extend(ObservableEvent.prototype, {
 
 
     _prepareArgs: function(l, triggerArgs) {
-        var args;
+        var args, prepend, append, repl;
 
         if (l.append || l.prepend) {
+            prepend = l.prepend;
+            append  = l.append;
             args    = triggerArgs.slice();
-            if (l.prepend) {
-                args    = l.prepend.concat(args);
+
+            if (prepend) {
+                if (typeof prepend === "function") {
+                    prepend = prepend(l, triggerArgs);
+                }
+                args    = prepend.concat(args);
             }
-            if (l.append) {
-                args    = args.concat(l.append);
+            if (append) {
+                if (typeof append === "function") {
+                    append = append(l, triggerArgs);
+                }
+                args    = args.concat(append);
             }
+        }
+        else if (l.replaceArgs) {
+            repl = l.replaceArgs;
+            if (typeof repl === "function") {
+                repl = repl(l, triggerArgs);
+            }
+            args = [].concat(repl);
         }
         else {
             args = triggerArgs;
@@ -658,12 +696,21 @@ extend(ObservableEvent.prototype, {
         if (self.suspended) {
             return null;
         }
+        if (self.limit > 0 && self.triggered >= self.limit) {
+            return null;
+        }
+        self.triggered++;
 
         if (self.autoTrigger) {
             self.lastTrigger = origArgs.slice();
         }
 
+        // in pipe mode if there is no listeners,
+        // we just return piped value
         if (listeners.length === 0) {
+            if (rr === "pipe") {
+                return origArgs[0];
+            }
             return null;
         }
 
@@ -918,7 +965,7 @@ extend(Observable.prototype, {
      *      to the next promise.
      *  }
      * }
-     * @returns {lib_ObservableEvent}
+     * @returns {MetaphorJs.lib.ObservableEvent}
      */
     createEvent: function(name, options) {
         name = name.toLowerCase();
@@ -933,7 +980,7 @@ extend(Observable.prototype, {
     * @method
     * @access public
     * @param {string} name Event name
-    * @return {lib_ObservableEvent|undefined}
+    * @return {MetaphorJs.lib.ObservableEvent|undefined}
     */
     getEvent: function(name) {
         name = name.toLowerCase();
@@ -968,12 +1015,13 @@ extend(Observable.prototype, {
     *           Start calling handler after this number of calls. Starts from 1
     *           @default 1
     *       }
-        *      @type {[]} append Append parameters
-        *      @type {[]} prepend Prepend parameters
-        *      @type {bool} allowDupes allow the same handler twice
-        *      @type {bool|int} async run event asynchronously. If event was
-        *                      created with <code>expectPromises: true</code>, 
-        *                      this option is ignored.
+    *       @type {array} append Append parameters
+    *       @type {array} prepend Prepend parameters
+    *       @type {array} replaceArgs Replace parameters
+    *       @type {bool} allowDupes allow the same handler twice
+    *       @type {bool|int} async run event asynchronously. If event was
+    *                      created with <code>expectPromises: true</code>, 
+    *                      this option is ignored.
     * }
     */
     on: function(name, fn, context, options) {
@@ -1021,10 +1069,21 @@ extend(Observable.prototype, {
      * @code src-docs/examples/relay.js
      * @param {object} eventSource
      * @param {string} eventName
+     * @param {string} triggerName
+     * @param {string} triggerNamePfx prefix all relayed event names
      */
-    relayEvent: function(eventSource, eventName) {
+    relayEvent: function(eventSource, eventName, triggerName, triggerNamePfx) {
         eventSource.on(eventName, this.trigger, this, {
-            prepend: eventName === "*" ? null : [eventName]
+            prepend: eventName === "*" ? 
+                        null: 
+                        // use provided new event name or original name
+                        [triggerName || eventName],
+            replaceArgs: eventName === "*" && triggerNamePfx ? 
+                            function(l, args) {
+                                args[0] = triggerNamePfx + args[0]
+                                return args;
+                            } : 
+                            null
         });
     },
 
@@ -1233,46 +1292,79 @@ extend(Observable.prototype, {
         for (i in self) {
             self[i] = null;
         }
-    },
-
-    /**
-    * Although all methods are public there is getApi() method that allows you
-    * extending your own objects without overriding "destroy" (which you probably have)
-    * @code src-docs/examples/api.js
-    * @method
-    * @md-not-inheritable
-    * @returns object
-    */
-    getApi: function() {
-
-        var self    = this;
-
-        if (!self.api) {
-
-            var methods = [
-                    "createEvent", "getEvent", "on", "un", "once", "hasListener", "removeAllListeners",
-                    "trigger", "suspendEvent", "suspendAllEvents", "resumeEvent",
-                    "resumeAllEvents", "destroyEvent",
-                    "relayEvent", "unrelayEvent"
-                ],
-                api = {},
-                name;
-
-            for(var i =- 1, l = methods.length;
-                    ++i < l;
-                    name = methods[i],
-                    api[name] = bind(self[name], self)){}
-
-            self.api = api;
-        }
-
-        return self.api;
-
     }
 }, true, false);
+
+
+var __createEvents = function(host, obs, events) {
+    for (var i in events) {
+        host.createEvent ?
+            host.createEvent(i, events[i]) :
+            obs.createEvent(i, events[i]);
+    }
+};
+
+var __on = function(host, obs, event, fn, context) {
+    host.on ?
+        host.on(event, fn, context || host) :
+        obs.on(event, fn, context || host);
+};
+
+Observable.$initHost = function(host, hostCfg, observable)  {
+    var i;
+
+    if (host.$$events) {
+        __createEvents(host, observable, host.$$events);
+    }
+
+    if (hostCfg && hostCfg.callback) {
+        var ls = hostCfg.callback,
+            context = ls.context || ls.scope || ls.$context;
+
+        if (ls.$events)
+            __createEvents(host, observable, ls.$events);
+
+        ls.context = null;
+        ls.scope = null;
+
+        for (i in ls) {
+            if (ls[i]) {
+                __on(host, observable, i, ls[i], context);
+            }
+        }
+
+        hostCfg.callback = null;
+
+        if (context) {
+            host.$$callbackContext = context;
+        }
+    }
+};
+
+Observable.$initHostConfig = function(host, config, scope, node) {
+    var msl = MetaphorJs.lib.Config.MODE_LISTENER,
+        ctx;
+    config.setDefaultMode("callbackContext", MetaphorJs.lib.Config.MODE_SINGLE);
+    config.eachProperty(function(name) {
+        if (name.substring(0,4) === 'on--') {
+            config.setMode(name, msl);
+            if (!ctx) {
+                if (scope.$app)
+                    ctx = config.get("callbackContext") ||
+                            (node ? scope.$app.getParentCmp(node) : null) ||
+                            scope.$app ||
+                            scope;
+                else 
+                    ctx = config.get("callbackContext") || scope;
+            }
+            host.on(name.substring(4), config.get(name), ctx);
+        }
+    });
+};
+
 
 return Observable;
 }());
 typeof global != "undefined" ? (global['MetaphorJs'] = MetaphorJs) : (window['MetaphorJs'] = MetaphorJs);
 
-}());/* BUNDLE END 003 */
+}());/* BUNDLE END 004 */
