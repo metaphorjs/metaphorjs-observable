@@ -1,5 +1,5 @@
 
-var nextUid = require("metaphorjs-shared/src/func/nextUid.js"),
+const nextUid = require("metaphorjs-shared/src/func/nextUid.js"),
     extend = require("metaphorjs-shared/src/func/extend.js"),
     toArray = require("metaphorjs-shared/src/func/toArray.js"),
     async = require("metaphorjs-shared/src/func/async.js"),
