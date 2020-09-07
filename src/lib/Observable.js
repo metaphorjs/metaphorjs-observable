@@ -413,7 +413,7 @@ extend(Observable.prototype, {
 }, true, false);
 
 
-var __createEvents = function(host, obs, events) {
+const __createEvents = function(host, obs, events) {
     for (var i in events) {
         host.createEvent ?
             host.createEvent(i, events[i]) :
@@ -421,13 +421,13 @@ var __createEvents = function(host, obs, events) {
     }
 };
 
-var __on = function(host, obs, event, fn, context) {
+const __on = function(host, obs, event, fn, context) {
     host.on ?
         host.on(event, fn, context || host) :
         obs.on(event, fn, context || host);
 };
 
-Observable.$initHost = function(host, hostCfg, observable)  {
+Observable['$initHost'] = function(host, hostCfg, observable)  {
     var i;
 
     if (host.$$events) {
@@ -458,9 +458,10 @@ Observable.$initHost = function(host, hostCfg, observable)  {
     }
 };
 
-Observable.$initHostConfig = function(host, config, scope, node) {
+Observable['$initHostConfig'] = function(host, config, scope, node) {
     var msl = MetaphorJs.lib.Config.MODE_LISTENER,
         ctx;
+
     config.setDefaultMode("callbackContext", MetaphorJs.lib.Config.MODE_SINGLE);
     config.eachProperty(function(name) {
         if (name.substring(0,4) === 'on--') {

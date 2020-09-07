@@ -1,5 +1,5 @@
 {
-    "name": "@metaphorjs/observable",
+    "name": "metaphorjs-observable",
     "version": "1.4.0",
     "description": "A javascript event system",
     "directories": {
@@ -19,5 +19,6 @@
     "bugs": {
         "url": "https://github.com/metaphorjs/metaphorjs-observable/issues"
     },
-    "homepage": "https://github.com/metaphorjs/metaphorjs-observable"
+    "homepage": "https://github.com/metaphorjs/metaphorjs-observable",
+    "dependencies": {}
 }
