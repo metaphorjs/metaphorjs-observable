@@ -162,6 +162,19 @@ extend(Observable.prototype, {
     },
 
     /**
+     * Subscribe to an event and return a promise that will be resolved
+     * with event payload
+     * @param {string} name Event name
+     * @return {Promise}
+     * @code src-docs/examples/promise.js
+     */
+    promise: function(name) {
+        return new Promise((resolve) => {
+            this.once(name, resolve, null, { limit: 1 });
+        });
+    },
+
+    /**
     * Unsubscribe from an event
     * @method
     * @access public
