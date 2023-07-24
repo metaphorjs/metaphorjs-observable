@@ -4,22 +4,20 @@
         "sourceMap": false,
         "noImplicitAny": false,
         "declaration": true,
+        "strict": true,
         "module": "commonjs",
         "target": "es5",
         "lib": [
             "dom",
             "esnext"
-        ],
-        "types": [
-            "mocha"
         ]
     },
     "include": [
-        "src/**/*",
-        "tests/**/*"
+        "src/**/*"
     ],
     "exclude": [
         "node_modules",
-        "dist"
+        "dist",
+        "tests/**/*"
     ]
 }
