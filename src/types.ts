@@ -1,8 +1,3 @@
-/*import * as returnTypes from "./lib/returnTypes";
-const retTypesArray = [
-    ...Object.values(returnTypes),
-    null
-];*/
 
 export enum ReturnType {
     RAW = "raw",
@@ -17,10 +12,7 @@ export enum ReturnType {
     FIRST_NON_EMPTY = "nonempty"
 }
 
-//export type ReturnType = typeof retTypesArray[number];
-//export type ReturnType = keyof typeof ReturnTypes | null;
-
-export type TriggerFilter = (listener: Listener, params?: any[]) => boolean;
+export type TriggerFilter = (params: any[], listener?: Listener) => boolean;
 
 export type ListenerFunction = (...args: any) => any;
 
@@ -31,12 +23,8 @@ export type ReturnValue = undefined | any | any[] | { [key: string] : any } |
                             Promise<any[]> |
                             Promise<{ [key: string] : any }>;
 
-
 type BaseEventOptions = {
-    /**
-     * Listener's context (this) object
-     */
-    context?: object,
+
     /**
      * A function that decides whether event should trigger a listener this time
      */
@@ -100,11 +88,14 @@ export type ListenerOptions = BaseEventOptions & {
      * @default 1
      */
     start?: number,
-
+    /**
+     * Listener's context (this) object
+     */
+    context?: object,
     /**
      * You can pass any additional fields here. They will be passed back to TriggerFilter
      */
-    extraData?: { [key: string]: any }
+    extraData?: any
 }
 
 

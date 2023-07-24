@@ -7,9 +7,9 @@
         "test": "test"
     },
     "scripts": {
-        "test": "npx ts-mocha -p tsconfig.json test/**/*.spec.ts"
+        "test": "npx ts-mocha -p tsconfig.json tests/**/*.spec.ts"
     },
-    "main": "index.ts",
+    "main": "src/index.ts",
     "repository": {
         "type": "git",
         "url": "https://github.com/metaphorjs/metaphorjs-observable.git"

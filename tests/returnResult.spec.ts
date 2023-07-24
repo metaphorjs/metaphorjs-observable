@@ -87,5 +87,14 @@ describe("Observable", function(){
             const res = o.pipe("event", 1);
             assert.equal(4, res);
         });
+
+        it("raw", function(){
+            const o = new Observable;
+            o.on("event", () => new Promise(resolve => resolve(1)));
+            o.on("event", () => 2);
+            const res = o.raw("event");
+            assert(res[0] instanceof Promise);
+            assert(res[1] === 2);
+        });
     });
 });

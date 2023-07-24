@@ -1,37 +1,57 @@
-# MetaphorJs.lib.Observable
-A javascript event system implementing multiple patterns: observable, collector and pipe.
+# Observable
+A javascript event bus implementing multiple patterns: observable, collector and pipe.
 
-[Docs](http://metaphorjs.com/js/observable/docs/index.html)
+## Version 1.5.0 is not compatible with 1.4.0. It is a complete rewrite.
 
-Observable:
+### Observable:
 ```javascript
 const Observable = require("@metaphorjs/observable");
 const o = new Observable;
-o.on("event", function(x, y, z){ console.log([x, y, z]) });
+o.on("event", (x, y, z) => console.log([x, y, z]));
 o.trigger("event", 1, 2, 3); // [1, 2, 3]
+// other methods:
+o.untilTrue()
+o.untilFalse()
 ```
 
-Collector:
+### Collector:
 ```javascript
 const Observable = require("@metaphorjs/observable");
 const o = new Observable;
-o.createEvent("collectStuff", "all");
-o.on("collectStuff", function(){ return 1; });
-o.on("collectStuff", function(){ return 2; });
-const results = o.trigger("collectStuff"); // [1, 2]
+o.on("collectStuff", () => 1);
+o.on("collectStuff", () => 2);
+const results = o.all("collectStuff"); // [1, 2]
 ```
-
-Pipe:
 ```javascript
 const Observable = require("@metaphorjs/observable");
 const o = new Observable;
-o.createEvent("some-job", "pipe");
-o.on("some-job", function(value){
-    return value + value;
-});
-o.on("some-job", function(value){
-    return value * value;
-});
+o.on("collectStuff", () => Promise.resolve(1));
+o.on("collectStuff", () => Promise.resolve(2));
+o.on("collectStuff", () => 3);
+const results = await o.resolveAll("collectStuff"); // [1, 2, 3]
+```
+Other collector methods:
+```
+o.first()
+o.last()
+o.firstNonEmpty()
+o.concat()
+o.merge()
+o.raw()
+```
 
-const result = o.trigger("some-job", 1); // 4
+### Pipe:
+```javascript
+const Observable = require("@metaphorjs/observable");
+const o = new Observable;
+o.on("some-job", (value) => value + value);
+o.on("some-job", (value) => value * value);
+const result = o.pipe("some-job", 1); // 4
+```
+```javascript
+const Observable = require("@metaphorjs/observable");
+const o = new Observable;
+o.on("some-job", (value) => Promise.resolve(value + value));
+o.on("some-job", (value) => Promise.resolve(value * value));
+const result = await o.resolvePipe("some-job", 1); // 4
 ```

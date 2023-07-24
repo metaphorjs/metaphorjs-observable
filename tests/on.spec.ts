@@ -4,7 +4,7 @@ import util from "./util"
 
 describe("Observable", function(){
 
-    it("should append and prepend arguments", function(){
+    it("should respect listener's append and prepend arguments", function(){
 
         const o = new Observable;
 
@@ -25,6 +25,81 @@ describe("Observable", function(){
         assert.deepStrictEqual(["!", 1, 2], appended);
     });
 
+    it("should respect event's append and prepend arguments", function(){
+
+        const o = new Observable;
+
+        o.createEvent("event", {
+            prepend: [1,2],
+            append: [3,4]
+        })
+
+        const l = function(saveIn) {
+            return (...args) => {
+                args.forEach(arg => saveIn.push(arg));
+            };
+        };
+
+        const args = [];
+
+        o.on("event", l(args));
+        o.trigger("event", "!");
+
+        assert.deepStrictEqual([1,2, "!", 3, 4], args);
+    });
+
+    it("should respect listener's replaceArgs argument", function(){
+
+        const o = new Observable;
+
+        const l = function(saveIn) {
+            return (...args) => {
+                args.forEach(arg => saveIn.push(arg));
+            };
+        };
+
+        const args = [];
+
+        o.on("event", l(args), { replaceArgs: [1,2] });
+        o.trigger("event", "!");
+
+        assert.deepStrictEqual([1, 2], args);
+    });
+
+    it("should respect listener's first option", function(){
+
+        const o = new Observable;
+        const triggered = [];
+        const l = util.listenerFactory("log-id", triggered);
+
+        o.on("event", l(1));
+        o.on("event", l(2), { first: true });
+        o.trigger("event");
+
+        assert.deepStrictEqual([2, 1], triggered);
+    });
+
+    it("should respect event's replaceArgs argument", function(){
+
+        const o = new Observable;
+
+        o.createEvent("event", {
+            replaceArgs: [1, 2]
+        })
+        const l = function(saveIn) {
+            return (...args) => {
+                args.forEach(arg => saveIn.push(arg));
+            };
+        };
+
+        const args = [];
+
+        o.on("event", l(args));
+        o.trigger("event", "!");
+
+        assert.deepStrictEqual([1, 2], args);
+    });
+
     it("should respect start and limit options", function(){
 
         const o = new Observable;
@@ -40,6 +115,25 @@ describe("Observable", function(){
         o.trigger("event");
 
         assert.deepStrictEqual([1,1,2,2], triggered);
+    });
+
+    it("should respect event's limit option", function(){
+
+        const o = new Observable;
+        o.createEvent("event", {
+            limit: 2
+        })
+        const triggered = [];
+        const l = util.listenerFactory("log-id", triggered);
+
+        o.on("event", l(1));
+
+        o.trigger("event");
+        o.trigger("event");
+        o.trigger("event");
+        o.trigger("event");
+
+        assert.deepStrictEqual([1,1], triggered);
     });
 
     it("should respect given context and control dupes", function(){

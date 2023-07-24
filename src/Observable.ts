@@ -64,7 +64,7 @@ export default class Observable {
 
     /**
      * Subscribe to an event and return a promise that will be resolved
-     * with event payload
+     * with event payload. 
      * @param name Event name
      * @code src-docs/examples/promise.js
      */
@@ -190,12 +190,30 @@ export default class Observable {
     }
 
     /**
+     * Trigger event and return a promise with results from the listeners
+     * @param name Event name
+     * @param [...args]
+     */
+    resolveAll(name: string, ...args: any[]): Promise<any[]> {
+        return this._trigger(name, args, ReturnType.ALL, true);
+    }
+
+    /**
      * Trigger first event's listener and return its result
      * @param name Event name
      * @param [...args]
      */
     first(name: string, ...args: any[]): any | Promise<any> {
         return this._trigger(name, args, ReturnType.FIRST);
+    }
+
+    /**
+     * Trigger first event's listener and return its result as a promise
+     * @param name Event name
+     * @param [...args]
+     */
+    resolveFirst(name: string, ...args: any[]): Promise<any> {
+        return this._trigger(name, args, ReturnType.FIRST, true);
     }
 
     /**
@@ -208,6 +226,15 @@ export default class Observable {
     }
 
     /**
+     * Trigger event and return last listener's result as a promise
+     * @param name Event name
+     * @param [...args]
+     */
+    resolveLast(name: string, ...args: any[]): Promise<any> {
+        return this._trigger(name, args, ReturnType.LAST, true);
+    }
+
+    /**
      * Trigger event and return all results from the listeners merged into one object
      * @param name Event name
      * @param [...args]
@@ -215,6 +242,16 @@ export default class Observable {
     merge(name: string, ...args: any[]): object | Promise<object> {
         return this._trigger(name, args, ReturnType.MERGE);
     }
+
+    /**
+     * Trigger event and return as a promise all results from the listeners merged into one object
+     * @param name Event name
+     * @param [...args]
+     */
+    resolveMerge(name: string, ...args: any[]): Promise<object> {
+        return this._trigger(name, args, ReturnType.MERGE, true);
+    }
+
 
     /**
      * Trigger event and return all results from the listeners flattened into one array
@@ -226,12 +263,30 @@ export default class Observable {
     }
 
     /**
+     * Trigger event and return as a promise all results from the listeners flattened into one array
+     * @param name Event name
+     * @param [...args]
+     */
+    resolveConcat(name: string, ...args: any[]): Promise<any[]> {
+        return this._trigger(name, args, ReturnType.CONCAT, true);
+    }
+
+    /**
      * Trigger event and return first non-empty listener result and skip others
      * @param name Event name
      * @param [...args]
      */
     firstNonEmpty(name: string, ...args: any[]): any | Promise<any> {
         return this._trigger(name, args, ReturnType.FIRST_NON_EMPTY);
+    }
+
+    /**
+     * Trigger event and return as a promise first non-empty listener result and skip others
+     * @param name Event name
+     * @param [...args]
+     */
+    resolveFirstNonEmpty(name: string, ...args: any[]): Promise<any> {
+        return this._trigger(name, args, ReturnType.FIRST_NON_EMPTY, true);
     }
 
     /**
@@ -262,6 +317,16 @@ export default class Observable {
     }
 
     /**
+     * Trigger event and pass previous listener's return value into next listener and return 
+     * last result as promise
+     * @param name Event name
+     * @param [...args]
+     */
+    resolvePipe(name: string, ...args: any[]): Promise<any> {
+        return this._trigger(name, args, ReturnType.PIPE, true);
+    }
+
+    /**
      * Trigger event and return all results as is
      * @param name Event name
      * @param [...args]
@@ -279,7 +344,7 @@ export default class Observable {
         return this._trigger(name, args);
     }
 
-    _trigger(name: string, args: any[], returnType?: ReturnType): ReturnValue {
+    _trigger(name: string, args: any[], returnType: ReturnType | null = null, resolve: boolean = false): ReturnValue {
 
         const events = this.events;
         let e: ObservableEvent;
@@ -288,7 +353,7 @@ export default class Observable {
 
         if (events[name]) {
             e = events[name];
-            return e.trigger(args, returnType);
+            return resolve ? e.resolve(args, returnType) : e.trigger(args, returnType);
         }
 
         // trigger * event with current event name

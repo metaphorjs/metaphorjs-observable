@@ -32,9 +32,10 @@ describe("Observable", function(){
         it("all", function(done){
             const o = new Observable;
             o.on("event", l1(1));
+            o.on("event", () => 3);
             o.on("event", l1(2));
             Promise.resolve(o.all("event")).then((res) => {
-                assert.deepStrictEqual([1,2], res);
+                assert.deepStrictEqual([1,3,2], res);
                 done();
             }).catch(function(reason){
                 done(reason);
@@ -144,9 +145,10 @@ describe("Observable", function(){
         it("pipe", function(done){
             const o = new Observable;
             o.on("event", l3((value) => value + value));
+            o.on("event", value => value + 1);
             o.on("event", l3((value) => value * value));
             o.pipe("event", 1).then(function(res){
-                assert.equal(4, res);
+                assert.equal(9, res);
                 done();
             })
             .catch(function(reason){

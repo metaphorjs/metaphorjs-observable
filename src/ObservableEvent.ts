@@ -24,7 +24,6 @@ export default class ObservableEvent {
     append: ArgumetsTransformer = null
     prepend: ArgumetsTransformer = null
     replaceArgs: ArgumetsTransformer = null
-    context: object = null
 
     constructor(options?: EventOptions) {
         if (options) {
@@ -39,7 +38,6 @@ export default class ObservableEvent {
         this.listeners = null;
         this.filter = null;
         this.filterContext = null;
-        this.context = null;
     }
 
     /**
@@ -86,9 +84,9 @@ export default class ObservableEvent {
 
         if (this.autoTrigger && this.lastTrigger && !this.suspended) {
             const prevFilter = this.filter;
-            this.filter = (l: Listener) => {
+            this.filter = (args, l: Listener) => {
                 if (l.fn === fn) {
-                    return prevFilter ? prevFilter(l) !== false : true;
+                    return prevFilter ? prevFilter(args, l) !== false : true;
                 }
                 return false;
             };
@@ -140,15 +138,9 @@ export default class ObservableEvent {
         this.suspended = false;
     }
 
-
-    getListenerContext(l: Listener) {
-        return l.context || this.context;
-    }
-
     getFilterContext(l: Listener) {
-        return l.filterContext || this.filterContext || l.context || this.context;
+        return l.filterContext || this.filterContext || l.context;
     }
-
 
     prepareArgs(l: Listener, triggerArgs: any[]): any[] {
 
@@ -191,11 +183,11 @@ export default class ObservableEvent {
         const result = listener.async !== false ?
                         /* promise */ async(
                             listener.fn, 
-                            this.getListenerContext(listener), 
+                            listener.context, 
                             args, 
                             listener.async === true ? 0 : listener.async
                         ) :
-                        /* value or promise */ listener.fn.apply(this.getListenerContext(listener), args);
+                        /* value or promise */ listener.fn.apply(listener.context, args);
         if (resolve !== null) {
             resolve(result);
         }
@@ -222,9 +214,6 @@ export default class ObservableEvent {
         return this.lcall(listener, args);
     }
 
-    /**
-     * @return {*}
-     */
     trigger(origArgs: any[], returnType?: ReturnType): ReturnValue {
 
         if (this.suspended) {
@@ -272,12 +261,12 @@ export default class ObservableEvent {
 
             args = this.prepareArgs(listener, origArgs);
             
-            if (this.filter && this.filter.call(this.filterContext || this.context, listener, args) === false) {
+            if (this.filter && this.filter.call(this.filterContext, args, listener) === false) {
                 continue;
             }
 
             if (listener.filter && 
-                listener.filter.apply(this.getFilterContext(listener), args) === false) {
+                listener.filter.call(this.getFilterContext(listener), args) === false) {
                 continue;
             }
 
@@ -388,5 +377,9 @@ export default class ObservableEvent {
                 return results[ results.length - 1 ];
             }
         }
+    }
+
+    resolve(origArgs: any[], returnType?: ReturnType): Promise<any> {
+        return Promise.resolve(this.trigger(origArgs, returnType));
     }
 }
