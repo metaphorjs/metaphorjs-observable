@@ -1,24 +1,31 @@
 {
     "name": "metaphorjs-observable",
-    "version": "1.4.0",
-    "description": "A javascript event system",
+    "version": "1.5.0",
+    "description": "A javascript event bus",
     "directories": {
         "doc": "docs",
         "test": "test"
     },
     "scripts": {
-        "test": "mocha"
+        "test": "npx ts-mocha -p tsconfig.json test/**/*.spec.ts"
     },
-    "main": "dist/metaphorjs.observable.npm.js",
+    "main": "index.ts",
     "repository": {
         "type": "git",
         "url": "https://github.com/metaphorjs/metaphorjs-observable.git"
     },
     "author": "Ivan Kuindzhi",
     "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/metaphorjs/metaphorjs-observable/issues"
-    },
     "homepage": "https://github.com/metaphorjs/metaphorjs-observable",
-    "dependencies": {}
+    "devDependencies": {
+        "@types/chai": "^4.3.5",
+        "@types/expect": "^24.3.0",
+        "@types/mocha": "^10.0.1",
+        "@types/sinon": "^10.0.15",
+        "chai": "^4.3.7",
+        "mocha": "^10.2.0",
+        "sinon": "^15.2.0",
+        "ts-mocha": "^10.0.0",
+        "typescript": "^5.1.6"
+    }
 }

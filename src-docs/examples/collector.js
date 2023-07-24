@@ -1,4 +1,4 @@
-var o = new Observable;
+const o = new Observable;
 o.createEvent("collectStuff", "all");
 o.on("collectStuff", function(){ return 1; });
 o.on("collectStuff", function(){ return 2; });

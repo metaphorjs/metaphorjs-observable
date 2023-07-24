@@ -1,4 +1,4 @@
-var o = new Observable;
+const o = new Observable;
 o.createEvent("auto", {autoTrigger: true});
 // trigger first
 o.trigger("auto", 1, 2);

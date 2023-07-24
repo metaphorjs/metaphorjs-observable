@@ -1,5 +1,5 @@
-var o = new Observable;
-o.createEvent("filtered", {triggerFilter: function(l, args){
+const o = new Observable;
+o.createEvent("filtered", {triggerFilter: (l, args) => {
     if (l.always) {
         return true;
     }
